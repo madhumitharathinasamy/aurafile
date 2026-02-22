@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # AuraFile
 
 AuraFile is a comprehensive, privacy-focused online tool suite for image processing. It specifically runs on Next.js 16 and uses server-side processing with Sharp to ensure high performance and privacy.
@@ -51,3 +52,7 @@ AuraFile does not store user files. All processing happens ephemerally in the se
 
 ## License
 MIT
+=======
+# aurafile
+MyToolsToGo is a lightweight web platform. It offers simple online tools like PDF utilities, image tools, QR generators, converters, and calculators. Built step by step with clean frontend design and scalable architecture.
+>>>>>>> d1b2d66ac7bd7ed97aa7f6740aea18ba2844afab
