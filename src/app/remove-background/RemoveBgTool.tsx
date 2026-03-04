@@ -212,8 +212,8 @@ export default function RemoveBgTool() {
             {isProcessing && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/60 backdrop-blur-md z-50 text-center p-6">
                     <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#0081C9] border-t-transparent" />
-                    <p className="mt-4 font-bold text-slate-800 text-lg">{progress}</p>
-                    {!progress.includes("Removing") && <p className="text-sm text-slate-500 font-medium mt-2">This may take 10–20 seconds.</p>}
+                    <p className="mt-4 text-slate-800">{progress}</p>
+                    {!progress.includes("Removing") && <p className="text-muted-foreground mt-2">This may take 10–20 seconds.</p>}
                 </div>
             )}
 
@@ -273,14 +273,14 @@ export default function RemoveBgTool() {
                     >
                         {/* Status Check */}
                         <div className={`p-4 rounded-xl border flex items-center gap-4 transition-colors mb-6 shadow-sm ${isDone ? 'bg-green-50 border-green-200' : 'bg-[#E8ECEF] border-transparent'}`}>
-                            <div className={`p-2 rounded-full ${isDone ? 'bg-green-100 text-green-600' : 'bg-slate-200 text-slate-500'}`}>
+                            <div className={`p-2 rounded-full ${isDone ? 'bg-green-100 text-green-600' : 'bg-slate-200 text-muted-foreground'}`}>
                                 <Icon name={isDone ? "check" : "image"} size={20} />
                             </div>
                             <div>
                                 <h3 className={`font-bold text-sm ${isDone ? 'text-green-800' : 'text-slate-800'}`}>
                                     {isDone ? "Foreground Isolated!" : "Ready for Processing"}
                                 </h3>
-                                <p className="text-xs font-medium text-slate-500 mt-0.5">
+                                <p className="text-muted-foreground mt-0.5">
                                     {isDone ? "Tweak the background or download." : "Configure settings and click Remove."}
                                 </p>
                             </div>
@@ -298,7 +298,7 @@ export default function RemoveBgTool() {
                                     { label: "Large (Slower, Highest detail)", value: "large" }
                                 ]}
                             />
-                            <p className="text-xs text-slate-500 mt-1">If the result misses small details like hair, try Large mode and re-process.</p>
+                            <p className="text-muted-foreground mt-1">If the result misses small details like hair, try Large mode and re-process.</p>
 
                             {isDone && (
                                 <button
@@ -362,7 +362,7 @@ export default function RemoveBgTool() {
                                 ]}
                             />
                             {activeFile.settings?.bgType === "transparent" && (
-                                <p className="text-[10px] uppercase font-bold text-slate-400 mt-1">Locked to PNG to preserve transparency</p>
+                                <p className="text-[10px] uppercase text-muted-foreground mt-1">Locked to PNG to preserve transparency</p>
                             )}
 
                             <div className="pt-2">

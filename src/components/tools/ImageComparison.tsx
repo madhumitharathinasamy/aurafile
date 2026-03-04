@@ -39,7 +39,7 @@ export function ImageComparison({
                     onClick={() => setShowOriginal(true)}
                     className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-200 ${showOriginal
                         ? "bg-slate-800 text-white shadow-md"
-                        : "text-slate-500 hover:text-slate-800 hover:bg-slate-100"
+                        : "text-muted-foreground hover:text-slate-800 hover:bg-slate-100"
                         }`}
                 >
                     {beforeLabel}
@@ -48,7 +48,7 @@ export function ImageComparison({
                     onClick={() => setShowOriginal(false)}
                     className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-200 ${!showOriginal
                         ? "bg-[#0081C9] text-white shadow-md shadow-[#0081C9]/20"
-                        : "text-slate-500 hover:text-[#0081C9] hover:bg-[#0081C9]/10"
+                        : "text-muted-foreground hover:text-[#0081C9] hover:bg-[#0081C9]/10"
                         }`}
                 >
                     {afterLabel}

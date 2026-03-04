@@ -16,7 +16,6 @@ import { Icon } from "@/components/ui/Icon";
 import { toast } from "sonner";
 import { useFileUpload } from "@/hooks/useFileUpload";
 import { ToolSettingsRenderer, SettingGroup, SettingRow } from "@/components/tools/ToolSettingsRenderer";
-import JSZip from "jszip";
 import { saveAs } from "file-saver";
 
 type AspectRatio = {
@@ -73,10 +72,15 @@ export default function CropTool() {
     const [heightInput, setHeightInput] = useState("");
     const [isInputActive, setIsInputActive] = useState(false);
 
+    const croppedUrlsRef = useRef(croppedUrls);
+    useEffect(() => {
+        croppedUrlsRef.current = croppedUrls;
+    }, [croppedUrls]);
+
     // Cleanup URLs
     useEffect(() => {
         return () => {
-            Object.values(croppedUrls).forEach(url => URL.revokeObjectURL(url));
+            Object.values(croppedUrlsRef.current).forEach(url => URL.revokeObjectURL(url));
         };
     }, []);
 
@@ -109,6 +113,7 @@ export default function CropTool() {
                 }
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeIndex, activeFile]);
 
 
@@ -407,6 +412,7 @@ export default function CropTool() {
     const handleDownload = async () => {
         try {
             if (applyToAll && files.length > 1) {
+                const JSZip = (await import("jszip")).default;
                 const zip = new JSZip();
                 const promises = files.map(async (fileMeta) => {
                     if (!fileMeta.settings?.isCropped || !croppedUrls[fileMeta.id]) return;
@@ -558,13 +564,13 @@ export default function CropTool() {
 
                         <SettingGroup title="Dimensions">
                             <div className="flex justify-between items-center mb-1">
-                                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Exact Pixels</label>
+                                <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">Exact Pixels</label>
                                 <button
                                     onClick={() => {
                                         if (aspect) { setAspect(undefined); setSelectedRatioLabel("Free"); }
                                         else if (completedCrop && completedCrop.height > 0) { setAspect(completedCrop.width / completedCrop.height); setSelectedRatioLabel("Custom"); }
                                     }}
-                                    className={`text-xs flex items-center gap-1 transition-colors ${aspect ? "text-[#0081C9] font-medium" : "text-slate-500"}`}
+                                    className={`text-xs flex items-center gap-1 transition-colors ${aspect ? "text-[#0081C9] font-medium" : "text-muted-foreground"}`}
                                 >
                                     <Icon name={aspect ? "lock" : "unlock"} size={12} />
                                     {aspect ? "Locked" : "Unlocked"}

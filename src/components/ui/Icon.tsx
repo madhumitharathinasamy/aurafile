@@ -52,6 +52,17 @@ import {
     FlipVertical,
     Grid,
     Minimize,
+    CheckCircle,
+    ChevronDown,
+    ChevronUp,
+    Expand,
+    FileImage,
+    FilePlus,
+    FileType2,
+    Loader2,
+    Shrink,
+    Wand2,
+    AlertCircle,
     LucideProps
 } from "lucide-react";
 
@@ -109,7 +120,18 @@ export type IconName =
     | "flip-horizontal"
     | "flip-vertical"
     | "grid"
-    | "minimize";
+    | "minimize"
+    | "check-circle"
+    | "chevron-down"
+    | "chevron-up"
+    | "expand"
+    | "file-image"
+    | "file-plus"
+    | "file-type-2"
+    | "loader-2"
+    | "shrink"
+    | "wand-2"
+    | "alert-circle";
 
 const icons: Record<IconName, React.FC<LucideProps>> = {
     resize: Maximize2,
@@ -166,6 +188,17 @@ const icons: Record<IconName, React.FC<LucideProps>> = {
     "flip-vertical": FlipVertical,
     grid: Grid,
     minimize: Minimize,
+    "check-circle": CheckCircle,
+    "chevron-down": ChevronDown,
+    "chevron-up": ChevronUp,
+    expand: Expand,
+    "file-image": FileImage,
+    "file-plus": FilePlus,
+    "file-type-2": FileType2,
+    "loader-2": Loader2,
+    shrink: Shrink,
+    "wand-2": Wand2,
+    "alert-circle": AlertCircle,
 };
 
 interface IconProps extends LucideProps {

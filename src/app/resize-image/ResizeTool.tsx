@@ -99,7 +99,7 @@ export default function ResizeTool() {
     const handleSettingChange = (key: keyof ResizeSettings, value: any) => {
         if (!activeFile) return;
 
-        let finalUpdates = { [key]: value, isResized: false };
+        let finalUpdates: any = { [key]: value, isResized: false };
 
         if (key === "preset" && value !== "") {
             const preset = SOCIAL_PRESETS.find(p => p.id === value);
@@ -108,6 +108,21 @@ export default function ResizeTool() {
                 finalUpdates.width = preset.width as any;
                 finalUpdates.height = preset.height as any;
                 finalUpdates.lockAspectRatio = false as any;
+            }
+        }
+
+        // Maintain Aspect Ratio logic for Width/Height inputs
+        if (activeFile.settings.mode === "pixels" && activeFile.settings.lockAspectRatio) {
+            const originalRatio = activeFile.originalWidth && activeFile.originalHeight
+                ? activeFile.originalWidth / activeFile.originalHeight
+                : 1;
+
+            if (key === "width" && value !== "") {
+                const newWidth = parseInt(value) || 0;
+                finalUpdates.height = Math.round(newWidth / originalRatio);
+            } else if (key === "height" && value !== "") {
+                const newHeight = parseInt(value) || 0;
+                finalUpdates.width = Math.round(newHeight * originalRatio);
             }
         }
 
@@ -308,7 +323,7 @@ export default function ResizeTool() {
                     >
                         <div className="bg-[#E8ECEF] rounded-xl p-4 flex items-center justify-between shadow-sm">
                             <div className="flex flex-col">
-                                <span className="text-xs font-medium text-slate-500 mb-1">Original</span>
+                                <span className="text-xs font-medium text-muted-foreground mb-1">Original</span>
                                 <span className="text-sm font-bold text-slate-800">
                                     {activeFile.file ? `${activeFile.originalWidth || activeFile.settings?.width || '-'}x${activeFile.originalHeight || activeFile.settings?.height || '-'}` : "—"}
                                 </span>
@@ -317,7 +332,7 @@ export default function ResizeTool() {
                                 <Icon name="arrow-right" size={16} strokeWidth={2.5} />
                             </div>
                             <div className="flex flex-col text-right">
-                                <span className="text-xs font-medium text-slate-500 mb-1">Resized</span>
+                                <span className="text-xs font-medium text-muted-foreground mb-1">Resized</span>
                                 <span className="text-sm font-bold text-slate-800">
                                     {`${activeFile.settings?.width || '-'}x${activeFile.settings?.height || '-'}`}
                                 </span>
@@ -375,7 +390,7 @@ export default function ResizeTool() {
                             ) : (
                                 <div className="flex items-end gap-3 w-full pt-2">
                                     <div className="flex-1 space-y-1.5 flex flex-col">
-                                        <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">Width (px)</label>
+                                        <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block mb-1">Width (px)</label>
                                         <input
                                             type="number"
                                             min="1"
@@ -392,7 +407,7 @@ export default function ResizeTool() {
                                         <Icon name={activeFile.settings?.lockAspectRatio ? "lock" : "unlock"} size={16} />
                                     </button>
                                     <div className="flex-1 space-y-1.5 flex flex-col">
-                                        <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">Height (px)</label>
+                                        <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block mb-1">Height (px)</label>
                                         <input
                                             type="number"
                                             min="1"
@@ -447,7 +462,7 @@ export default function ResizeTool() {
                                 />
                                 <button
                                     onClick={() => handleSettingChange("fillBackground", "transparent")}
-                                    className="text-xs text-slate-500 hover:text-slate-800 px-2 py-1 rounded"
+                                    className="text-xs text-muted-foreground hover:text-slate-800 px-2 py-1 rounded"
                                 >
                                     Transparent
                                 </button>

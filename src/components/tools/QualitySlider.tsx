@@ -29,7 +29,7 @@ export function QualitySlider({ quality, onChange }: QualitySliderProps) {
                 className="mb-2 h-1.5 w-full cursor-pointer appearance-none rounded-full bg-border outline-none [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:transition-transform hover:[&::-webkit-slider-thumb]:scale-110"
             />
 
-            <p className="mt-2 text-center text-sm text-text-secondary">
+            <p className="mt-2 text-center text-text-secondary">
                 {getQualityLabel(quality)}
             </p>
         </div>

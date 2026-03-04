@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PdfUploader } from "@/components/tools/PdfUploader";
 import { ToolModal } from "@/components/modal/ToolModal";
 import { toast } from "sonner";
 import { Icon } from "@/components/ui/Icon";
-import { PDFDocument } from "pdf-lib";
+import { PDFDocument } from "@cantoo/pdf-lib";
 import { useFileUpload } from "@/hooks/useFileUpload";
+import { generatePdfPreview } from "@/lib/pdf-processing/pdf-preview";
+import { PdfSecuritySeo } from "@/components/seo/SeoContentBlocks";
 
 export default function ProtectPdfTool() {
     const {
@@ -16,11 +18,24 @@ export default function ProtectPdfTool() {
         activeFile,
         addFiles,
         clearAll,
-        updateFileSettings
+        updateFileSettings,
+        updatePreviewUrl
     } = useFileUpload([]);
 
     const [password, setPassword] = useState("");
     const [isProcessing, setIsProcessing] = useState(false);
+
+    useEffect(() => {
+        files.forEach(async (fileObj) => {
+            if (fileObj.previewUrl && fileObj.previewUrl.startsWith('blob:') && fileObj.format === 'pdf') {
+                const preview = await generatePdfPreview(fileObj.file);
+                if (preview) {
+                    updatePreviewUrl(fileObj.id, preview.url);
+                    updateFileSettings(fileObj.id, { pageCount: preview.pageCount });
+                }
+            }
+        });
+    }, [files, updatePreviewUrl]);
 
     const handleUpload = (uploadedFiles: File[]) => {
         addFiles(uploadedFiles, {
@@ -40,38 +55,44 @@ export default function ProtectPdfTool() {
         setIsProcessing(true);
         try {
             const arrayBuffer = await activeFile.file.arrayBuffer();
-            const pdfDoc = await PDFDocument.load(arrayBuffer);
 
-            // Cast to any to access the encrypt method which exists in the lib
-            (pdfDoc as any).encrypt({
-                userPassword: password,
-                ownerPassword: password,
-                permissions: {
-                    printing: "highResolution",
-                    modifying: false,
-                    copying: false,
-                    annotating: false,
-                    fillingForms: false,
-                    contentAccessibility: false,
-                    documentAssembly: false,
-                },
+            const worker = new Worker(new URL('../../workers/pdf.worker.ts', import.meta.url));
+
+            worker.onmessage = (e) => {
+                if (e.data.type === 'SUCCESS') {
+                    const blob = new Blob([e.data.payload.buffer], { type: "application/pdf" });
+                    const url = URL.createObjectURL(blob);
+
+                    updateFileSettings(activeFile.id, {
+                        protectedUrl: url,
+                        isProtected: true
+                    });
+
+                    toast.success("PDF protected successfully!");
+                } else if (e.data.type === 'ERROR') {
+                    console.error("Worker Error:", e.data.payload.error);
+                    toast.error("Failed to protect PDF. The file might already be encrypted.");
+                }
+
+                setIsProcessing(false);
+                worker.terminate();
+            };
+
+            worker.onerror = (error) => {
+                console.error("Worker Execution Error:", error);
+                toast.error("Failed to initialize security worker.");
+                setIsProcessing(false);
+                worker.terminate();
+            };
+
+            worker.postMessage({
+                type: 'PROTECT',
+                payload: { buffer: arrayBuffer, password }
             });
-
-            const pdfBytes = await pdfDoc.save();
-            const blob = new Blob([pdfBytes as any], { type: "application/pdf" });
-            const url = URL.createObjectURL(blob);
-
-            updateFileSettings(activeFile.id, {
-                protectedUrl: url,
-                isProtected: true
-            });
-
-            toast.success("PDF protected successfully!");
 
         } catch (error) {
             console.error(error);
-            toast.error("Failed to protect PDF. The file might already be encrypted.");
-        } finally {
+            toast.error("Failed to process PDF.");
             setIsProcessing(false);
         }
     };
@@ -127,12 +148,15 @@ export default function ProtectPdfTool() {
                             </div>
                         </div>
                     </div>
+
+                    <PdfSecuritySeo />
                 </div>
             )}
 
             <ToolModal
                 isOpen={files.length > 0}
                 onClose={clearAll}
+                hidePreviewPane={false}
                 title="Protect PDF"
                 files={files}
                 activeIndex={activeIndex}
@@ -154,13 +178,44 @@ export default function ProtectPdfTool() {
                     </span>
                 }
                 isProcessing={isProcessing}
+                customPreview={
+                    <div className="w-full h-full flex flex-col items-center justify-center p-8 bg-[#e3e7e9] bg-[radial-gradient(#d1d5db_1px,transparent_1px)] [background-size:16px_16px] relative overflow-hidden">
+                        {activeFile?.previewUrl && (
+                            <img
+                                src={activeFile.previewUrl}
+                                alt="PDF preview"
+                                className={`max-w-full max-h-full object-contain shadow-2xl rounded-sm transition-all duration-700 ${isProtected ? 'blur-md opacity-40 scale-95' : 'blur-0 opacity-100 scale-100'}`}
+                            />
+                        )}
+
+                        {/* Locked State Overlay */}
+                        <div className={`absolute inset-0 flex flex-col items-center justify-center transition-all duration-500 z-10 ${isProtected ? 'opacity-100 scale-100' : 'opacity-0 scale-50 pointer-events-none'}`}>
+                            <div className="bg-white/95 backdrop-blur-sm p-8 rounded-3xl shadow-2xl border border-slate-200/50 flex flex-col items-center gap-4">
+                                <div className="bg-red-50 text-red-500 w-24 h-24 rounded-2xl flex items-center justify-center animate-bounce-slight">
+                                    <Icon name="lock" size={48} />
+                                </div>
+                                <div className="text-center">
+                                    <h3 className="text-slate-800 font-sans tracking-tight">Document Secured</h3>
+                                    <p className="text-muted-foreground mt-1 max-w-[200px]">Password protection has been successfully applied.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Unlocked State Badge */}
+                        <div className={`absolute top-6 right-6 transition-all duration-500 z-10 ${!isProtected ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'}`}>
+                            <div className="bg-green-50 text-green-700 px-4 py-2 rounded-full text-sm font-bold shadow-sm border border-green-200 flex items-center gap-2">
+                                <Icon name="unlock" size={16} /> Unlocked
+                            </div>
+                        </div>
+                    </div>
+                }
             >
                 {/* TOOL SPECIFIC SIDEBAR CONTENT */}
                 {activeFile && (
                     <div className="space-y-8">
                         <div>
                             <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-xl font-bold text-slate-800 font-sans">Security Lock</h2>
+                                <h2 className="text-slate-800 font-sans">Security Lock</h2>
                                 {isProtected && (
                                     <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
                                         <Icon name="check-circle" size={14} />
@@ -176,10 +231,10 @@ export default function ProtectPdfTool() {
                                         <Icon name="file-text" size={24} className="text-[#0081C9]" />
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <p className="font-semibold text-slate-800 truncate text-sm" title={activeFile.file.name}>
+                                        <p className="text-slate-800 truncate" title={activeFile.file.name}>
                                             {activeFile.file.name}
                                         </p>
-                                        <p className="text-xs text-slate-500 mt-0.5 font-medium flex gap-2">
+                                        <p className="text-muted-foreground mt-0.5 flex gap-2">
                                             <span>Ready for encryption</span>
                                         </p>
                                     </div>
@@ -190,7 +245,7 @@ export default function ProtectPdfTool() {
                         {/* Settings / Results Data */}
                         {!isProtected ? (
                             <div className="space-y-4">
-                                <h3 className="text-sm font-semibold text-slate-800">Set Password</h3>
+                                <h3 className="text-slate-800">Set Password</h3>
 
                                 <div className="bg-[#E8ECEF] p-4 rounded-xl border border-transparent focus-within:border-[#0081C9] focus-within:bg-white transition-all space-y-2">
                                     <label className="text-xs font-bold uppercase tracking-wider text-zinc-500 block mb-1">Document Password</label>
@@ -205,24 +260,24 @@ export default function ProtectPdfTool() {
                                         />
                                     </div>
                                 </div>
-                                <p className="text-[10px] text-slate-400 font-medium px-2">
+                                <p className="text-[10px] text-muted-foreground px-2">
                                     Make sure to remember this password. If lost, the document cannot be recovered.
                                 </p>
                             </div>
                         ) : (
                             <div className="space-y-4">
-                                <h3 className="text-sm font-semibold text-slate-800">Results</h3>
+                                <h3 className="text-slate-800">Results</h3>
 
                                 <div className="bg-[#0081C9]/5 border border-[#0081C9]/20 p-4 rounded-xl flex items-start gap-3">
                                     <Icon name="lock" size={18} className="text-[#0081C9] mt-0.5" />
                                     <div>
-                                        <p className="text-sm font-semibold text-[#0081C9]">Successfully Encrypted</p>
-                                        <p className="text-xs text-slate-600 mt-1">
+                                        <p className="text-[#0081C9]">Successfully Encrypted</p>
+                                        <p className="text-muted-foreground mt-1">
                                             Your file is now protected with 128-bit RC4 encryption. It restricts modifying, copying, and annotating without the password.
                                         </p>
 
                                         <div className="mt-3 inline-flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-[#0081C9]/20">
-                                            <span className="text-xs text-slate-500 font-medium">Password:</span>
+                                            <span className="text-xs text-muted-foreground font-medium">Password:</span>
                                             <span className="text-xs font-mono font-bold text-slate-800">{password}</span>
                                         </div>
                                     </div>

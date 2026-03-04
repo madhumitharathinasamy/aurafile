@@ -17,10 +17,10 @@ export function Card({ title, description, icon, href }: CardProps) {
                     {icon}
                 </div>
             )}
-            <h3 className="mb-2 text-base md:text-lg font-bold text-foreground group-hover:text-primary transition-colors">
+            <h3 className="mb-2 text-foreground group-hover:text-primary transition-colors">
                 {title}
             </h3>
-            <p className="mb-4 text-xs md:text-sm text-muted-foreground leading-relaxed flex-grow">
+            <p className="mb-4 text-muted-foreground leading-relaxed flex-grow">
                 {description}
             </p>
             <div className="flex items-center text-sm font-semibold text-primary mt-auto">

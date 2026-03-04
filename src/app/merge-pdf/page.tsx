@@ -70,7 +70,6 @@ export default function MergePdfPage() {
             howItWorks={steps}
             benefits={benefits}
             faq={faq}
-            theme="red"
         />
     );
 }

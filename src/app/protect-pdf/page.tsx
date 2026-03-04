@@ -70,7 +70,6 @@ export default function ProtectPdfPage() {
             howItWorks={steps}
             benefits={benefits}
             faq={faq}
-            theme="red"
         />
     );
 }

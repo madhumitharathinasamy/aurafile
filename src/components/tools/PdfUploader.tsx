@@ -12,13 +12,45 @@ interface PdfUploaderProps {
 
 export function PdfUploader({ onUpload, maxFiles = UPLOAD_LIMITS.MAX_FILES }: PdfUploaderProps) {
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        onDrop: (acceptedFiles) => {
+        onDrop: async (acceptedFiles) => {
             if (acceptedFiles?.length > 0) {
+                let filesToProcess = acceptedFiles;
                 if (acceptedFiles.length > maxFiles) {
                     toast.warning(`Only the first ${maxFiles} files were added. Limit reached.`);
-                    onUpload(acceptedFiles.slice(0, maxFiles));
-                } else {
-                    onUpload(acceptedFiles);
+                    filesToProcess = acceptedFiles.slice(0, maxFiles);
+                }
+
+                // Check for password protection
+                const validFiles: File[] = [];
+                for (const file of filesToProcess) {
+                    try {
+                        const arrayBuffer = await file.arrayBuffer();
+                        const pdfjsLib = await import("pdfjs-dist");
+                        if (typeof window !== "undefined" && !pdfjsLib.GlobalWorkerOptions.workerSrc) {
+                            pdfjsLib.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+                        }
+
+                        const loadingTask = pdfjsLib.getDocument(arrayBuffer);
+                        loadingTask.onPassword = (updatePassword: any, reason: number) => {
+                            // Reason 1 = NEED_PASSWORD
+                            if (reason === 1) {
+                                throw new Error("PasswordProtected");
+                            }
+                        };
+
+                        await loadingTask.promise;
+                        validFiles.push(file);
+                    } catch (error: any) {
+                        if (error.message === "PasswordProtected" || error.name === "PasswordException") {
+                            toast.error(`"${file.name}" is password protected and cannot be processed.`);
+                        } else {
+                            toast.error(`"${file.name}" appears to be an invalid or broken PDF.`);
+                        }
+                    }
+                }
+
+                if (validFiles.length > 0) {
+                    onUpload(validFiles);
                 }
             }
         },
@@ -42,21 +74,21 @@ export function PdfUploader({ onUpload, maxFiles = UPLOAD_LIMITS.MAX_FILES }: Pd
         <div
             {...getRootProps()}
             className={`rounded-xl border-2 border-dashed p-8 text-center cursor-pointer transition-all duration-200 ease-in-out ${isDragActive
-                ? "border-red-500 bg-red-500/5"
-                : "border-border bg-surface hover:border-red-500/50 hover:bg-background"
+                ? "border-primary bg-primary/5"
+                : "border-border bg-surface hover:border-primary/50 hover:bg-background"
                 }`}
         >
             <input {...getInputProps()} />
             <div className="flex flex-col items-center gap-4">
-                <div className="mb-2 rounded-full bg-red-50 p-4 shadow-sm dark:bg-red-900/20">
-                    <Icon name="file-text" size={48} className="text-red-600" />
+                <div className="mb-2 rounded-full bg-primary/10 p-4 shadow-sm dark:bg-primary/20">
+                    <Icon name="file-text" size={48} className="text-primary" />
                 </div>
-                <p className="text-base font-medium text-foreground">
+                <p className="text-foreground">
                     {isDragActive
                         ? "Drop the PDF here..."
                         : "Drag & drop PDF files here, or click to select"}
                 </p>
-                <p className="text-xs text-muted-foreground">Supports up to {maxFiles} PDFs (Max {UPLOAD_LIMITS.MAX_FILE_SIZE_MB}MB)</p>
+                <p className="text-muted-foreground">Supports up to {maxFiles} PDFs (Max {UPLOAD_LIMITS.MAX_FILE_SIZE_MB}MB)</p>
             </div>
         </div>
     );

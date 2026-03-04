@@ -1,90 +1,93 @@
 import type { Metadata } from "next";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { Card } from "@/components/ui/Card";
+import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
-    title: "About Us",
-    description: "Learn about Aura File - The secure, fast, and free image toolkit.",
+    title: "About Us | AuraFile",
+    description: "Learn about AuraFile, our mission to provide fast, secure, and private browser-based image tools for everyone.",
+    alternates: {
+        canonical: "https://aurafile.net/about",
+    },
 };
 
 export default function AboutPage() {
     return (
-        <>
-            <PageHeader
-                title="About Aura File"
-                subtitle="Secure, fast, and free tools to help you master your images."
-            />
+        <main className="container mx-auto max-w-3xl px-4 py-16 md:py-24 animate-fade-in">
+            {/* Header */}
+            <h1 className="mb-8 text-center text-[#0081C9] font-extrabold text-4xl md:text-5xl tracking-tight">About AuraFile</h1>
+            <p className="text-center text-lg md:text-xl text-muted-foreground mb-16 leading-relaxed max-w-2xl mx-auto">
+                AuraFile is a suite of powerful, browser-based file tools designed for speed, privacy, and simplicity.
+            </p>
 
-            <main className="container mx-auto max-w-[1000px] pb-12 px-4 md:pb-12">
-
-                {/* Mission / Story Section */}
-                <section className="mb-24 grid gap-8 md:mb-12">
-                    <div className="mx-auto max-w-[800px] text-center">
-                        <h2 className="mb-6 text-3xl font-bold md:text-4xl text-foreground">Who are we?</h2>
-                        <p className="mb-6 text-lg md:text-xl leading-relaxed text-muted-foreground">
-                            Since 2024, Aura File has been dedicated to providing user-friendly image editing tools that are quick to process with high-quality results.
-                            We noticed that most free online tools were full of ads, slow, or unsafe. We wanted to build something better.
-                        </p>
-                        <p className="text-lg md:text-xl leading-relaxed text-muted-foreground">
-                            Based in the cloud but running locally in your browser when possible, Aura File is designed to be the <strong>safest</strong> place to edit your photos online.
-                        </p>
-                    </div>
-                </section>
-
-                {/* Stats Grid */}
-                <section className="mb-24 grid grid-cols-1 gap-8 md:mb-12 sm:grid-cols-3 text-center">
-                    <div className="rounded-xl bg-surface p-8">
-                        <div className="mb-2 text-4xl font-extrabold text-primary">100%</div>
-                        <div className="font-medium text-muted">Secure Processing</div>
-                    </div>
-                    <div className="rounded-xl bg-surface p-8">
-                        <div className="mb-2 text-4xl font-extrabold text-accent">0</div>
-                        <div className="font-medium text-muted">Files Stored Permanently</div>
-                    </div>
-                    <div className="rounded-xl bg-surface p-8">
-                        <div className="mb-2 text-4xl font-extrabold text-success">Free</div>
-                        <div className="font-medium text-muted">Forever</div>
-                    </div>
-                </section>
-
-                {/* Values Section */}
-                <section className="mb-24 md:mb-12">
-                    <h2 className="mb-12 text-center text-3xl font-bold md:text-4xl text-foreground">Why choose Aura File?</h2>
-                    <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                        <Card
-                            title="Privacy First"
-                            description="We believe your files belong to you. Our architecture ensures automatic deletion and strict privacy controls."
-                            icon={<span className="text-2xl">🔒</span>}
-                        />
-                        <Card
-                            title="Global Community"
-                            description="Helping millions of users worldwide (eventually!) to process their images in seconds."
-                            icon={<span className="text-2xl">🌍</span>}
-                        />
-                        <Card
-                            title="Ongoing Updates"
-                            description="We are constantly launching new tools and features to give users easier workflows and higher quality results."
-                            icon={<span className="text-2xl">🚀</span>}
-                        />
-                    </div>
-                </section>
-
-                {/* Media Kit Section */}
-                <section className="rounded-xl bg-gradient-to-br from-[#1f1f23] to-black px-8 py-16 text-center text-white">
-                    <h2 className="mb-6 text-3xl md:text-4xl font-bold">Media Kit</h2>
-                    <p className="mx-auto mb-8 max-w-[600px] text-lg md:text-xl text-gray-400">
-                        Writing about Aura File? Download our official logos and brand assets here.
+            <div className="space-y-16 text-foreground/90">
+                {/* Mission Section */}
+                <section>
+                    <h2 className="mb-6 text-2xl md:text-4xl font-semibold text-foreground">Our Mission</h2>
+                    <p className="mb-4">
+                        We believe that simple tasks like resizing an image or converting a file format shouldn't require downloading heavy software, registering for an account, or risking your privacy by uploading files to unknown servers.
                     </p>
-                    <div className="flex flex-wrap justify-center gap-4">
-                        <a href="/favicon.ico" download="aurafile-logo.ico" className="no-underline">
-                            <Button variant="secondary" className="bg-white text-black border-none hover:bg-white/90">
-                                Download Logo
-                            </Button>
-                        </a>
+                    <p className="mb-8">
+                        Our mission is to build the web's best collection of file utility tools that work <strong>entirely in your browser</strong>. This ensures:
+                    </p>
+
+                    {/* Feature List */}
+                    <ul className="space-y-4">
+                        <li className="flex items-start gap-3 text-base">
+                            <div className="mt-1 flex-shrink-0 text-primary">
+                                <Icon name="check-circle" size={20} />
+                            </div>
+                            <div>
+                                <span className="font-bold text-foreground">Privacy:</span> Your files never leave your device.
+                            </div>
+                        </li>
+                        <li className="flex items-start gap-3 text-base">
+                            <div className="mt-1 flex-shrink-0 text-primary">
+                                <Icon name="check-circle" size={20} />
+                            </div>
+                            <div>
+                                <span className="font-bold text-foreground">Speed:</span> Zero upload/download times for processing.
+                            </div>
+                        </li>
+                        <li className="flex items-start gap-3 text-base">
+                            <div className="mt-1 flex-shrink-0 text-primary">
+                                <Icon name="check-circle" size={20} />
+                            </div>
+                            <div>
+                                <span className="font-bold text-foreground">Accessibility:</span> Works on any device with a modern web browser.
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+
+                {/* Tech Section */}
+                <section>
+                    <h2 className="mb-6 text-2xl md:text-4xl font-semibold text-foreground">Why Browser-Based?</h2>
+                    <p className="leading-relaxed">
+                        Traditional online tools upload your files to a cloud server to process them. This is slow, requires internet bandwidth, and raises privacy concerns. By leveraging modern web technologies like <code className="bg-primary/10 text-primary px-2 py-1 rounded font-mono text-sm font-semibold mx-1">WebAssembly and the Canvas API</code>, AuraFile brings desktop-class performance directly to your browser tab.
+                    </p>
+                </section>
+
+                {/* Contact Section */}
+                <section className="bg-surface border border-border rounded-2xl p-8 text-center mt-12">
+                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary mb-6">
+                        <Icon name="mail" size={24} />
+                    </div>
+                    <h2 className="mb-4 text-xl md:text-2xl font-semibold text-foreground">Contact Us</h2>
+                    <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+                        We are constantly improving and adding new tools. If you have feedback, suggestions, or just want to say hi, reach out to us:
+                    </p>
+                    <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+                        <Button
+                            href="mailto:aurafile.team@gmail.com"
+                            variant="primary"
+                            className="w-full sm:w-auto flex items-center gap-2"
+                        >
+                            <Icon name="mail" size={18} />
+                            Email Us
+                        </Button>
                     </div>
                 </section>
-            </main>
-        </>
+            </div>
+        </main>
     );
 }

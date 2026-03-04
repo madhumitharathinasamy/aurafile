@@ -19,10 +19,10 @@ export default function ContactPage() {
 
             <main className="container mx-auto px-4 pb-24 max-w-3xl">
                 <div className="p-12 bg-surface rounded-lg border border-border text-center">
-                    <h2 className="mb-4 flex items-center justify-center gap-2 text-3xl md:text-4xl font-bold text-foreground">
+                    <h2 className="mb-4 flex items-center justify-center gap-2 text-foreground">
                         <span>📧</span> Email Support
                     </h2>
-                    <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-md mx-auto mb-8">
+                    <p className="text-muted-foreground leading-relaxed max-w-md mx-auto mb-8">
                         For all inquiries, please email us directly. We aim to respond within 24 hours.
                     </p>
 

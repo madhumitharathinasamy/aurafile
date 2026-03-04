@@ -5,7 +5,6 @@ import { ImageUploader } from "@/components/tools/ImageUploader";
 import { ToolModal } from "@/components/modal/ToolModal";
 import { ImageComparison } from "@/components/tools/ImageComparison";
 import { Icon } from "@/components/ui/Icon";
-import { compressImageAction } from "@/actions/tools";
 import { toast } from "sonner";
 import { useFileUpload } from "@/hooks/useFileUpload";
 import JSZip from "jszip";
@@ -63,6 +62,46 @@ export default function CompressTool() {
     const [isProcessing, setIsProcessing] = useState(false);
     const [applyToAll, setApplyToAll] = useState(false);
 
+    const processSingleFile = useCallback(async (currentFile: any) => {
+        try {
+            const imageCompression = (await import("browser-image-compression")).default;
+            const options: any = {
+                useWebWorker: true,
+                preserveExif: currentFile.settings.preserveMetadata,
+            };
+
+            if (currentFile.settings.targetMode && currentFile.settings.targetSizeValue) {
+                const targetSize = parseFloat(currentFile.settings.targetSizeValue);
+                if (!isNaN(targetSize) && targetSize > 0) {
+                    options.maxSizeMB = currentFile.settings.targetSizeUnit === "KB" ? targetSize / 1024 : targetSize;
+                }
+            } else {
+                // If not target mode, fallback to trying to compress using quality ratio.
+                options.initialQuality = currentFile.settings.quality / 100;
+                options.maxSizeMB = 50;
+            }
+
+            // Output format mapping
+            if (currentFile.settings.outputFormat !== "original") {
+                options.fileType = `image/${currentFile.settings.outputFormat}`;
+            }
+
+            const compressedFile = await imageCompression(currentFile.file, options);
+            const compressedUrl = URL.createObjectURL(compressedFile);
+
+            updateFileSettings(currentFile.id, {
+                compressedSize: compressedFile.size,
+                isCompressed: true,
+                compressedUrl: compressedUrl
+            });
+            return true;
+        } catch (e) {
+            console.error(e);
+            toast.error(`Error compressing ${currentFile.file.name}.`);
+            return false;
+        }
+    }, [updateFileSettings]);
+
     // Track relevant settings for auto-preview
     const activeSettingsStr = activeFile ? JSON.stringify({
         q: activeFile.settings.quality,
@@ -90,7 +129,7 @@ export default function CompressTool() {
         }, 600);
 
         return () => clearTimeout(timer);
-    }, [activeSettingsStr, activeFile?.id]);
+    }, [activeSettingsStr, activeFile, processSingleFile]);
 
     const handleUpload = async (uploadedFiles: File[]) => {
         addFiles(uploadedFiles, { ...DEFAULT_COMPRESS_SETTINGS });
@@ -136,40 +175,7 @@ export default function CompressTool() {
         }
     };
 
-    const processSingleFile = async (currentFile: any) => {
-        try {
-            const formData = new FormData();
-            formData.append("file", currentFile.file);
-            formData.append("quality", String(currentFile.settings.quality));
 
-            // Append new advanced settings
-            formData.append("targetMode", String(currentFile.settings.targetMode));
-            formData.append("targetSizeUnit", currentFile.settings.targetSizeUnit);
-            formData.append("targetSizeValue", currentFile.settings.targetSizeValue);
-            formData.append("outputFormat", currentFile.settings.outputFormat);
-            formData.append("strategy", currentFile.settings.strategy);
-            formData.append("preserveMetadata", String(currentFile.settings.preserveMetadata));
-            formData.append("chromaSubsampling", currentFile.settings.chromaSubsampling);
-
-            const res = await compressImageAction(formData);
-
-            if (res.success && res.data) {
-                updateFileSettings(currentFile.id, {
-                    compressedSize: res.newSize,
-                    isCompressed: true,
-                    compressedUrl: res.data
-                });
-                return true;
-            } else {
-                toast.error(`Failed to compress ${currentFile.file.name}: ${res.error}`);
-                return false;
-            }
-        } catch (e) {
-            console.error(e);
-            toast.error(`Error compressing ${currentFile.file.name}.`);
-            return false;
-        }
-    };
 
     const formatSize = (bytes: number) => {
         if (bytes === 0) return "0 Bytes";
@@ -294,7 +300,7 @@ export default function CompressTool() {
                         {/* Summary Card */}
                         <div className="bg-[#E8ECEF] rounded-xl p-4 flex items-center justify-between shadow-sm">
                             <div className="flex flex-col">
-                                <span className="text-xs font-medium text-slate-500 mb-1">Original</span>
+                                <span className="text-xs font-medium text-muted-foreground mb-1">Original</span>
                                 <span className="text-sm font-bold text-slate-800">
                                     {formatSize(activeFile.file.size)}
                                 </span>
@@ -303,7 +309,7 @@ export default function CompressTool() {
                                 <Icon name="arrow-right" size={16} strokeWidth={2.5} />
                             </div>
                             <div className="flex flex-col text-right">
-                                <span className="text-xs font-medium text-slate-500 mb-1">Compressed</span>
+                                <span className="text-xs font-medium text-muted-foreground mb-1">Compressed</span>
                                 <span className="text-sm font-bold text-slate-800">
                                     {activeFile.settings.isCompressed ? formatSize(activeFile.settings.compressedSize) : "—"}
                                 </span>

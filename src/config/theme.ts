@@ -1,21 +1,21 @@
 export const themeConfig = {
     colors: {
-        background: "#f1f5f9",  // Base Background (Slate-100)
-        foreground: "#0f1729",  // Base Text (Slate-900)
-        primary: "#0284c5",     // New Primary Blue
-        primaryForeground: "#f0f9ff",
-        secondary: "#324052",   // Secondary Slate
-        secondaryForeground: "#f8fafc",
-        accent: "#f8fafc",      // Accent Background
-        border: "#c8d3df",      // Blue-ish Gray Border
-        input: "#c8d3df",       // Input Border
-        surface: "#f8fafc",     // Card Background
-        textSecondary: "#465467", // Secondary Text
-        textMuted: "#94a3b8",     // Muted Text
-        divider: "#c8d3df",
-        ring: "#0284c5",        // Focus Ring
-        success: "#0284c5",     // Mapped to primary for now or keep separate if needed, but staying strict to palette
-        error: "#db2424",       // Destructive Red
+        background: "#f5f5f5",  // Light gray background
+        foreground: "#111111",  // Text
+        primary: "#0070f3",     // New Primary Blue
+        primaryForeground: "#ffffff",
+        secondary: "#111111",   // Secondary
+        secondaryForeground: "#ffffff",
+        accent: "#ffffff",      // Accent Background
+        border: "#eaeaea",      // Border
+        input: "#eaeaea",       // Input Border
+        surface: "#ffffff",     // Card Background (Surface)
+        textSecondary: "#666666", // Secondary Text
+        textMuted: "#888888",     // Muted Text
+        divider: "#eaeaea",
+        ring: "#0070f3",        // Focus Ring
+        success: "#0070f3",
+        error: "#e00000",       // Destructive Red
     },
     fonts: {
         sans: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",

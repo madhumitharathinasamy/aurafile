@@ -9,7 +9,7 @@ interface TypographyProps extends React.HTMLAttributes<HTMLElement> {
 
 export function PageTitle({ as: Tag = 'h1', children, className, ...props }: TypographyProps) {
     return (
-        <Tag className={cn("text-xl md:text-2xl font-bold tracking-tight text-foreground leading-tight", className)} {...props}>
+        <Tag className={cn("text-3xl md:text-4xl lg:text-6xl font-bold tracking-tight text-foreground leading-tight", className)} {...props}>
             {children}
         </Tag>
     );
@@ -17,7 +17,7 @@ export function PageTitle({ as: Tag = 'h1', children, className, ...props }: Typ
 
 export function SectionTitle({ as: Tag = 'h2', children, className, ...props }: TypographyProps) {
     return (
-        <Tag className={cn("text-lg md:text-xl font-bold tracking-tight text-foreground mb-4", className)} {...props}>
+        <Tag className={cn("text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight text-foreground mb-4", className)} {...props}>
             {children}
         </Tag>
     );
@@ -25,7 +25,7 @@ export function SectionTitle({ as: Tag = 'h2', children, className, ...props }: 
 
 export function SectionDescription({ as: Tag = 'p', children, className, ...props }: TypographyProps) {
     return (
-        <Tag className={cn("text-sm md:text-base font-medium text-muted-foreground mb-6", className)} {...props}>
+        <Tag className={cn("text-base font-medium text-muted-foreground mb-6", className)} {...props}>
             {children}
         </Tag>
     );
@@ -33,7 +33,7 @@ export function SectionDescription({ as: Tag = 'p', children, className, ...prop
 
 export function BodyText({ as: Tag = 'p', children, className, ...props }: TypographyProps) {
     return (
-        <Tag className={cn("text-sm md:text-base font-normal text-foreground leading-relaxed", className)} {...props}>
+        <Tag className={cn("text-base font-normal text-foreground leading-relaxed", className)} {...props}>
             {children}
         </Tag>
     );
@@ -41,7 +41,7 @@ export function BodyText({ as: Tag = 'p', children, className, ...props }: Typog
 
 export function SmallText({ as: Tag = 'p', children, className, ...props }: TypographyProps) {
     return (
-        <Tag className={cn("text-xs text-muted-foreground", className)} {...props}>
+        <Tag className={cn("text-sm text-muted-foreground", className)} {...props}>
             {children}
         </Tag>
     );

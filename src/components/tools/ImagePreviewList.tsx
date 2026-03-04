@@ -54,7 +54,7 @@ export function ImagePreviewList({
                                     />
                                 </div>
                                 <div className="min-w-0 flex-1 flex flex-col justify-center">
-                                    <p className="truncate text-xs font-medium mb-1" title={item.file.name}>
+                                    <p className="truncate mb-1" title={item.file.name}>
                                         {item.file.name}
                                     </p>
                                     <div className="flex flex-col text-[10px] text-muted-foreground leading-tight">

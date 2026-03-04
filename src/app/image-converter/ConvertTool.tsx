@@ -7,8 +7,7 @@ import { toast } from "sonner";
 import { Icon } from "@/components/ui/Icon";
 import { ImageComparison } from "@/components/tools/ImageComparison";
 import { useFileUpload } from "@/hooks/useFileUpload";
-import { ToolSettingsRenderer, SettingGroup, SettingRow, ToggleRow, SelectRow } from "@/components/tools/ToolSettingsRenderer";
-import JSZip from "jszip";
+import { ToolSettingsRenderer, SettingGroup, SelectRow, SettingRow, ToggleRow } from "@/components/tools/ToolSettingsRenderer";
 import { saveAs } from "file-saver";
 
 const ACCEPTED_EXTENSIONS = {
@@ -107,7 +106,7 @@ export default function ConvertTool() {
         }
     };
 
-    const handleSettingChange = (key: keyof ConvertSettings, value: any) => {
+    const handleSettingChange = (key: keyof ConvertSettings, value: string | number | boolean) => {
         if (!activeFile) return;
 
         let finalUpdates = { [key]: value };
@@ -130,50 +129,38 @@ export default function ConvertTool() {
         }
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const processSingleFile = async (integratedFile: any) => {
-        const file = integratedFile.file;
-        const id = integratedFile.id;
-        const settings: ConvertSettings = integratedFile.settings;
-
-        if (validateFile(file)) {
-            return false;
-        }
-
         try {
-            const { convertImageAction } = await import("@/actions/tools");
-            const formData = new FormData();
-            formData.append("file", file);
-            formData.append("format", settings.targetFormat);
-            formData.append("quality", settings.quality.toString());
+            // Setup target options
+            const conversionFormat = integratedFile.settings.targetFormat.toLowerCase();
+            const mimeType = `image/${conversionFormat === 'jpg' ? 'jpeg' : conversionFormat}`;
 
-            // Advanced settings sent through the action (which reuses processCompressImage)
-            formData.append("targetMode", "false");
-            formData.append("strategy", settings.lossless ? "lossless" : "lossy");
-            formData.append("preserveMetadata", String(settings.preserveMetadata));
+            // Only convert formats we support via browser-image-compression locally
+            let resultFile;
 
-            if (settings.backgroundColor && settings.backgroundColor !== "transparent") {
-                formData.append("backgroundColor", settings.backgroundColor);
-            }
+            // Note: browser-image-compression is primarily for compression, 
+            // but we can use it for fileType conversion between web-safe formats
+            const options = {
+                useWebWorker: true,
+                maxSizeMB: 50, // Don't significantly compress
+                initialQuality: integratedFile.settings.quality / 100, // Still apply their requested quality
+                fileType: mimeType
+            };
 
-            const result = await convertImageAction(formData);
+            const imageCompression = (await import("browser-image-compression")).default;
+            resultFile = await imageCompression(integratedFile.file, options);
 
-            if (result.success && result.data) {
-                // Fetch the base64 string and convert to blob url for downloading
-                const response = await fetch(result.data);
-                const blob = await response.blob();
-                const objectUrl = URL.createObjectURL(blob);
+            const convertedUrl = URL.createObjectURL(resultFile);
 
-                setConvertedFiles(prev => ({
-                    ...prev,
-                    [id]: objectUrl
-                }));
-                return true;
-            } else {
-                console.error(`Failed to convert ${file.name}:`, result.error);
-                return false;
-            }
-        } catch (err) {
-            console.error(`Error converting ${file.name}:`, err);
+            setConvertedFiles(prev => ({
+                ...prev,
+                [integratedFile.id]: convertedUrl
+            }));
+            return true;
+        } catch (e) {
+            console.error(e);
+            toast.error(`Error converting ${integratedFile.file.name}.`);
             return false;
         }
     };
@@ -190,8 +177,24 @@ export default function ConvertTool() {
         let errorCount = 0;
 
         if (applyToAll && isBatchMode) {
-            toast.info(`Starting conversion of ${files.length} files...`);
-            for (const file of files) {
+
+            // Phase 3 Memory Monitor: Fallback to Sequential Processing
+            const totalBytes = files.reduce((acc, f) => acc + f.file.size, 0);
+            const isHeavyBatch = totalBytes > 1024 * 1024 * 1024; // > 1GB
+
+            if (isHeavyBatch) {
+                toast.warning(`Large batch detected (${(totalBytes / 1024 / 1024).toFixed(0)}MB). Using deep sequential processing to save memory...`);
+            } else {
+                toast.info(`Starting conversion of ${files.length} files...`);
+            }
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                if (isHeavyBatch) {
+                    toast.info(`Processing ${i + 1}/${files.length}...`);
+                    // Extra tick for garbage collection on heavy batches
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
                 const success = await processSingleFile(file);
                 if (success) successCount++;
                 else errorCount++;
@@ -359,10 +362,10 @@ export default function ConvertTool() {
                                     <Icon name="file-type-2" size={24} className="text-[#0081C9]" />
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <p className="font-semibold text-slate-800 truncate text-sm">
+                                    <p className="text-slate-800 truncate">
                                         Source: {activeFile.file.type.split('/')[1]?.toUpperCase() || 'UNKNOWN'}
                                     </p>
-                                    <p className="text-xs text-slate-500 mt-0.5 font-medium">
+                                    <p className="text-muted-foreground mt-0.5">
                                         Size: {(activeFile.file.size / 1024 / 1024).toFixed(2)} MB
                                     </p>
                                 </div>
@@ -427,13 +430,13 @@ export default function ConvertTool() {
                                 {["png", "webp", "gif"].includes(activeFile.settings?.targetFormat) && (
                                     <button
                                         onClick={() => handleSettingChange("backgroundColor", activeFile.settings?.backgroundColor === "transparent" ? "#FFFFFF" : "transparent")}
-                                        className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded transition-colors ${activeFile.settings?.backgroundColor === "transparent" ? "bg-[#0081C9]/10 text-[#0081C9]" : "bg-slate-100 text-slate-500 hover:bg-slate-200"}`}
+                                        className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded transition-colors ${activeFile.settings?.backgroundColor === "transparent" ? "bg-[#0081C9]/10 text-[#0081C9]" : "bg-slate-100 text-muted-foreground hover:bg-slate-200"}`}
                                     >
                                         Transparent
                                     </button>
                                 )}
                             </div>
-                            <p className="text-xs text-slate-500 mt-1">Replaces transparent pixels with this color.</p>
+                            <p className="text-muted-foreground mt-1">Replaces transparent pixels with this color.</p>
 
                             <div className="h-px bg-slate-200/60 my-2 w-full"></div>
 

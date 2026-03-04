@@ -20,10 +20,10 @@ export default function PrivacyPage() {
                 <div className="flex flex-col gap-12">
 
                     <section>
-                        <h2 className="mb-4 flex items-center gap-3 text-3xl md:text-4xl font-bold text-foreground">
+                        <h2 className="mb-4 flex items-center gap-3 text-foreground">
                             <span>ℹ️</span> 1. Information We Collect
                         </h2>
-                        <p className="mb-6 text-base leading-relaxed text-muted-foreground">
+                        <p className="mb-6 leading-relaxed text-muted-foreground">
                             Our mission is to process your images without compromising your privacy. When you use Aura File tools:
                         </p>
                         <ul className="flex flex-col gap-4">
@@ -43,37 +43,37 @@ export default function PrivacyPage() {
                     </section>
 
                     <section>
-                        <h2 className="mb-4 flex items-center gap-3 text-3xl md:text-4xl font-bold text-foreground">
+                        <h2 className="mb-4 flex items-center gap-3 text-foreground">
                             <span>🛠️</span> 2. How We Use Information
                         </h2>
-                        <p className="text-base leading-relaxed text-muted-foreground">
+                        <p className="leading-relaxed text-muted-foreground">
                             We use the data solely to provide the service you requested (e.g., resizing an image). We do not sell, trade, or share your personal files with third parties.
                         </p>
                     </section>
 
                     <section>
-                        <h2 className="mb-4 flex items-center gap-3 text-3xl md:text-4xl font-bold text-foreground">
+                        <h2 className="mb-4 flex items-center gap-3 text-foreground">
                             <span>🍪</span> 3. Cookies & Analytics
                         </h2>
-                        <p className="text-base leading-relaxed text-muted-foreground">
+                        <p className="leading-relaxed text-muted-foreground">
                             We use minimal cookies necessary for website functionality and anonymous analytics (e.g., Google Analytics) to improve our performance. You can disable cookies in your browser settings.
                         </p>
                     </section>
 
                     <section>
-                        <h2 className="mb-4 flex items-center gap-3 text-3xl md:text-4xl font-bold text-foreground">
+                        <h2 className="mb-4 flex items-center gap-3 text-foreground">
                             <span>🔒</span> 4. Security
                         </h2>
-                        <p className="text-base leading-relaxed text-muted-foreground">
+                        <p className="leading-relaxed text-muted-foreground">
                             We implement industry-standard security measures including SSL/TLS encryption for data in transit and automatic cleanup scripts for data at rest.
                         </p>
                     </section>
 
                     <section>
-                        <h2 className="mb-4 flex items-center gap-3 text-3xl md:text-4xl font-bold text-foreground">
+                        <h2 className="mb-4 flex items-center gap-3 text-foreground">
                             <span>📫</span> 5. Contact Us
                         </h2>
-                        <p className="text-base leading-relaxed text-muted-foreground">
+                        <p className="leading-relaxed text-muted-foreground">
                             If you have questions about this Privacy Policy, please contact us at <a href={`mailto:${siteConfig.links.email}`} className="text-primary hover:underline">{siteConfig.links.email}</a>.
                         </p>
                     </section>

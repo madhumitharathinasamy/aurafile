@@ -1,4 +1,5 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
+import { toast } from "sonner";
 
 export interface IntegratedFile {
     id: string;
@@ -16,17 +17,32 @@ export function useFileUpload(initialFiles: IntegratedFile[] = []) {
     const [files, setFiles] = useState<IntegratedFile[]>(initialFiles);
     const [activeIndex, setActiveIndex] = useState<number>(0);
 
+    const filesRef = useRef(files);
+    useEffect(() => {
+        filesRef.current = files;
+    }, [files]);
+
     // Cleanup URLs when files are removed or component unmounts
     useEffect(() => {
         return () => {
-            files.forEach(f => {
+            filesRef.current.forEach(f => {
                 if (f.previewUrl) URL.revokeObjectURL(f.previewUrl);
             });
         };
     }, []);
 
     const addFiles = useCallback((newRawFiles: File[], defaultSettings: any = {}) => {
-        const newIntegratedFiles: IntegratedFile[] = newRawFiles.map(file => ({
+        // Enforce Phase 5 Hard Limit (50MB)
+        const MAX_SIZE = 50 * 1024 * 1024;
+        const validFiles = newRawFiles.filter(file => {
+            if (file.size > MAX_SIZE) {
+                toast.error(`"${file.name}" exceeds the 50MB limit and was skipped.`);
+                return false;
+            }
+            return true;
+        });
+
+        const newIntegratedFiles: IntegratedFile[] = validFiles.map(file => ({
             id: crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2, 9) + Date.now().toString(36),
             file,
             previewUrl: URL.createObjectURL(file),
@@ -43,6 +59,8 @@ export function useFileUpload(initialFiles: IntegratedFile[] = []) {
             }
             return updated;
         });
+
+        return newIntegratedFiles;
     }, []);
 
     const removeFile = useCallback((id: string) => {
@@ -72,6 +90,18 @@ export function useFileUpload(initialFiles: IntegratedFile[] = []) {
         setFiles([]);
         setActiveIndex(0);
     }, [files]);
+
+    const updatePreviewUrl = useCallback((id: string, newUrl: string) => {
+        setFiles(prev => prev.map(f => {
+            if (f.id === id) {
+                if (f.previewUrl && f.previewUrl.startsWith('blob:')) {
+                    URL.revokeObjectURL(f.previewUrl);
+                }
+                return { ...f, previewUrl: newUrl };
+            }
+            return f;
+        }));
+    }, []);
 
     const updateFileSettings = useCallback((id: string, newSettings: any) => {
         setFiles(prev => prev.map(f => {
@@ -103,6 +133,7 @@ export function useFileUpload(initialFiles: IntegratedFile[] = []) {
         clearAll,
         updateFileSettings,
         updateAllFileSettings,
+        updatePreviewUrl,
         isBatchMode: files.length > 1,
         hasFiles: files.length > 0
     };

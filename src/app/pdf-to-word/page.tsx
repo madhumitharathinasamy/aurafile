@@ -70,7 +70,6 @@ export default function PdfToWordPage() {
             howItWorks={steps}
             benefits={benefits}
             faq={faq}
-            theme="red"
         />
     );
 }

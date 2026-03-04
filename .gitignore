@@ -61,3 +61,22 @@ eslint-results.json
 eslint-errors.txt
 lint-output.txt
 tsc-output.txt
+
+# Tesseract data
+*.traineddata
+
+# Additional Logs & Command Outputs
+*.log
+error-log.txt
+ts_errors_utf8.log
+tsc_out.txt
+git_status.txt
+get_git_files.js
+git_status_output.json
+
+# One-off test and utility scripts
+test-*.mjs
+test-*.js
+generate-test-*.js
+extract_icons.js
+refactor_typography.js

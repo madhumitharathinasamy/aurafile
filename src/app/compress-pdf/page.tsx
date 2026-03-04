@@ -70,7 +70,6 @@ export default function CompressPdfPage() {
             howItWorks={steps}
             benefits={benefits}
             faq={faq}
-            theme="red"
         />
     );
 }

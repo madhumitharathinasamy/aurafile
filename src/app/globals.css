@@ -15,27 +15,29 @@
   html,
   body {
     @apply bg-background text-foreground overflow-x-hidden;
+    font-size: 16px;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
   h1 {
-    @apply text-2xl md:text-4xl font-extrabold tracking-tight;
+    font-size: clamp(30px, 5vw, 60px);
+    @apply font-bold tracking-tight;
   }
 
   h2 {
-    @apply text-xl md:text-2xl font-bold;
+    @apply text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight;
   }
 
   h3 {
-    @apply text-lg md:text-xl font-semibold;
+    @apply text-lg md:text-xl lg:text-2xl font-semibold;
   }
 
   p {
-    @apply text-sm md:text-base leading-relaxed;
+    @apply text-base leading-relaxed;
   }
 
   small {
-    @apply text-xs md:text-sm;
+    @apply text-sm leading-none;
   }
 }
 
@@ -187,8 +189,10 @@ a {
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .hide-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 /* Checkerboard pattern for transparent images */

@@ -29,14 +29,35 @@ export function ImageUploader({
     }
 }: ImageUploaderProps) {
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        onDrop: (acceptedFiles) => {
+        onDrop: async (acceptedFiles) => {
             if (acceptedFiles?.length > 0) {
                 const limit = multiple ? maxFiles : 1;
+                const filesToProcess = acceptedFiles.slice(0, limit);
+
                 if (acceptedFiles.length > limit) {
                     toast.warning(`Only the first ${limit} files were added. Limit reached.`);
-                    onUpload(acceptedFiles.slice(0, limit));
-                } else {
-                    onUpload(acceptedFiles);
+                }
+
+                // Pre-validate for broken images
+                const validFiles: File[] = [];
+                for (const file of filesToProcess) {
+                    try {
+                        const url = URL.createObjectURL(file);
+                        const img = new Image();
+                        await new Promise((resolve, reject) => {
+                            img.onload = () => resolve(true);
+                            img.onerror = () => reject();
+                            img.src = url;
+                        });
+                        URL.revokeObjectURL(url);
+                        validFiles.push(file);
+                    } catch (e) {
+                        toast.error(`"${file.name}" appears to be broken or unsupported.`);
+                    }
+                }
+
+                if (validFiles.length > 0) {
+                    onUpload(validFiles);
                 }
             }
         },
@@ -70,12 +91,12 @@ export function ImageUploader({
                     <Icon name="upload" size={28} />
                 </div>
                 <div className="text-center">
-                    <p className="text-base font-medium">Drag & drop your images</p>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <p className="">Drag & drop your images</p>
+                    <p className="text-muted-foreground mt-1">
                         or <span className="text-primary font-medium">browse</span> to choose files
                     </p>
                 </div>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-muted-foreground">
                     Supports JPG, PNG, WEBP, GIF • Max {Math.round(maxSize / (1024 * 1024))}MB • Up to {maxFiles} files
                 </p>
             </div>

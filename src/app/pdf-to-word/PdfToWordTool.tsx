@@ -8,6 +8,8 @@ import { toast } from "sonner";
 import { analyzePdf } from "@/lib/pdf-processing/pdf-analyzer";
 import { convertPdfToDocx } from "@/lib/pdf-processing/pdf-to-docx";
 import { useFileUpload } from "@/hooks/useFileUpload";
+import { generatePdfPreview } from "@/lib/pdf-processing/pdf-preview";
+import { useEffect } from "react";
 
 export default function PdfToWordTool() {
     // 1. Universal State Engine
@@ -18,13 +20,34 @@ export default function PdfToWordTool() {
         activeFile,
         addFiles,
         clearAll,
-        updateFileSettings
+        updateFileSettings,
+        updatePreviewUrl
     } = useFileUpload([]);
 
     // 2. Local Processing State
     const [isConverting, setIsConverting] = useState(false);
     const [useOcr, setUseOcr] = useState(false);
     const [outputFormat, setOutputFormat] = useState<'docx' | 'txt'>('docx');
+
+    useEffect(() => {
+        files.forEach(async (fileObj) => {
+            if (fileObj.previewUrl && fileObj.previewUrl.startsWith('blob:') && fileObj.format === 'pdf') {
+                const preview = await generatePdfPreview(fileObj.file);
+                if (preview) {
+                    updatePreviewUrl(fileObj.id, preview.url);
+                    updateFileSettings(fileObj.id, { pageCount: preview.pageCount });
+                }
+            }
+        });
+    }, [files, updatePreviewUrl]);
+
+    // Reset processing state if all files are removed (e.g. user closed modal during conversion)
+    useEffect(() => {
+        if (files.length === 0) {
+            setIsConverting(false);
+            setUseOcr(false);
+        }
+    }, [files.length]);
 
     const handleUpload = async (uploadedFiles: File[]) => {
         // Enforce maximum 5 files batch limit for PDF conversion
@@ -34,7 +57,7 @@ export default function PdfToWordTool() {
         }
 
         // Add to universal store first using default structure
-        addFiles(uploadedFiles, {
+        const newFiles = addFiles(uploadedFiles, {
             status: 'analyzing',
             progress: 0,
             pageCount: 0,
@@ -43,34 +66,27 @@ export default function PdfToWordTool() {
             error: null
         });
 
-        const latestBatch = [...files, ...uploadedFiles.map(f => ({ id: "tmp", file: f }))];
-        // Note: the hook UUID mapped files asynchronously, so we find them by matching File ref or wait a tick.
-        // For simplicity, we trigger analysis iteratively on the newly pushed raw files
-        for (const rawFile of uploadedFiles) {
+        for (const newFile of newFiles) {
             try {
-                const analysis = await analyzePdf(rawFile);
-
-                // We use updateAllFileSettings globally, but limit it to matching file names for safety
-                // In production we'd want to return UUIDs from `addFiles` directly.
+                const analysis = await analyzePdf(newFile.file);
 
                 if (analysis.isScanned) {
                     setUseOcr(true);
                     toast("Scanned PDF detected. OCR enabled automatically.");
                 }
 
-                // Temporary hack: we just update all states for now
-                files.forEach(f => {
-                    if (f.file.name === rawFile.name) {
-                        updateFileSettings(f.id, {
-                            status: 'idle',
-                            pageCount: analysis.pageCount,
-                            isScanned: analysis.isScanned
-                        });
-                    }
+                updateFileSettings(newFile.id, {
+                    status: 'idle',
+                    pageCount: analysis.pageCount,
+                    isScanned: analysis.isScanned
                 });
 
-            } catch (error) {
+            } catch (error: any) {
                 console.error("Analysis Failed", error);
+                updateFileSettings(newFile.id, {
+                    status: 'error',
+                    error: "Failed to analyze PDF"
+                });
             }
         }
     };
@@ -81,45 +97,76 @@ export default function PdfToWordTool() {
 
         const filesToProcess = files.filter(f => f.settings?.status === 'idle' || f.settings?.status === 'complete' || !f.settings?.status);
 
-        for (const file of filesToProcess) {
-            updateFileSettings(file.id, { status: 'converting', progress: 0 });
+        try {
+            for (const file of filesToProcess) {
+                updateFileSettings(file.id, { status: 'converting', progress: 0 });
 
-            try {
-                const shouldOcr = useOcr || (file.settings?.isScanned ?? false);
+                try {
+                    const shouldOcr = useOcr || (file.settings?.isScanned ?? false);
 
-                const blob = await convertPdfToDocx(file.file, {
-                    useOcr: shouldOcr,
-                    onProgress: (p) => updateFileSettings(file.id, { progress: p })
-                });
+                    const blob = await convertPdfToDocx(file.file, {
+                        useOcr: shouldOcr,
+                        onProgress: (p) => updateFileSettings(file.id, { progress: p })
+                    });
 
-                const url = URL.createObjectURL(blob);
+                    const url = URL.createObjectURL(blob);
 
-                updateFileSettings(file.id, {
-                    status: 'complete',
-                    progress: 100,
-                    resultUrl: url
-                });
+                    updateFileSettings(file.id, {
+                        status: 'complete',
+                        progress: 100,
+                        resultUrl: url
+                    });
 
-                toast.success(`Converted ${file.file.name}`);
+                    toast.success(`Converted ${file.file.name}`);
 
-            } catch (err: any) {
-                console.error(err);
-                updateFileSettings(file.id, { status: 'error', error: err.message || "Conversion failed" });
-                toast.error(`Failed to convert ${file.file.name}`);
+                } catch (err: any) {
+                    console.error(err);
+                    updateFileSettings(file.id, { status: 'error', error: err.message || "Conversion failed" });
+                    toast.error(`Failed to convert ${file.file.name}`);
+                }
             }
+        } finally {
+            setIsConverting(false);
         }
-
-        setIsConverting(false);
     };
 
-    // Helper for rendering status text safely
     const getStatusText = (settings: any) => {
         switch (settings?.status) {
-            case 'analyzing': return 'Analyzing...';
+            case 'analyzing': return 'Reading file...';
             case 'converting': return `Converting... ${settings.progress || 0}%`;
             case 'complete': return 'Converted';
             case 'error': return 'Error';
             default: return 'Ready';
+        }
+    };
+
+    const isDone = files.length > 0 && files.every(f => f.settings?.status === 'complete');
+
+    const downloadAll = async () => {
+        const completedFiles = files.filter(f => f.settings?.status === 'complete' && f.settings?.resultUrl);
+        if (completedFiles.length === 0) return;
+
+        try {
+            for (const file of completedFiles) {
+                const link = document.createElement("a");
+                link.href = file.settings.resultUrl;
+                link.download = `${file.file.name.replace('.pdf', '')}.docx`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                await new Promise(resolve => setTimeout(resolve, 300));
+            }
+        } catch (error) {
+            console.error("Download failed:", error);
+            toast.error("Failed to download converted PDFs.");
+        }
+    };
+
+    const handlePrimaryAction = () => {
+        if (isDone) {
+            downloadAll();
+        } else {
+            handleConvert();
         }
     };
 
@@ -136,15 +183,25 @@ export default function PdfToWordTool() {
             <ToolModal
                 isOpen={files.length > 0}
                 onClose={clearAll}
+                hidePreviewPane={false}
                 title="Convert PDF to Word"
                 files={files}
                 activeIndex={activeIndex}
                 setActiveIndex={setActiveIndex}
-                onPrimaryAction={handleConvert}
+                onPrimaryAction={handlePrimaryAction}
                 primaryActionText={
                     <span className="flex items-center justify-center gap-2">
-                        <Icon name="file-text" size={18} />
-                        {files.length > 1 ? "Convert All PDFs" : "Convert to Word"}
+                        {isDone ? (
+                            <>
+                                <Icon name="download" size={18} />
+                                {files.length > 1 ? `Download All DOCX (${files.length})` : "Download DOCX"}
+                            </>
+                        ) : (
+                            <>
+                                <Icon name="file-text" size={18} />
+                                {files.length > 1 ? "Convert All PDFs" : "Convert to Word"}
+                            </>
+                        )}
                     </span>
                 }
                 isProcessing={isConverting}
@@ -153,7 +210,7 @@ export default function PdfToWordTool() {
                 {activeFile && (
                     <div className="space-y-8">
                         <div>
-                            <h2 className="text-xl font-bold text-slate-800 mb-6 font-sans">Convert to Word</h2>
+                            <h2 className="text-slate-800 mb-6 font-sans">Convert to Word</h2>
 
                             {/* File Info Box */}
                             <div className="bg-[#E8ECEF] rounded-xl p-4 flex flex-col gap-3 shadow-sm">
@@ -162,15 +219,15 @@ export default function PdfToWordTool() {
                                         <Icon name="file-text" size={24} className="text-[#0081C9]" />
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <p className="font-semibold text-slate-800 truncate text-sm">{activeFile.file.name}</p>
-                                        <p className="text-xs text-slate-500 mt-0.5 font-medium">
+                                        <p className="text-slate-800 truncate">{activeFile.file.name}</p>
+                                        <p className="text-muted-foreground mt-0.5">
                                             {(activeFile.file.size / 1024 / 1024).toFixed(2)} MB
                                             {activeFile.settings?.pageCount > 0 && ` • ${activeFile.settings.pageCount} Pages`}
                                         </p>
                                     </div>
                                 </div>
                                 <div className="flex items-center justify-between text-xs font-semibold pt-3 border-t border-slate-300">
-                                    <span className="text-slate-500 uppercase tracking-wider text-[10px]">Status</span>
+                                    <span className="text-muted-foreground uppercase tracking-wider text-[10px]">Status</span>
                                     <span className={
                                         activeFile.settings?.status === 'complete' ? 'text-green-600' :
                                             activeFile.settings?.status === 'error' ? 'text-red-600' :
@@ -183,58 +240,74 @@ export default function PdfToWordTool() {
                             </div>
                         </div>
 
-                        {activeFile.settings?.status === 'complete' && activeFile.settings?.resultUrl && (
-                            <a href={activeFile.settings.resultUrl} download={`${activeFile.file.name.replace('.pdf', '')}.docx`}>
-                                <button className="w-full flex items-center justify-center gap-2 h-12 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm font-semibold shadow-md shadow-green-600/20">
-                                    <Icon name="download" size={18} /> Download DOCX
-                                </button>
-                            </a>
+                        {activeFile.settings?.isScanned && (
+                            <div className="bg-amber-50 border border-amber-200 text-amber-800 p-3 rounded-xl flex items-start gap-3 shadow-sm">
+                                <Icon name="scan-line" size={20} className="text-amber-600 mt-0.5 flex-shrink-0" />
+                                <div>
+                                    <h4 className="text-sm font-bold">Scanned PDF Detected</h4>
+                                    <p className="mt-0.5 text-amber-700">
+                                        This document appears to be a scan or image. We recommend leaving OCR enabled for accurate text extraction.
+                                    </p>
+                                </div>
+                            </div>
                         )}
 
-                        {/* Conversion Settings */}
-                        <div className="space-y-4">
-                            <h3 className="text-sm font-semibold text-slate-800">Conversion Options</h3>
-
-                            <div className="space-y-3">
-                                {/* OCR Toggle styled like Apple switches */}
-                                <div className="flex items-center justify-between p-3.5 bg-white border border-slate-300 rounded-xl shadow-sm">
-                                    <div className="space-y-0.5">
-                                        <label className="text-xs font-bold uppercase tracking-wider text-zinc-500 block mb-1">OCR Mode</label>
-                                        <p className="text-xs text-slate-500 font-medium">Force text recognition on scanned PDFs</p>
-                                    </div>
-                                    <button
-                                        onClick={() => setUseOcr(!useOcr)}
-                                        type="button"
-                                        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${useOcr ? 'bg-[#0081C9]' : 'bg-slate-300'}`}
-                                    >
-                                        <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${useOcr ? 'translate-x-5' : 'translate-x-0'}`} />
-                                    </button>
+                        {activeFile.settings?.status === 'complete' && activeFile.settings?.resultUrl && (
+                            <div className="bg-green-50 border border-green-200 p-4 rounded-xl flex flex-col items-center justify-center gap-3 shadow-sm text-center">
+                                <Icon name="check-circle" size={32} className="text-green-500" />
+                                <div>
+                                    <h4 className="text-sm font-bold text-green-800">Conversion Successful</h4>
+                                    <p className="text-green-700">Your Word document is ready to download.</p>
                                 </div>
+                            </div>
+                        )}
 
-                                {/* Output Format Toggle Map */}
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold uppercase tracking-wider text-zinc-500 block mb-1">Output Format</label>
-                                    <div className="grid grid-cols-2 gap-2">
+                        {/* Conversion Settings (Only show if not complete) */}
+                        {activeFile.settings?.status !== 'complete' && (
+                            <div className="space-y-4">
+                                <h3 className="text-slate-800">Conversion Options</h3>
+
+                                <div className="space-y-3">
+                                    {/* OCR Toggle styled like Apple switches */}
+                                    <div className="flex items-center justify-between p-3.5 bg-white border border-slate-300 rounded-xl shadow-sm">
+                                        <div className="space-y-0.5">
+                                            <label className="text-xs font-bold uppercase tracking-wider text-zinc-500 block mb-1">OCR Mode</label>
+                                            <p className="text-muted-foreground">Force text recognition on scanned PDFs</p>
+                                        </div>
                                         <button
-                                            onClick={() => setOutputFormat('docx')}
-                                            className={`h-11 rounded-lg text-sm font-semibold border transition-all ${outputFormat === 'docx'
-                                                ? "bg-[#0081C9]/5 text-[#0081C9] border-[#0081C9]/50 ring-1 ring-[#0081C9]/20 shadow-sm"
-                                                : "bg-white border-slate-300 text-slate-600 hover:bg-slate-50"
-                                                }`}
+                                            onClick={() => setUseOcr(!useOcr)}
+                                            type="button"
+                                            className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${useOcr ? 'bg-[#0081C9]' : 'bg-slate-300'}`}
                                         >
-                                            DOCX (Word)
+                                            <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${useOcr ? 'translate-x-5' : 'translate-x-0'}`} />
                                         </button>
-                                        <button
-                                            onClick={() => setOutputFormat('txt')}
-                                            disabled
-                                            className="h-11 rounded-lg text-sm font-semibold border border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed opacity-70"
-                                        >
-                                            TXT (Soon)
-                                        </button>
+                                    </div>
+
+                                    {/* Output Format Toggle Map */}
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold uppercase tracking-wider text-zinc-500 block mb-1">Output Format</label>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <button
+                                                onClick={() => setOutputFormat('docx')}
+                                                className={`h-11 rounded-lg text-sm font-semibold border transition-all ${outputFormat === 'docx'
+                                                    ? "bg-[#0081C9]/5 text-[#0081C9] border-[#0081C9]/50 ring-1 ring-[#0081C9]/20 shadow-sm"
+                                                    : "bg-white border-slate-300 text-slate-600 hover:bg-slate-50"
+                                                    }`}
+                                            >
+                                                DOCX (Word)
+                                            </button>
+                                            <button
+                                                onClick={() => setOutputFormat('txt')}
+                                                disabled
+                                                className="h-11 rounded-lg text-sm font-semibold border border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed opacity-70"
+                                            >
+                                                TXT (Soon)
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        )}
 
                     </div>
                 )}

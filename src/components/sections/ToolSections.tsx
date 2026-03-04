@@ -48,7 +48,7 @@ export function HowItWorksSection({ steps, theme = "blue" }: { steps: Step[]; th
                                 <div className="hidden md:block absolute top-8 left-[60%] w-[80%] h-[2px] bg-gradient-to-r from-border/50 to-transparent" />
                             )}
 
-                            <h3 className="text-lg md:text-xl lg:text-2xl font-bold mb-3">{step.title}</h3>
+                            <h3 className="mb-3">{step.title}</h3>
                             <BodyText className="text-muted-foreground">{step.description}</BodyText>
                         </div>
                     ))}
@@ -78,7 +78,7 @@ export function BenefitsSection({ benefits, theme = "blue" }: { benefits: Benefi
                             <div className={`mb-4 inline-flex p-3 rounded-lg ${iconBg} transition-colors`}>
                                 <Icon name={benefit.icon} size={24} />
                             </div>
-                            <h3 className="text-xl md:text-2xl font-bold mb-2">{benefit.title}</h3>
+                            <h3 className="mb-2">{benefit.title}</h3>
                             <BodyText className="text-muted-foreground text-base">{benefit.description}</BodyText>
                         </div>
                     ))}
