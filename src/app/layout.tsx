@@ -7,6 +7,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { Toaster } from "@/components/ui/Toaster";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -84,6 +85,7 @@ export default function RootLayout({
         <Footer />
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
         <Toaster />
+        <SpeedInsights />
       </body>
     </html>
   );
