@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function AboutUs() {
     return (
         <main className="container mx-auto max-w-4xl px-4 py-16 animate-fade-in">
-            <h1 className="mb-8 text-primary">About AuraFile</h1>
+            <h1 className="mb-8 text-center text-[#00B4D8] font-extrabold text-4xl md:text-5xl tracking-tight">About AuraFile</h1>
             <div className="prose prose-slate max-w-none text-foreground/80">
                 <p className="lead text-muted-foreground mb-8">
                     AuraFile is a suite of powerful, browser-based image tools designed for speed, privacy, and simplicity.

@@ -14,7 +14,7 @@ export default function AboutPage() {
     return (
         <main className="container mx-auto max-w-3xl px-4 py-16 md:py-24 animate-fade-in">
             {/* Header */}
-            <h1 className="mb-8 text-center text-[#0081C9] font-extrabold text-4xl md:text-5xl tracking-tight">About AuraFile</h1>
+            <h1 className="mb-8 text-center text-[#00B4D8] font-extrabold text-4xl md:text-5xl tracking-tight">About AuraFile</h1>
             <p className="text-center text-lg md:text-xl text-muted-foreground mb-16 leading-relaxed max-w-2xl mx-auto">
                 AuraFile is a suite of powerful, browser-based file tools designed for speed, privacy, and simplicity.
             </p>

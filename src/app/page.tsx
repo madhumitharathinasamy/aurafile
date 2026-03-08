@@ -136,7 +136,7 @@ export default function Home() {
       </section>
 
       {/* Features/Benefits Section */}
-      <section id="features" className="py-20 md:py-24 bg-[#A3ADB8]">
+      <section id="features" className="py-20 md:py-24 bg-[#c4cdd6]">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4 max-w-[var(--container-width)] mx-auto text-center">
             {features.items.map((feature, i) => (
