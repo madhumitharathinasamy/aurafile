@@ -51,7 +51,7 @@ export function Button({ variant = "primary", className, href, children, onClick
     }
 
     return (
-        <button className={rootClassName} {...props}>
+        <button className={rootClassName} onClick={onClick} {...props}>
             {children}
         </button>
     );

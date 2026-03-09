@@ -9,6 +9,7 @@ import { useDropzone } from "react-dropzone";
 import { UPLOAD_LIMITS } from "@/config/limits";
 import { toast } from "sonner";
 import { generatePdfFromImages, PageSizeOption, MarginOption } from "@/lib/pdf-processing/image-to-pdf";
+import { saveAs } from "file-saver";
 
 export default function ImageToPdfTool() {
     const {
@@ -31,7 +32,6 @@ export default function ImageToPdfTool() {
         // Reset done state on new upload
         if (isDone) {
             setIsDone(false);
-            if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
             setPdfBlobUrl(null);
         }
     };
@@ -63,15 +63,26 @@ export default function ImageToPdfTool() {
         }
     });
 
+    const [pdfBlob, setPdfBlob] = useState<Blob | null>(null);
+
     const handleProcess = async () => {
-        if (isDone && pdfBlobUrl) {
-            // Trigger download
-            const link = document.createElement("a");
-            link.href = pdfBlobUrl;
-            link.download = `aurafile_merged_images.pdf`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+        if (isDone && pdfBlob) {
+            // Robust download trigger for existing generated blob
+            try {
+                const url = URL.createObjectURL(pdfBlob);
+                const a = document.createElement("a");
+                a.style.display = "none";
+                a.href = url;
+                a.download = `aurafile_merged_images.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 100);
+            } catch (e) {
+                toast.error("Failed to download PDF.");
+            }
             return;
         }
 
@@ -85,18 +96,22 @@ export default function ImageToPdfTool() {
                 margin,
             });
 
-            const url = URL.createObjectURL(blob);
-            setPdfBlobUrl(url);
+            setPdfBlob(blob);
             setIsDone(true);
             toast.success("PDF generated successfully!");
 
-            // Auto download
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = `aurafile_merged_images.pdf`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            // Auto download on first generation using the same robust method
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.style.display = "none";
+            a.href = url;
+            a.download = `aurafile_merged_images.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
 
         } catch (error) {
             toast.error("Failed to generate PDF. Check console for details.");

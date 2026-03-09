@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { Icon } from "@/components/ui/Icon";
 import { PDFDocument } from "@cantoo/pdf-lib";
 import { useFileUpload } from "@/hooks/useFileUpload";
+import { saveAs } from "file-saver";
 
 export default function UnlockPdfTool() {
     const {
@@ -24,7 +25,7 @@ export default function UnlockPdfTool() {
 
     const handleUpload = (uploadedFiles: File[]) => {
         addFiles(uploadedFiles, {
-            unlockedUrl: null,
+            unlockedBlob: null,
             isUnlocked: false,
             needsPassword: true
         });
@@ -47,10 +48,9 @@ export default function UnlockPdfTool() {
 
             const pdfBytes = await pdfDoc.save();
             const blob = new Blob([pdfBytes as any], { type: "application/pdf" });
-            const url = URL.createObjectURL(blob);
 
             updateFileSettings(activeFile.id, {
-                unlockedUrl: url,
+                unlockedBlob: blob,
                 isUnlocked: true,
                 needsPassword: false
             });
@@ -68,29 +68,65 @@ export default function UnlockPdfTool() {
         }
     };
 
-    const downloadFile = async () => {
-        if (!activeFile?.settings?.unlockedUrl) return;
+    const downloadFile = () => {
+        console.log("Triggering downloadFile...");
+        console.log("activeFile:", activeFile);
+        console.log("activeFile.settings:", activeFile?.settings);
+        console.log("activeFile.settings.unlockedBlob:", activeFile?.settings?.unlockedBlob);
+
+        if (!activeFile?.settings?.unlockedBlob) {
+            toast.error("Download failed: No decrypted file found in memory.");
+            console.error("Missing unlockedBlob in settings object!");
+            return;
+        }
 
         try {
-            const response = await fetch(activeFile.settings.unlockedUrl);
-            const blob = await response.blob();
-            const blobUrl = URL.createObjectURL(blob);
-
-            const link = document.createElement("a");
-            link.href = blobUrl;
-
             const extensionStr = ".pdf";
-            const baseName = activeFile.file.name.endsWith(extensionStr)
+            const lowerName = activeFile.file.name.toLowerCase();
+            const baseName = lowerName.endsWith(extensionStr)
                 ? activeFile.file.name.slice(0, -4)
                 : activeFile.file.name;
 
-            link.download = `unlocked_${baseName}.pdf`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(blobUrl);
+            const finalName = `unlocked_${baseName}.pdf`;
+            console.log("Target filename:", finalName);
+
+            // Generate an ephemeral URL directly from the raw blob
+            const url = URL.createObjectURL(activeFile.settings.unlockedBlob);
+            console.log("Generated Object URL:", url);
+
+            // Native anchor trigger 
+            const a = document.createElement("a");
+            a.style.display = "none";
+            a.href = url;
+            a.download = finalName;
+
+            console.log("Appending anchor to DOM and clicking...");
+            document.body.appendChild(a);
+
+            // Execute click
+            a.click();
+            console.log("Click executed.");
+
+            // Secondary ultimate fallback: Just open the blob if click failed silently
+            // Note: Most modern browsers block window.open in this context without explicit user trust, but it's a diagnostic fallback
+            try {
+                window.open(url, "_blank");
+                console.log("Secondary window fallback triggered.");
+            } catch (e) {
+                console.error("Window fallback failed:", e);
+            }
+
+            // Clean up immediately
+            setTimeout(() => {
+                console.log("Running cleanup timer...");
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                console.log("Cleanup finished.");
+            }, 300);
+
         } catch (error) {
-            toast.error("Failed to download unlocked PDF safely.");
+            console.error("Download error catch block triggered:", error);
+            toast.error("Failed to download unlocked PDF.");
         }
     };
 

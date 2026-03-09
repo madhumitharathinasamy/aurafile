@@ -40,6 +40,7 @@ export default function ProtectPdfTool() {
     const handleUpload = (uploadedFiles: File[]) => {
         addFiles(uploadedFiles, {
             protectedUrl: null,
+            protectedBlob: null as Blob | null,
             isProtected: false
         });
         setPassword("");
@@ -65,6 +66,7 @@ export default function ProtectPdfTool() {
 
                     updateFileSettings(activeFile.id, {
                         protectedUrl: url,
+                        protectedBlob: blob,
                         isProtected: true
                     });
 
@@ -95,14 +97,13 @@ export default function ProtectPdfTool() {
     };
 
     const downloadFile = async () => {
-        if (!activeFile?.settings?.protectedUrl) return;
+        if (!activeFile?.settings?.protectedBlob) return;
 
         try {
-            const response = await fetch(activeFile.settings.protectedUrl);
-            const blob = await response.blob();
-            const blobUrl = URL.createObjectURL(blob);
+            const blobUrl = URL.createObjectURL(activeFile.settings.protectedBlob);
 
             const link = document.createElement("a");
+            link.style.display = "none";
             link.href = blobUrl;
 
             const extensionStr = ".pdf";
@@ -113,8 +114,10 @@ export default function ProtectPdfTool() {
             link.download = `protected_${baseName}.pdf`;
             document.body.appendChild(link);
             link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(blobUrl);
+            setTimeout(() => {
+                document.body.removeChild(link);
+                URL.revokeObjectURL(blobUrl);
+            }, 100);
         } catch (error) {
             toast.error("Failed to download protected PDF safely.");
         }

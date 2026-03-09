@@ -111,7 +111,8 @@ export default function PdfToWordTool() {
                     updateFileSettings(file.id, {
                         status: 'complete',
                         progress: 100,
-                        resultUrl: url
+                        resultUrl: url,
+                        resultBlob: blob
                     });
 
                     toast.success(`Converted ${file.file.name}`);
@@ -139,21 +140,27 @@ export default function PdfToWordTool() {
     const isDone = files.length > 0 && files.every(f => f.settings?.status === 'complete');
 
     const downloadAll = async () => {
-        const completedFiles = files.filter(f => f.settings?.status === 'complete' && f.settings?.resultUrl);
+        const completedFiles = files.filter(f => f.settings?.status === 'complete' && f.settings?.resultBlob);
         if (completedFiles.length === 0) return;
 
         try {
             for (const file of completedFiles) {
+                const blobUrl = URL.createObjectURL(file.settings.resultBlob);
                 const link = document.createElement("a");
-                link.href = file.settings.resultUrl;
+                link.style.display = "none";
+                link.href = blobUrl;
                 link.download = `${file.file.name.replace('.pdf', '')}.docx`;
                 document.body.appendChild(link);
                 link.click();
-                document.body.removeChild(link);
+
+                // Allow browser time to trigger download before revoke
                 await new Promise(resolve => setTimeout(resolve, 300));
+
+                document.body.removeChild(link);
+                URL.revokeObjectURL(blobUrl);
             }
         } catch (error) {
-            toast.error("Failed to download converted PDFs.");
+            toast.error("Failed to download converted Documents.");
         }
     };
 

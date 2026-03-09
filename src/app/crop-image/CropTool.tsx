@@ -66,6 +66,7 @@ export default function CropTool() {
     const [isProcessing, setIsProcessing] = useState(false);
     const [applyToAll, setApplyToAll] = useState(false);
     const [croppedUrls, setCroppedUrls] = useState<{ [id: string]: string }>({});
+    const [croppedBlobs, setCroppedBlobs] = useState<{ [id: string]: Blob }>({});
 
     // Local inputs mapping
     const [widthInput, setWidthInput] = useState("");
@@ -128,6 +129,7 @@ export default function CropTool() {
             Object.values(prev).forEach(url => URL.revokeObjectURL(url));
             return {};
         });
+        setCroppedBlobs({});
 
         const uniqueFiles = uploadedFiles.filter(newFile =>
             !files.some(existing => existing.file.name === newFile.name && existing.file.size === newFile.size)
@@ -161,10 +163,12 @@ export default function CropTool() {
             const newUrls = { ...prev };
             if (applyToAll && files.length > 1) {
                 Object.values(newUrls).forEach(url => URL.revokeObjectURL(url));
+                setCroppedBlobs({});
                 return {};
             } else if (newUrls[activeFile.id]) {
                 URL.revokeObjectURL(newUrls[activeFile.id]);
                 delete newUrls[activeFile.id];
+                setCroppedBlobs(b => { const nb = { ...b }; delete nb[activeFile.id]; return nb; });
             }
             return newUrls;
         });
@@ -262,7 +266,7 @@ export default function CropTool() {
         rotation = 0,
         flip = { horizontal: false, vertical: false },
         circular = false
-    ): Promise<string | null> => {
+    ): Promise<{ url: string, blob: Blob } | null> => {
 
         return new Promise((resolve, reject) => {
             const img = new Image();
@@ -340,7 +344,7 @@ export default function CropTool() {
 
                 canvas.toBlob((blob) => {
                     if (!blob) resolve(null);
-                    else resolve(URL.createObjectURL(blob));
+                    else resolve({ url: URL.createObjectURL(blob), blob });
                 }, outFormat, 0.95);
             };
 
@@ -374,6 +378,7 @@ export default function CropTool() {
 
         try {
             const newUrls: { [id: string]: string } = {};
+            const newBlobs: { [id: string]: Blob } = {};
 
             // To apply to all files of varying sizes, we must convert the current pixel crop to a percentage crop
             const percentCrop = convertToPercentCrop(completedCrop, imgRef.current.width, imgRef.current.height);
@@ -391,16 +396,18 @@ export default function CropTool() {
                 // But for safety and consistency, we'll re-load if it's not the active one.
                 const source = (fileMeta.id === activeFile.id) ? imgRef.current : fileMeta.file;
 
-                const url = await canvasUtils(source, cropParams, rotate, { horizontal: flipH, vertical: flipV }, isCircular);
+                const result = await canvasUtils(source, cropParams, rotate, { horizontal: flipH, vertical: flipV }, isCircular);
 
-                if (url) {
-                    newUrls[fileMeta.id] = url;
+                if (result) {
+                    newUrls[fileMeta.id] = result.url;
+                    newBlobs[fileMeta.id] = result.blob;
                     updateFileSettings(fileMeta.id, { isCropped: true });
                 } else {
                 }
             }
 
             setCroppedUrls(prev => ({ ...prev, ...newUrls }));
+            setCroppedBlobs(prev => ({ ...prev, ...newBlobs }));
             toast.success("Crop applied successfully! Ready to download.");
 
         } catch (error) {
@@ -416,9 +423,8 @@ export default function CropTool() {
                 const JSZip = (await import("jszip")).default;
                 const zip = new JSZip();
                 const promises = files.map(async (fileMeta) => {
-                    if (!fileMeta.settings?.isCropped || !croppedUrls[fileMeta.id]) return;
-                    const res = await fetch(croppedUrls[fileMeta.id]);
-                    const blob = await res.blob();
+                    if (!fileMeta.settings?.isCropped || !croppedBlobs[fileMeta.id]) return;
+                    const blob = croppedBlobs[fileMeta.id];
 
                     const originalName = fileMeta.file.name.substring(0, fileMeta.file.name.lastIndexOf('.')) || fileMeta.file.name;
                     const ext = fileMeta.file.type.split('/')[1] || "jpg";
@@ -429,9 +435,8 @@ export default function CropTool() {
                 const content = await zip.generateAsync({ type: "blob" });
                 saveAs(content, "aurafile-cropped.zip");
                 toast.success("Downloaded ZIP file!");
-            } else if (activeFile && activeFile.settings?.isCropped && croppedUrls[activeFile.id]) {
-                const res = await fetch(croppedUrls[activeFile.id]);
-                const blob = await res.blob();
+            } else if (activeFile && activeFile.settings?.isCropped && croppedBlobs[activeFile.id]) {
+                const blob = croppedBlobs[activeFile.id];
 
                 const originalName = activeFile.file.name.substring(0, activeFile.file.name.lastIndexOf('.')) || activeFile.file.name;
                 const ext = activeFile.file.type.split('/')[1] || "jpg";

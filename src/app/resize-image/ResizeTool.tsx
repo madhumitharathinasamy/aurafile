@@ -54,6 +54,7 @@ export default function ResizeTool() {
     const [isProcessing, setIsProcessing] = useState(false);
     const [applyToAll, setApplyToAll] = useState(false);
     const [resizedUrls, setResizedUrls] = useState<{ [id: string]: string }>({});
+    const [resizedBlobs, setResizedBlobs] = useState<{ [id: string]: Blob }>({});
 
     // Cleanup URLs on unmount or file reset
     useEffect(() => {
@@ -160,6 +161,7 @@ export default function ResizeTool() {
 
         try {
             const newUrls: { [id: string]: string } = {};
+            const newBlobs: { [id: string]: Blob } = {};
             const filesToProcess = applyToAll ? files : (activeFile ? [activeFile] : []);
 
             for (const fileMeta of filesToProcess) {
@@ -186,10 +188,12 @@ export default function ResizeTool() {
                 });
 
                 newUrls[fileMeta.id] = URL.createObjectURL(blob);
+                newBlobs[fileMeta.id] = blob;
                 updateFileSettings(fileMeta.id, { isResized: true });
             }
 
             setResizedUrls(prev => ({ ...prev, ...newUrls }));
+            setResizedBlobs(prev => ({ ...prev, ...newBlobs }));
             toast.success("Images resized successfully! Ready to download.");
 
         } catch (error) {
@@ -204,9 +208,8 @@ export default function ResizeTool() {
             if (applyToAll && isBatchMode) {
                 const zip = new JSZip();
                 const promises = files.map(async (fileMeta) => {
-                    if (!fileMeta.settings.isResized || !resizedUrls[fileMeta.id]) return;
-                    const res = await fetch(resizedUrls[fileMeta.id]);
-                    const blob = await res.blob();
+                    if (!fileMeta.settings.isResized || !resizedBlobs[fileMeta.id]) return;
+                    const blob = resizedBlobs[fileMeta.id];
 
                     const targetFormat = (fileMeta.settings.format === "original"
                         ? (fileMeta.file.type.split('/')[1] || "jpg")
@@ -221,9 +224,8 @@ export default function ResizeTool() {
                 const content = await zip.generateAsync({ type: "blob" });
                 saveAs(content, "aurafile-resized.zip");
                 toast.success("Downloaded ZIP file!");
-            } else if (activeFile && activeFile.settings.isResized && resizedUrls[activeFile.id]) {
-                const res = await fetch(resizedUrls[activeFile.id]);
-                const blob = await res.blob();
+            } else if (activeFile && activeFile.settings.isResized && resizedBlobs[activeFile.id]) {
+                const blob = resizedBlobs[activeFile.id];
 
                 const targetFormat = (activeFile.settings.format === "original"
                     ? (activeFile.file.type.split('/')[1] || "jpg")

@@ -162,7 +162,7 @@ export default function CompressPdfTool() {
                 }
 
                 let settingsUpdate = {
-                    compressedUrl: null as string | null,
+                    compressedBlob: null as Blob | null,
                     compressedSize: finalPdfBytes.byteLength,
                     compressionDone: true,
                     savings: 0,
@@ -170,8 +170,7 @@ export default function CompressPdfTool() {
                 };
 
                 const blob = new Blob([finalPdfBytes as any], { type: "application/pdf" });
-                const url = URL.createObjectURL(blob);
-                settingsUpdate.compressedUrl = url;
+                settingsUpdate.compressedBlob = blob;
 
                 if (finalPdfBytes.byteLength >= fileToProcess.size) {
                     toast.info(`${fileToProcess.file.name} is already optimized.`, {
@@ -201,18 +200,17 @@ export default function CompressPdfTool() {
 
     const downloadFile = async () => {
         // Find how many files are done
-        const completedFiles = files.filter(f => f.settings?.compressionDone && f.settings?.compressedUrl);
+        const completedFiles = files.filter(f => f.settings?.compressionDone && f.settings?.compressedBlob);
 
         if (completedFiles.length === 0) return;
 
         try {
             // Trigger download sequentially
             for (const file of completedFiles) {
-                const response = await fetch(file.settings.compressedUrl);
-                const blob = await response.blob();
-                const blobUrl = URL.createObjectURL(blob);
+                const blobUrl = URL.createObjectURL(file.settings.compressedBlob);
 
                 const link = document.createElement("a");
+                link.style.display = "none";
                 link.href = blobUrl;
                 const extensionStr = ".pdf";
                 const baseName = file.file.name.endsWith(extensionStr)
@@ -222,11 +220,12 @@ export default function CompressPdfTool() {
                 link.download = `compressed_${baseName}.pdf`;
                 document.body.appendChild(link);
                 link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(blobUrl);
 
                 // Slight delay to ensure browser registers multiple downloads gracefully
                 await new Promise(resolve => setTimeout(resolve, 300));
+
+                document.body.removeChild(link);
+                URL.revokeObjectURL(blobUrl);
             }
         } catch (error) {
             toast.error("Failed to download compressed PDFs safely.");

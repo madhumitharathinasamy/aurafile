@@ -29,6 +29,7 @@ interface CompressSettings {
     compressedSize: number;
     isCompressed: boolean;
     compressedUrl: string | null;
+    compressedBlob: Blob | null;
 }
 
 const DEFAULT_COMPRESS_SETTINGS: CompressSettings = {
@@ -43,7 +44,8 @@ const DEFAULT_COMPRESS_SETTINGS: CompressSettings = {
     originalSize: 0,
     compressedSize: 0,
     isCompressed: false,
-    compressedUrl: null
+    compressedUrl: null,
+    compressedBlob: null
 };
 
 export default function CompressTool() {
@@ -92,7 +94,8 @@ export default function CompressTool() {
             updateFileSettings(currentFile.id, {
                 compressedSize: compressedFile.size,
                 isCompressed: true,
-                compressedUrl: compressedUrl
+                compressedUrl: compressedUrl,
+                compressedBlob: compressedFile
             });
             return true;
         } catch (e) {
@@ -194,9 +197,8 @@ export default function CompressTool() {
                 const zip = new JSZip();
 
                 for (const fileMeta of files) {
-                    if (!fileMeta.settings.compressedUrl) continue;
-                    const response = await fetch(fileMeta.settings.compressedUrl);
-                    const blob = await response.blob();
+                    if (!fileMeta.settings.compressedBlob) continue;
+                    const blob = fileMeta.settings.compressedBlob;
 
                     const originalName = fileMeta.file.name.substring(0, fileMeta.file.name.lastIndexOf('.')) || fileMeta.file.name;
                     // Format extraction could be improved, but usually compressedUrl has correct mime/extension info. 
@@ -214,9 +216,8 @@ export default function CompressTool() {
                 const content = await zip.generateAsync({ type: "blob" });
                 saveAs(content, "aurafile-compressed.zip");
                 toast.success("Downloaded ZIP file!");
-            } else if (activeFile && isCurrentCompressed) {
-                const response = await fetch(activeFile.settings.compressedUrl!);
-                const blob = await response.blob();
+            } else if (activeFile && isCurrentCompressed && activeFile.settings.compressedBlob) {
+                const blob = activeFile.settings.compressedBlob;
 
                 let targetExt = "jpg";
                 if (activeFile.settings.outputFormat === "original") {

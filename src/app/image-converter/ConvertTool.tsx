@@ -58,6 +58,7 @@ export default function ConvertTool() {
 
     const [isConverting, setIsConverting] = useState<boolean>(false);
     const [convertedFiles, setConvertedFiles] = useState<{ [key: string]: string }>({});
+    const [convertedBlobs, setConvertedBlobs] = useState<{ [key: string]: Blob }>({});
     const [applyToAll, setApplyToAll] = useState(false);
 
     // Cleanup on unmount
@@ -110,6 +111,7 @@ export default function ConvertTool() {
         if (Object.keys(convertedFiles).length > 0) {
             Object.values(convertedFiles).forEach(url => URL.revokeObjectURL(url));
             setConvertedFiles({});
+            setConvertedBlobs({});
         }
 
         if (applyToAll && isBatchMode) {
@@ -143,6 +145,10 @@ export default function ConvertTool() {
                 ...prev,
                 [integratedFile.id]: convertedUrl
             }));
+            setConvertedBlobs(prev => ({
+                ...prev,
+                [integratedFile.id]: resultFile
+            }));
             return true;
         } catch (e) {
             toast.error(`Error converting ${integratedFile.file.name}.`);
@@ -157,6 +163,7 @@ export default function ConvertTool() {
         // Clean up previous URLs
         Object.values(convertedFiles).forEach(url => URL.revokeObjectURL(url));
         setConvertedFiles({});
+        setConvertedBlobs({});
 
         let successCount = 0;
         let errorCount = 0;
@@ -205,20 +212,21 @@ export default function ConvertTool() {
 
     const getDownloadExt = (format: string) => format === "jpeg" ? "jpg" : format;
 
-    const downloadFile = async (fileName: string, fileUrl: string, format: string) => {
+    const downloadFile = async (fileName: string, fileBlob: Blob, format: string) => {
         try {
-            const response = await fetch(fileUrl);
-            const blob = await response.blob();
-            const blobUrl = URL.createObjectURL(blob);
+            const blobUrl = URL.createObjectURL(fileBlob);
 
             const link = document.createElement("a");
+            link.style.display = "none";
             link.href = blobUrl;
             const originalName = fileName.substring(0, fileName.lastIndexOf('.')) || fileName;
             link.download = `${originalName}.${getDownloadExt(format)}`;
             document.body.appendChild(link);
             link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(blobUrl);
+            setTimeout(() => {
+                document.body.removeChild(link);
+                URL.revokeObjectURL(blobUrl);
+            }, 100);
         } catch (error) {
             toast.error("Failed to download image safely.");
         }
@@ -245,10 +253,9 @@ export default function ConvertTool() {
                 }
                 usedNames.add(fileName);
 
-                const response = await fetch(fileUrl);
-                if (!response.ok) throw new Error(`Failed to fetch ${fileName}`);
-                const blob = await response.blob();
-                zip.file(fileName, blob);
+                const fileBlob = convertedBlobs[id];
+                if (!fileBlob) throw new Error(`Failed to retrieve ${fileName}`);
+                zip.file(fileName, fileBlob);
             });
 
             await Promise.all(promises);
@@ -275,8 +282,8 @@ export default function ConvertTool() {
             if (isAllConverted) downloadAll();
             else handleConvert();
         } else {
-            if (isCurrentFileConverted && activeFile) {
-                downloadFile(activeFile.file.name, convertedFiles[activeFile.id], activeFile.settings.targetFormat);
+            if (isCurrentFileConverted && activeFile && convertedBlobs[activeFile.id]) {
+                downloadFile(activeFile.file.name, convertedBlobs[activeFile.id], activeFile.settings.targetFormat);
             } else {
                 handleConvert();
             }

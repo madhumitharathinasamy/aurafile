@@ -29,6 +29,7 @@ export default function MergePdfTool() {
 
     const [isProcessing, setIsProcessing] = useState(false);
     const [mergedUrl, setMergedUrl] = useState<string | null>(null);
+    const [mergedBlob, setMergedBlob] = useState<Blob | null>(null);
     const [pageMetadata, setPageMetadata] = useState<PdfPageThumb[]>([]);
 
     useEffect(() => {
@@ -139,7 +140,8 @@ export default function MergePdfTool() {
                 if (e.data.type === 'SUCCESS') {
                     const blob = new Blob([e.data.payload.buffer], { type: "application/pdf" });
                     const url = URL.createObjectURL(blob);
-                    setMergedUrl(url);
+                    setMergedBlob(blob);
+                    setMergedUrl(url); // Kept for previews
                     toast.success("PDFs merged successfully!");
                 } else if (e.data.type === 'ERROR') {
                     toast.error(e.data.payload.error);
@@ -165,21 +167,24 @@ export default function MergePdfTool() {
         }
     };
 
+    const [mergedBlob, setMergedBlob] = useState<Blob | null>(null);
+
     const downloadFile = async () => {
-        if (!mergedUrl) return;
+        if (!mergedBlob) return;
 
         try {
-            const response = await fetch(mergedUrl);
-            const blob = await response.blob();
-            const blobUrl = URL.createObjectURL(blob);
+            const blobUrl = URL.createObjectURL(mergedBlob);
 
             const link = document.createElement("a");
+            link.style.display = "none";
             link.href = blobUrl;
             link.download = `merged_document_${new Date().getTime()}.pdf`;
             document.body.appendChild(link);
             link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(blobUrl);
+            setTimeout(() => {
+                document.body.removeChild(link);
+                URL.revokeObjectURL(blobUrl);
+            }, 100);
         } catch (error) {
             toast.error("Failed to download merged PDF safely.");
         }

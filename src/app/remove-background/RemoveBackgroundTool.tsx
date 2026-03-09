@@ -17,12 +17,14 @@ interface RemoveBgSettings {
     // Output stats
     isRemoved: boolean;
     removedUrl: string | null;
+    removedBlob: Blob | null;
 }
 
 const DEFAULT_SETTINGS: RemoveBgSettings = {
     highQuality: true,
     isRemoved: false,
-    removedUrl: null
+    removedUrl: null,
+    removedBlob: null
 };
 
 export default function RemoveBackgroundTool() {
@@ -61,7 +63,8 @@ export default function RemoveBackgroundTool() {
 
             updateFileSettings(currentFile.id, {
                 isRemoved: true,
-                removedUrl: removedUrl
+                removedUrl: removedUrl,
+                removedBlob: imageBlob
             });
             return true;
         } catch (e) {
@@ -137,9 +140,8 @@ export default function RemoveBackgroundTool() {
                 const zip = new JSZip();
 
                 for (const fileMeta of files) {
-                    if (!fileMeta.settings.removedUrl) continue;
-                    const response = await fetch(fileMeta.settings.removedUrl);
-                    const blob = await response.blob();
+                    if (!fileMeta.settings.removedBlob) continue;
+                    const blob = fileMeta.settings.removedBlob;
 
                     const originalName = fileMeta.file.name.substring(0, fileMeta.file.name.lastIndexOf('.')) || fileMeta.file.name;
                     zip.file(`${originalName}-nobg.png`, blob); // Always PNG to preserve transparency
@@ -149,8 +151,7 @@ export default function RemoveBackgroundTool() {
                 saveAs(content, "aurafile-nobg.zip");
                 toast.success("Downloaded ZIP file!");
             } else if (activeFile && isCurrentProcessed) {
-                const response = await fetch(activeFile.settings.removedUrl!);
-                const blob = await response.blob();
+                const blob = activeFile.settings.removedBlob!;
 
                 const originalName = activeFile.file.name.substring(0, activeFile.file.name.lastIndexOf('.')) || activeFile.file.name;
                 saveAs(blob, `${originalName}-nobg.png`);

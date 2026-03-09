@@ -32,27 +32,38 @@ export function PdfUploader({ onUpload, maxFiles = UPLOAD_LIMITS.MAX_FILES, allo
                         }
 
                         const loadingTask = pdfjsLib.getDocument(arrayBuffer);
-                        loadingTask.onPassword = (updatePassword: any, reason: number) => {
-                            // Reason 1 = NEED_PASSWORD
-                            if (reason === 1 && !allowProtected) {
-                                throw new Error("PasswordProtected");
-                            }
-                        };
 
                         try {
-                            await loadingTask.promise;
+                            await new Promise((resolve, reject) => {
+                                loadingTask.onPassword = (updatePassword: any, reason: number) => {
+                                    // Immediate abort: destroy the worker to prevent an infinite hang
+                                    // since we are never going to provide the password to pdfjs-dist.
+                                    loadingTask.destroy().catch(() => { });
+
+                                    if (allowProtected) {
+                                        reject(new Error("AllowedProtected"));
+                                    } else {
+                                        reject(new Error("PasswordProtected"));
+                                    }
+                                };
+
+                                loadingTask.promise.then(resolve).catch(reject);
+                            });
+
+                            // If it resolves cleanly, it is a valid, unprotected PDF
                             validFiles.push(file);
                         } catch (loadError: any) {
-                            if (loadError.name === "PasswordException" && allowProtected) {
-                                // We expect a PasswordException if it's protected but we allowed it to bypass our manual throw.
+                            if (loadError.message === "AllowedProtected") {
+                                // We expect this because the tool allows protected files
                                 validFiles.push(file);
                             } else {
+                                // Let the outer catch handle "PasswordProtected" or broken PDF errors
                                 throw loadError;
                             }
                         }
 
                     } catch (error: any) {
-                        if (error.message === "PasswordProtected" || error.name === "PasswordException") {
+                        if (error.message === "PasswordProtected") {
                             toast.error(`"${file.name}" is password protected and cannot be processed.`);
                         } else {
                             toast.error(`"${file.name}" appears to be an invalid or broken PDF.`);

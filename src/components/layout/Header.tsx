@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { siteConfig } from "@/config/site";
+import { Icon } from "@/components/ui/Icon";
 
 
 export function Header() {
@@ -22,27 +23,67 @@ export function Header() {
                 </Link>
 
                 {/* Desktop Nav - Centered */}
-                <nav className="hidden flex-1 justify-center gap-8 md:flex">
-                    {siteConfig.header.nav.map((item) => (
-                        <Link
-                            key={item.href}
-                            href={item.href}
-                            className="text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900"
-                            onClick={(e) => {
-                                if (item.href.includes('#')) {
-                                    const id = item.href.split('#')[1];
-                                    const element = document.getElementById(id);
-                                    if (element) {
-                                        e.preventDefault();
-                                        element.scrollIntoView({ behavior: 'smooth' });
-                                        window.history.pushState(null, "", item.href);
-                                    }
-                                }
-                            }}
-                        >
-                            {item.title}
-                        </Link>
-                    ))}
+                <nav className="hidden flex-1 justify-center gap-6 lg:gap-8 md:flex items-center">
+                    <Link href="/" className="text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900">
+                        Home
+                    </Link>
+
+                    {/* Image Tools Dropdown */}
+                    <div className="relative group py-4">
+                        <button className="flex items-center gap-1 text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900 focus:outline-none">
+                            Image Tools
+                            <Icon name="chevron-down" size={14} className="transition-transform group-hover:rotate-180" />
+                        </button>
+
+                        {/* Dropdown Panel */}
+                        <div className="absolute top-[80%] left-1/2 -translate-x-1/2 w-[600px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pt-4 z-50">
+                            <div className="bg-white/95 backdrop-blur-md rounded-xl shadow-xl border border-slate-100 p-6 grid grid-cols-2 gap-4 relative overflow-hidden">
+                                {siteConfig.home.tools.image.map((tool) => (
+                                    <Link key={tool.title} href={tool.href} className="flex gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors group/item">
+                                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-[#0081C9]/10 text-[#0081C9] group-hover/item:bg-[#0081C9]/20 transition-colors">
+                                            <Icon name={tool.icon} size={20} />
+                                        </div>
+                                        <div>
+                                            <div className="font-bold text-slate-900 text-sm mb-1">{tool.title}</div>
+                                            <div className="text-xs font-medium text-slate-500 line-clamp-2">{tool.description}</div>
+                                        </div>
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* PDF Tools Dropdown */}
+                    <div className="relative group py-4">
+                        <button className="flex items-center gap-1 text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900 focus:outline-none">
+                            PDF Tools
+                            <Icon name="chevron-down" size={14} className="transition-transform group-hover:rotate-180" />
+                        </button>
+
+                        {/* Dropdown Panel */}
+                        <div className="absolute top-[80%] left-1/2 -translate-x-1/2 w-[600px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pt-4 z-50">
+                            <div className="bg-white/95 backdrop-blur-md rounded-xl shadow-xl border border-slate-100 p-6 grid grid-cols-2 gap-4 relative overflow-hidden">
+                                {siteConfig.home.tools.pdf.map((tool) => (
+                                    <Link key={tool.title} href={tool.href} className="flex gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors group/item">
+                                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-[#0081C9]/10 text-[#0081C9] group-hover/item:bg-[#0081C9]/20 transition-colors">
+                                            <Icon name={tool.icon} size={20} />
+                                        </div>
+                                        <div>
+                                            <div className="font-bold text-slate-900 text-sm mb-1">{tool.title}</div>
+                                            <div className="text-xs font-medium text-slate-500 line-clamp-2">{tool.description}</div>
+                                        </div>
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    <Link href="/about" className="text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900">
+                        About
+                    </Link>
+                    <Link href="/contact" className="text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900">
+                        Contact
+                    </Link>
                 </nav>
 
                 {/* Desktop Right Actions */}
@@ -83,28 +124,47 @@ export function Header() {
 
             {/* Mobile Nav Content */}
             {isMenuOpen && (
-                <div className="absolute left-0 right-0 top-full flex flex-col gap-4 border-b border-border bg-white p-4 shadow-lg md:hidden animate-in slide-in-from-top-2">
-                    {siteConfig.header.nav.map((item) => (
-                        <Link
-                            key={item.href}
-                            href={item.href}
-                            className="rounded-md p-3 text-lg font-bold hover:bg-slate-50 text-slate-700"
-                            onClick={(e) => {
-                                setIsMenuOpen(false);
-                                if (item.href.includes('#')) {
-                                    const id = item.href.split('#')[1];
-                                    const element = document.getElementById(id);
-                                    if (element) {
-                                        e.preventDefault();
-                                        setTimeout(() => element.scrollIntoView({ behavior: 'smooth' }), 100);
-                                        window.history.pushState(null, "", item.href);
-                                    }
-                                }
-                            }}
-                        >
-                            {item.title}
+                <div className="absolute left-0 right-0 top-full flex flex-col border-b border-border bg-white shadow-lg md:hidden animate-in slide-in-from-top-2 max-h-[80vh] overflow-y-auto thin-scrollbar">
+                    <div className="p-4 flex flex-col gap-2">
+                        <Link href="/" className="rounded-md p-3 text-lg font-bold hover:bg-slate-50 text-slate-700" onClick={() => setIsMenuOpen(false)}>
+                            Home
                         </Link>
-                    ))}
+
+                        {/* Image Tools Section Content */}
+                        <div className="px-3 py-2">
+                            <div className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+                                <Icon name="image" size={14} /> Image Tools
+                            </div>
+                            <div className="flex flex-col pl-2 border-l-2 border-slate-100 gap-1">
+                                {siteConfig.home.tools.image.map(tool => (
+                                    <Link key={tool.title} href={tool.href} onClick={() => setIsMenuOpen(false)} className="py-2 px-3 text-base font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md">
+                                        {tool.title}
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* PDF Tools Section Content */}
+                        <div className="px-3 py-2">
+                            <div className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+                                <Icon name="file-text" size={14} /> PDF Tools
+                            </div>
+                            <div className="flex flex-col pl-2 border-l-2 border-slate-100 gap-1">
+                                {siteConfig.home.tools.pdf.map(tool => (
+                                    <Link key={tool.title} href={tool.href} onClick={() => setIsMenuOpen(false)} className="py-2 px-3 text-base font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md">
+                                        {tool.title}
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+
+                        <Link href="/about" className="rounded-md p-3 text-lg font-bold hover:bg-slate-50 text-slate-700" onClick={() => setIsMenuOpen(false)}>
+                            About
+                        </Link>
+                        <Link href="/contact" className="rounded-md p-3 text-lg font-bold hover:bg-slate-50 text-slate-700" onClick={() => setIsMenuOpen(false)}>
+                            Contact
+                        </Link>
+                    </div>
                     <div className="flex flex-col gap-2 mt-2 pt-4 border-t border-slate-100">
                         <Link
                             href="/#tools"
