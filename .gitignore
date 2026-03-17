@@ -9,22 +9,30 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
-
-# testing
 # testing
 /coverage
-*.test.ts
-*.test.tsx
-*.spec.ts
-*.spec.tsx
-__tests__/
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+**/__tests__/
 test_final_results.log
 tsc_output_*.txt
 test_output*.txt
+test-output*.txt
+test_out*.txt
+test_out_clean*.txt
+err-*.txt
+err_*.txt
 test_result.log
+test-results*.json
 ts_errors.log
 tsc_errors.txt
 tsc_output.txt
+vitest_results.txt
+vitest_report.json
+split-script*.js
+temp-blog-covers.webp
 
 # next.js
 /.next/
