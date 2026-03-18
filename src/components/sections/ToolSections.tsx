@@ -1,5 +1,6 @@
 import { Icon, IconName } from "@/components/ui/Icon";
 import { SectionTitle, SectionDescription, BodyText } from "@/components/ui/typography";
+import { ScrollReveal } from "@/components/ScrollReveal";
 
 // --- Types ---
 export interface Step {
@@ -48,7 +49,7 @@ export function SEOAndSpecsSection({ howItWorks, benefits, theme = "blue", specs
                                         <div key={index} className="flex-1 relative flex flex-col pt-4">
                                             {/* Horizontal Progress Line on Desktop */}
                                             {index < howItWorks.length - 1 && (
-                                                <div className="hidden md:block absolute top-[2.25rem] left-[50%] w-full h-[2px] bg-slate-100 z-0" />
+                                                <div className="hidden md:block absolute top-[2.25rem] left-[50%] w-full h-[2px] bg-gradient-to-r from-[#00B4D8] to-transparent opacity-30 z-0" />
                                             )}
                                             <div className={`relative z-10 flex items-center justify-center w-12 h-12 rounded-full bg-white shadow-sm border border-slate-200 mx-auto mb-5 ${primaryColor} font-bold text-lg`}>
                                                 {index + 1}
@@ -81,21 +82,22 @@ export function SEOAndSpecsSection({ howItWorks, benefits, theme = "blue", specs
                     </div>
 
                     <div className="md:col-span-4">
-                        <div className="sticky top-24 flex flex-col gap-6">
-                            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-sm">
-                                <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-200">
-                                    <Icon name="cpu" className={primaryColor} size={24} />
-                                    <h3 className="text-lg font-bold text-slate-900 m-0 tracking-tight">Tool Specifications</h3>
-                                </div>
-                                
-                                <div className="space-y-4">
-                                    {_specs.map((spec, i) => (
-                                        <div key={i} className="flex justify-between items-center text-sm">
-                                            <span className="text-slate-500">{spec.label}</span>
-                                            <span className="font-semibold text-slate-800 text-right">{spec.value}</span>
-                                        </div>
-                                    ))}
-                                </div>
+                        <ScrollReveal>
+                            <div className="sticky top-24 flex flex-col gap-6">
+                                <div className="rounded-2xl border border-slate-200 bg-[#f8fafc] p-6 shadow-sm">
+                                    <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-200">
+                                        <Icon name="cpu" className={primaryColor} size={24} />
+                                        <h3 className="text-lg font-bold text-slate-900 m-0 tracking-tight">Tool Specifications</h3>
+                                    </div>
+                                    
+                                    <div className="space-y-4">
+                                        {_specs.map((spec, i) => (
+                                            <div key={i} className="flex justify-between items-center text-sm">
+                                                <span className="text-slate-500">{spec.label}</span>
+                                                <span className="font-semibold text-slate-800 text-right text-sm">{spec.value}</span>
+                                            </div>
+                                        ))}
+                                    </div>
 
                                 <div className="mt-8 pt-6 border-t border-slate-200">
                                     <div className="flex items-start gap-4 p-4 bg-white rounded-xl border border-emerald-100 shadow-sm">
@@ -107,8 +109,8 @@ export function SEOAndSpecsSection({ howItWorks, benefits, theme = "blue", specs
                                     </div>
                                 </div>
                             </div>
-
                         </div>
+                        </ScrollReveal>
                     </div>
                 </div>
             </div>
@@ -120,9 +122,10 @@ export function FAQSection({ items }: { items: FAQItem[] }) {
     if (!items || items.length === 0) return null;
 
     return (
-        <section className="py-12 md:py-16 bg-white border-t border-slate-100">
-            <div className="container mx-auto px-4 md:px-8 max-w-4xl">
-                <div className="text-center mb-12">
+        <ScrollReveal>
+            <section className="py-12 md:py-16 bg-white border-t border-slate-100">
+                <div className="container mx-auto px-4 md:px-8 max-w-4xl">
+                    <div className="text-center mb-12">
                     <h2 className="text-3xl font-bold text-slate-900 font-sans tracking-tight">Frequently Asked Questions</h2>
                 </div>
 
@@ -143,6 +146,7 @@ export function FAQSection({ items }: { items: FAQItem[] }) {
                 </div>
             </div>
         </section>
+        </ScrollReveal>
     );
 }
 

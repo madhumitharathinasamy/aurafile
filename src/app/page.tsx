@@ -18,7 +18,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col animate-fade-in">
       {/* Hero Section */}
-      <section className="relative overflow-hidden pt-20 pb-16 md:pt-32 md:pb-24 bg-grid-slate bg-[#F8FAFC]">
+      <section className="relative overflow-hidden pt-20 pb-16 md:pt-32 md:pb-24 bg-[#F8FAFC]">
         <div className="absolute left-[5%] top-[-10%] h-[500px] w-[500px] rounded-full bg-[#E0F2FE] blur-[100px] opacity-70"></div>
         <div className="absolute right-[5%] top-[10%] h-[400px] w-[400px] rounded-full bg-[#E0F2FE] blur-[100px] opacity-60"></div>
         <div className="container mx-auto px-4 relative z-10">

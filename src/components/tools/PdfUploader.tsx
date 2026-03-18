@@ -98,7 +98,7 @@ export function PdfUploader({ onUpload, maxFiles = UPLOAD_LIMITS.MAX_FILES, allo
                 {...getRootProps()}
                 className={`relative flex flex-col items-center justify-center gap-4 p-10 md:p-14 rounded-2xl border-2 border-dashed cursor-pointer transition-all duration-300 ${isDragActive
                     ? "border-[#00B4D8] bg-[#00B4D8]/5 shadow-[inset_0_0_30px_rgba(0,180,216,0.05)] scale-[1.01]"
-                    : "border-slate-300 hover:border-[#00B4D8]/50 bg-slate-50 shadow-inner"
+                    : "border-slate-300 hover:border-[#00B4D8] hover:bg-[#00B4D8]/10 bg-slate-50 shadow-inner"
                     }`}
             >
                 <input {...getInputProps()} data-testid="dropzone-file-input" />
@@ -106,7 +106,7 @@ export function PdfUploader({ onUpload, maxFiles = UPLOAD_LIMITS.MAX_FILES, allo
                     <Icon name="file-text" size={28} />
                 </div>
                 <div className="text-center">
-                    <p className="text-slate-800 font-bold text-lg md:text-xl tracking-tight">Drag & drop your PDF{maxFiles > 1 ? "s" : ""} here</p>
+                    <p className="text-slate-600 font-bold text-lg md:text-xl tracking-tight">Drag & drop your PDF{maxFiles > 1 ? "s" : ""} here</p>
                     <p className="text-slate-500 mt-1.5 text-sm">
                         or <span className="text-[#00B4D8] font-medium px-1 rounded hover:bg-[#00B4D8]/10 transition-colors">click to browse</span> files
                     </p>

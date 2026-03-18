@@ -96,7 +96,7 @@ export function Header() {
                 <div className="hidden items-center justify-end gap-5 md:flex w-48">
                     <Link
                         href="/#tools"
-                        className="rounded-[6px] bg-[#00B4D8] px-4 py-2 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#0096b7] hover:shadow"
+                        className="rounded-[6px] border-2 border-[#00B4D8] px-4 py-2 text-sm font-bold text-[#00B4D8] bg-transparent shadow-sm transition-all hover:bg-[#00B4D8]/10 hover:shadow"
                         onClick={(e) => {
                             const element = document.getElementById('tools');
                             if (element) {
@@ -174,7 +174,7 @@ export function Header() {
                     <div className="flex flex-col gap-2 mt-2 pt-4 border-t border-slate-100">
                         <Link
                             href="/#tools"
-                            className="rounded-md bg-[#00B4D8] p-3 text-lg font-bold text-white text-center shadow-sm"
+                            className="rounded-md border-2 border-[#00B4D8] p-3 text-lg font-bold text-[#00B4D8] bg-transparent text-center shadow-sm hover:bg-[#00B4D8]/10 transition-colors"
                             onClick={(e) => {
                                 setIsMenuOpen(false);
                                 const element = document.getElementById('tools');
