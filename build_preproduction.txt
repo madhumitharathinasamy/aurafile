@@ -1,0 +1,81 @@
+﻿
+> aurafile@0.1.0 build
+> next build
+
+Γû▓ Next.js 16.1.6 (Turbopack)
+- Environments: .env.local
+- Experiments (use with caution):
+  ┬╖ optimizePackageImports
+  ┬╖ serverActions
+
+  Creating an optimized production build ...
+node.exe : Turbopack 
+build encountered 1 
+warnings:
+At C:\nvm4w\nodejs\npm
+.ps1:29 char:3
++   & $NODE_EXE 
+$NPM_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: (Turbopack    
+ build encountered    
+ 1 warnings::Stri    
+ng) [], RemoteExc    
+eption
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 
+[next]/internal/font/g
+oogle/inter_fa93af41.m
+odule.css
+Error while 
+requesting resource
+There was an issue 
+requesting https://fon
+ts.googleapis.com/css2
+?family=Inter:wght@100
+..900&display=swap
+
+Import trace:
+  Server Component:
+    [next]/internal/fo
+nt/google/inter_fa93af
+41.module.css
+    [next]/internal/fo
+nt/google/inter_fa93af
+41.js
+    
+./src/app/layout.tsx
+
+
+
+> Build error occurred
+Error: Turbopack 
+build failed with 1 
+errors:
+[next]/internal/font/g
+oogle/inter_fa93af41.m
+odule.css
+next/font: error:
+Failed to fetch 
+`Inter` from Google 
+Fonts.
+
+Import trace:
+  Server Component:
+    [next]/internal/fo
+nt/google/inter_fa93af
+41.module.css
+    [next]/internal/fo
+nt/google/inter_fa93af
+41.js
+    
+./src/app/layout.tsx
+
+
+    at ignore-listed 
+frames

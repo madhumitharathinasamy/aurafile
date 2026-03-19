@@ -1,0 +1,58 @@
+﻿
+> aurafile@0.1.0 build
+> next build
+
+Γû▓ Next.js 16.1.6 (Turbopack)
+- Environments: .env.local
+- Experiments (use with caution):
+  ┬╖ optimizePackageImports
+  ┬╖ serverActions
+
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 9.5s
+  Running TypeScript ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/35) ...
+  Generating static pages using 7 workers (8/35) 
+  Generating static pages using 7 workers (17/35) 
+  Generating static pages using 7 workers (26/35) 
+Γ£ô Generating static pages using 7 workers (35/35) in 2.5s
+  Finalizing page optimization ...
+
+Route (app)                                Revalidate  Expire
+Γöî Γùï /                                              1d      1y
+Γö£ Γùï /_not-found                                    1d      1y
+Γö£ Γùï /about                                         1d      1y
+Γö£ Γùï /about-us                                      1d      1y
+Γö£ Γùï /blog                                          1d      1y
+Γö£ ΓùÅ /blog/[slug]                                   1d      1y
+Γöé Γö£ /blog/how-to-merge-multiple-pdfs-fast          1d      1y
+Γöé Γö£ /blog/pdf-security-cloud-servers               1d      1y
+Γöé Γö£ /blog/image-compression-101                    1d      1y
+Γöé Γöö [+4 more paths]
+Γö£ Γùï /compress-image                                1d      1y
+Γö£ Γùï /compress-pdf                                  1d      1y
+Γö£ Γùï /contact                                       1d      1y
+Γö£ Γùï /crop-image                                    1d      1y
+Γö£ Γùï /disclaimer                                    1d      1y
+Γö£ Γùï /image-converter                               1d      1y
+Γö£ Γùï /image-to-pdf                                  1d      1y
+Γö£ Γùï /merge-pdf                                     1d      1y
+Γö£ Γùï /pdf-to-word                                   1d      1y
+Γö£ Γùï /privacy                                       1d      1y
+Γö£ Γùï /privacy-policy                                1d      1y
+Γö£ Γùï /protect-pdf                                   1d      1y
+Γö£ Γùï /remove-background                             1d      1y
+Γö£ Γùï /rename-files                                  1d      1y
+Γö£ Γùï /resize-image                                  1d      1y
+Γö£ Γùï /robots.txt
+Γö£ Γùï /sitemap-html                                  1d      1y
+Γö£ Γùï /sitemap.xml
+Γö£ Γùï /terms                                         1d      1y
+Γö£ Γùï /terms-of-service                              1d      1y
+Γöö Γùï /unlock-pdf                                    1d      1y
+
+
+Γùï  (Static)  prerendered as static content
+ΓùÅ  (SSG)     prerendered as static HTML (uses generateStaticParams)
+

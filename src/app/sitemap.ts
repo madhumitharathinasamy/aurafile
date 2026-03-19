@@ -22,6 +22,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
         { url: `${baseUrl}/pdf-to-word`, lastModified: new Date(), changeFrequency: "monthly", priority: 1.0 },
         { url: `${baseUrl}/image-to-pdf`, lastModified: new Date(), changeFrequency: "monthly", priority: 1.0 },
         { url: `${baseUrl}/protect-pdf`, lastModified: new Date(), changeFrequency: "monthly", priority: 1.0 },
+        // File Tools
+        { url: `${baseUrl}/rename-files`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.9 },
         // Legal pages
         {
             url: `${baseUrl}/privacy-policy`,

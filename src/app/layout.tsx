@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/config/site";
 import { themeConfig } from "@/config/theme";
@@ -10,9 +9,6 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import { ClientToaster } from "@/components/ui/ClientToaster";
 
-
-
-const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 
 export const dynamic = "force-static";
@@ -87,7 +83,7 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased`} style={themeVariables} suppressHydrationWarning>
+      <body className="font-sans antialiased" style={themeVariables} suppressHydrationWarning>
         <Header />
         {children}
         <Footer />

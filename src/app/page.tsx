@@ -7,6 +7,7 @@ import { ScrollReveal } from "@/components/ScrollReveal";
 
 const ToolsSection = dynamic(() => import("@/components/home/ToolsSection"), { ssr: true });
 const FeaturesSection = dynamic(() => import("@/components/home/FeaturesSection"), { ssr: true });
+const BlogSection = dynamic(() => import("@/components/home/BlogSection"), { ssr: true });
 const Reviews = dynamic(() => import("@/components/ui/Reviews").then(mod => mod.Reviews), { ssr: true });
 
 export const dynamicConfig = "force-static";
@@ -66,6 +67,10 @@ export default function Home() {
 
       <ScrollReveal>
         <FeaturesSection />
+      </ScrollReveal>
+
+      <ScrollReveal>
+        <BlogSection />
       </ScrollReveal>
 
       <ScrollReveal>

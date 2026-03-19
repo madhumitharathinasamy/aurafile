@@ -84,6 +84,9 @@ export function Header() {
                         </div>
                     </div>
 
+                    <Link href="/blog" className="text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900">
+                        Blog
+                    </Link>
                     <Link href="/about" className="text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900">
                         About
                     </Link>
@@ -164,6 +167,9 @@ export function Header() {
                             </div>
                         </div>
 
+                        <Link href="/blog" className="rounded-md p-3 text-lg font-bold hover:bg-slate-50 text-slate-700" onClick={() => setIsMenuOpen(false)}>
+                            Blog
+                        </Link>
                         <Link href="/about" className="rounded-md p-3 text-lg font-bold hover:bg-slate-50 text-slate-700" onClick={() => setIsMenuOpen(false)}>
                             About
                         </Link>

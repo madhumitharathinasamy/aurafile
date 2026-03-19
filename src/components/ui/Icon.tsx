@@ -63,6 +63,9 @@ import {
     Shrink,
     Wand2,
     AlertCircle,
+    Linkedin,
+    Facebook,
+    Mail,
     LucideProps
 } from "lucide-react";
 
@@ -131,7 +134,11 @@ export type IconName =
     | "loader-2"
     | "shrink"
     | "wand-2"
-    | "alert-circle";
+    | "alert-circle"
+    | "Linkedin"
+    | "linkedin"
+    | "facebook"
+    | "mail";
 
 const icons: Record<IconName, React.FC<LucideProps>> = {
     resize: Maximize2,
@@ -199,6 +206,10 @@ const icons: Record<IconName, React.FC<LucideProps>> = {
     shrink: Shrink,
     "wand-2": Wand2,
     "alert-circle": AlertCircle,
+    Linkedin: Linkedin,
+    linkedin: Linkedin,
+    facebook: Facebook,
+    mail: Mail,
 };
 
 interface IconProps extends LucideProps {

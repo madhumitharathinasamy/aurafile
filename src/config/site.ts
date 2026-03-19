@@ -5,6 +5,8 @@ export const siteConfig = {
     links: {
         github: "https://github.com/aurafile", // Placeholder
         twitter: "https://twitter.com/aurafile", // Placeholder
+        linkedin: "https://www.linkedin.com/in/aura-file-4913483b8",
+        facebook: "https://www.facebook.com/profile.php?id=61577547112396",
         email: "team@aurafile.net",
     },
     keywords: [
@@ -138,6 +140,15 @@ export const siteConfig = {
                     icon: "unlock",
                     tags: ["PDF", "Security"]
                 },
+            ],
+            other: [
+                {
+                    title: "Rename Files",
+                    description: "Bulk rename multiple files securely right in your browser.",
+                    href: "/rename-files",
+                    icon: "folder",
+                    tags: ["Utility", "Files"]
+                }
             ],
         },
         features: {
