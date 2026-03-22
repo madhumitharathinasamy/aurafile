@@ -98,10 +98,21 @@ export function Header() {
                 </nav>
 
                 {/* Desktop Right Actions */}
-                <div className="hidden items-center justify-end gap-5 md:flex w-48">
+                <div className="hidden items-center justify-end gap-4 md:flex">
+                    <form role="search" className="relative hidden lg:block" action="/search">
+                        <Icon name="search" size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                        <input 
+                            type="search" 
+                            name="q"
+                            placeholder="Search tools..." 
+                            className="h-9 w-44 rounded-full border border-slate-200 bg-slate-50 pl-9 pr-4 text-sm outline-none transition-all focus:w-56 focus:border-[#00B4D8] focus:bg-white focus:ring-2 focus:ring-[#00B4D8]/20"
+                            aria-label="Search"
+                        />
+                    </form>
+
                     <Link
                         href="/#tools"
-                        className="rounded-[6px] border-2 border-[#00B4D8] px-4 py-2 text-sm font-bold text-[#00B4D8] bg-transparent shadow-sm transition-all hover:bg-[#00B4D8]/10 hover:shadow"
+                        className="rounded-[6px] border-2 border-[#00B4D8] px-4 py-2 mt-[-2px] text-sm font-bold text-[#00B4D8] bg-transparent shadow-sm transition-all hover:bg-[#00B4D8]/10 hover:shadow"
                         onClick={(e) => {
                             const element = document.getElementById('tools');
                             if (element) {
@@ -137,6 +148,18 @@ export function Header() {
             {isMenuOpen && (
                 <div className="absolute left-0 right-0 top-full flex flex-col border-b border-border bg-white shadow-lg md:hidden animate-in slide-in-from-top-2 max-h-[80vh] overflow-y-auto thin-scrollbar">
                     <div className="p-4 flex flex-col gap-2">
+                        {/* Mobile Search */}
+                        <form role="search" className="relative mb-2 shrink-0" action="/search">
+                            <Icon name="search" size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                            <input 
+                                type="search" 
+                                name="q"
+                                placeholder="Search tools..." 
+                                className="h-10 w-full rounded-lg border border-slate-200 bg-slate-50 pl-10 pr-4 text-base outline-none focus:border-[#00B4D8]"
+                                aria-label="Search"
+                            />
+                        </form>
+
                         <Link href="/" className="rounded-md p-3 text-lg font-bold hover:bg-slate-50 text-slate-700" onClick={() => setIsMenuOpen(false)}>
                             Home
                         </Link>

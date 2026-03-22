@@ -9,7 +9,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import { ClientToaster } from "@/components/ui/ClientToaster";
 import { CookieConsent } from "@/components/layout/CookieConsent";
-
+import Script from "next/script";
 
 
 export const dynamic = "force-static";
@@ -26,6 +26,9 @@ export const metadata: Metadata = {
   keywords: siteConfig.keywords,
   authors: siteConfig.authors,
   creator: siteConfig.creator,
+  alternates: {
+    canonical: `https://${siteConfig.domain}`,
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -85,10 +88,39 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-sans antialiased" style={themeVariables} suppressHydrationWarning>
+        {/* Placeholder AdSense Script: Replace with actual Publisher ID once approved */}
+        <Script 
+          async 
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0000000000000000" 
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+
+        {/* Global Schema.org Structured Data */}
+        <Script
+          id="global-schema"
+          type="application/ld+json"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": siteConfig.name,
+              "description": siteConfig.description,
+              "url": `https://${siteConfig.domain}/`,
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": `https://${siteConfig.domain}/search?q={search_term_string}`,
+                "query-input": "required name=search_term_string"
+              }
+            })
+          }}
+        />
+
         <Header />
         {children}
         <Footer />
-        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || "G-0000000000"} />
         <ClientToaster />
         <CookieConsent />
         <SpeedInsights />

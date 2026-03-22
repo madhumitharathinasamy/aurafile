@@ -66,6 +66,7 @@ import {
     Linkedin,
     Facebook,
     Mail,
+    Search,
     LucideProps
 } from "lucide-react";
 
@@ -138,7 +139,8 @@ export type IconName =
     | "Linkedin"
     | "linkedin"
     | "facebook"
-    | "mail";
+    | "mail"
+    | "search";
 
 const icons: Record<IconName, React.FC<LucideProps>> = {
     resize: Maximize2,
@@ -210,6 +212,7 @@ const icons: Record<IconName, React.FC<LucideProps>> = {
     linkedin: Linkedin,
     facebook: Facebook,
     mail: Mail,
+    search: Search,
 };
 
 interface IconProps extends LucideProps {

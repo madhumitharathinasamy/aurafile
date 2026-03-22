@@ -3,6 +3,8 @@ import { siteConfig } from "@/config/site";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { BelowFoldSections } from "@/components/home/BelowFoldSections";
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { HomeSeoArticle } from "@/components/home/HomeSeoArticle";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -18,6 +20,11 @@ export default function Home() {
         <div className="absolute right-[5%] top-[10%] h-[400px] w-[400px] rounded-full bg-[#E0F2FE] blur-[100px] opacity-60" />
         <div className="container mx-auto px-4 relative z-10">
           <div className="mx-auto max-w-4xl text-center">
+            {/* SEO-Only Breadcrumbs for strict scanners */}
+            <div className="sr-only">
+              <Breadcrumbs items={[{ label: "Home", href: "/" }]} />
+            </div>
+
             {/* Trusted Badge */}
             <div className="mb-10 inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-1.5 text-xs font-bold text-slate-600 shadow-sm">
               <span className="mr-2 h-2.5 w-2.5 rounded-full bg-[#00B4D8]" />
@@ -57,6 +64,9 @@ export default function Home() {
 
       {/* ── Below-the-fold sections (Client — deferred via idle/scroll) ───── */}
       <BelowFoldSections />
+
+      {/* ── SEO Content Density block for AdSense ───── */}
+      <HomeSeoArticle />
     </main>
   );
 }
