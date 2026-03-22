@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import { RemoveBgToolLoader } from './RemoveBgToolLoader';
-import ToolPageLayout, { Step, Benefit, FAQItem } from '@/components/tools/ToolPageLayout';
+import ToolPageLayout from '@/components/tools/ToolPageLayout';
+import { RemoveBackgroundArticle } from './RemoveBackgroundArticle';
 
 export const dynamic = 'force-static';
-
+export const revalidate = 86400;
 
 export const metadata: Metadata = {
-    title: 'Remove Image Background Free � On-Device AI | AuraFile',
+    title: 'Remove Image Background Free \u2013 On-Device AI | AuraFile',
     description: 'Remove image backgrounds using AI that runs locally in your browser. Your photos are never uploaded. Free, private, no accounts needed.',
     alternates: {
         canonical: 'https://aurafile.net/remove-background',
@@ -14,43 +15,43 @@ export const metadata: Metadata = {
 };
 
 export default function RemoveBackgroundPage() {
-    const steps: Step[] = [
+    const steps = [
         {
-            title: "Remove Background Free - No Upload | AuraFile",
-            description: "Remove image backgrounds instantly with AI, entirely in your browser. No uploads, no cloud processing. 100% private background remover.",
-            icon: "upload-cloud"
+            title: "Upload Image",
+            description: "Select an image with a clear subject. For the first run, the AI model will briefly download directly to your browser cache.",
+            icon: "upload-cloud" as const
         },
         {
-            title: "Remove Background Free - No Upload | AuraFile",
-            description: "Remove image backgrounds instantly with AI, entirely in your browser. No uploads, no cloud processing. 100% private background remover.",
-            icon: "wand-2"
+            title: "AI Processing",
+            description: "The local AI model securely isolates the subject from the background using your device's GPU.",
+            icon: "wand-2" as const
         },
         {
-            title: "Remove Background Free - No Upload | AuraFile",
-            description: "Remove image backgrounds instantly with AI, entirely in your browser. No uploads, no cloud processing. 100% private background remover.",
-            icon: "download"
+            title: "Save Transparent PNG",
+            description: "Download the perfect cutout as a high-resolution PNG file with a transparent background.",
+            icon: "download" as const
         }
     ];
 
-    const benefits: Benefit[] = [
+    const benefits = [
         {
-            title: "Remove Background Free - No Upload | AuraFile",
-            description: "Remove image backgrounds instantly with AI, entirely in your browser. No uploads, no cloud processing. 100% private background remover.",
-            icon: "shield-check"
+            title: "Zero Cloud Uploads",
+            description: "Because the neural network executes in your browser, your personal or proprietary photos are never uploaded to a server.",
+            icon: "shield-check" as const
         },
         {
-            title: "Remove Background Free - No Upload | AuraFile",
-            description: "Remove image backgrounds instantly with AI, entirely in your browser. No uploads, no cloud processing. 100% private background remover.",
-            icon: "zap"
+            title: "Sub-Second Speed",
+            description: "After the initial model cache, processing subsequent images is instantaneous because there is no network latency.",
+            icon: "zap" as const
         },
         {
-            title: "Remove Background Free - No Upload | AuraFile",
-            description: "Remove image backgrounds instantly with AI, entirely in your browser. No uploads, no cloud processing. 100% private background remover.",
-            icon: "layers"
+            title: "No Subscription Limits",
+            description: "Cloud-based AI APIs charge per image. Since you are utilizing your own hardware, usage is completely free and unlimited.",
+            icon: "layers" as const
         }
     ];
 
-    const faq: FAQItem[] = [
+    const faq = [
         {
             question: "Why does it take a moment on the first use?",
             answer: "The AI model (~50MB for the medium setting) is downloaded once to your browser and then cached. Subsequent uses on the same device are instant."
@@ -76,7 +77,7 @@ export default function RemoveBackgroundPage() {
     return (
         <ToolPageLayout
             title="AI Background Remover"
-            description="Remove image backgrounds instantly using on-device AI. 100% private � no uploads, no accounts."
+            description="Remove image backgrounds instantly using on-device AI. 100% private \u2014 no uploads, no accounts."
             toolComponent={<RemoveBgToolLoader />}
             howItWorks={steps}
             benefits={benefits}
@@ -86,6 +87,7 @@ export default function RemoveBackgroundPage() {
                 { label: "Image Tools", href: "/image-tools" },
                 { label: "AI Background Remover", href: "/remove-background" }
             ]}
+            longFormContent={<RemoveBackgroundArticle />}
         />
     );
 }

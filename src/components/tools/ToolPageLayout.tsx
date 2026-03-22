@@ -15,6 +15,7 @@ interface ToolPageLayoutProps {
     backgroundImage?: string;
     theme?: "blue" | "red";
     breadcrumbs?: BreadcrumbItem[];
+    longFormContent?: React.ReactNode;
 }
 
 export default function ToolPageLayout({
@@ -26,7 +27,8 @@ export default function ToolPageLayout({
     faq,
     specs,
     theme = "blue",
-    breadcrumbs
+    breadcrumbs,
+    longFormContent
 }: ToolPageLayoutProps) {
     const isRed = theme === "red";
     
@@ -61,6 +63,13 @@ export default function ToolPageLayout({
 
                     {/* 3. FAQ Section */}
                     <FAQSection items={faq} />
+
+                    {/* 4. Long Form SEO Content (if provided) */}
+                    {longFormContent && (
+                        <section className="container mx-auto px-4 max-w-4xl mt-16 pt-16 border-t border-slate-200">
+                            {longFormContent}
+                        </section>
+                    )}
                 </div>
             </ScrollReveal>
         </div>
