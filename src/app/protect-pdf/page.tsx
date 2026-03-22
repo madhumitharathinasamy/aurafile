@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { ProtectPdfToolLoader } from "./ProtectPdfToolLoader";
 import ToolPageLayout, { Step, Benefit, FAQItem } from "@/components/tools/ToolPageLayout";
 
@@ -73,6 +73,11 @@ export default function ProtectPdfPage() {
             howItWorks={steps}
             benefits={benefits}
             faq={faq}
+            breadcrumbs={[
+                { label: "Home", href: "/" },
+                { label: "PDF Tools", href: "/pdf-tools" },
+                { label: "Protect PDF", href: "/protect-pdf" }
+            ]}
         />
     );
 }

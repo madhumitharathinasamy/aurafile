@@ -75,10 +75,13 @@ export function Footer() {
                         <nav aria-label="Footer Navigation - Site Map">
                             <ul className="flex flex-col gap-4 m-0 p-0">
                                 <li><Link href="/" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block">Home</Link></li>
-                                <li><Link href="/#tools" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block">Image Tools</Link></li>
-                                <li><Link href="/#tools" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block">PDF Tools</Link></li>
+                                <li><Link href="/image-tools" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block">Image Tools</Link></li>
+                                <li><Link href="/pdf-tools" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block">PDF Tools</Link></li>
+                                <li><Link href="/document-tools" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block">Document Tools</Link></li>
                                 <li><Link href="/blog" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block">Blog</Link></li>
+                                <li><Link href="/faq" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block">FAQ</Link></li>
                                 <li><Link href="/about" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block">About</Link></li>
+                                <li><Link href="/security" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block">Security Architecture</Link></li>
                                 <li><Link href="/contact" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block">Contact</Link></li>
                             </ul>
                         </nav>

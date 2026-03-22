@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { CompressPdfToolLoader } from "./CompressPdfToolLoader";
 import ToolPageLayout, { Step, Benefit, FAQItem } from "@/components/tools/ToolPageLayout";
 
@@ -73,6 +73,11 @@ export default function CompressPdfPage() {
             howItWorks={steps}
             benefits={benefits}
             faq={faq}
+            breadcrumbs={[
+                { label: "Home", href: "/" },
+                { label: "PDF Tools", href: "/pdf-tools" },
+                { label: "Compress PDF", href: "/compress-pdf" }
+            ]}
         />
     );
 }

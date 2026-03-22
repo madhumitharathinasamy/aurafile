@@ -1,4 +1,4 @@
-﻿import { Metadata } from "next";
+import { Metadata } from "next";
 import { ConvertToolLoader } from "./ConvertToolLoader";
 import ToolPageLayout, { Step, Benefit, FAQItem } from "@/components/tools/ToolPageLayout";
 
@@ -73,6 +73,11 @@ export default function ConvertPage() {
             howItWorks={steps}
             benefits={benefits}
             faq={faq}
+            breadcrumbs={[
+                { label: "Home", href: "/" },
+                { label: "Image Tools", href: "/image-tools" },
+                { label: "Convert Image", href: "/image-converter" }
+            ]}
         />
     );
 }

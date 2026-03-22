@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { MergePdfToolLoader } from "./MergePdfToolLoader";
 import ToolPageLayout, { Step, Benefit, FAQItem } from "@/components/tools/ToolPageLayout";
 
@@ -6,8 +6,8 @@ export const dynamic = 'force-static';
 
 
 export const metadata: Metadata = {
-    title: "Merge PDF Free - Private, No Upload | AuraFile",
-    description: "Combine multiple PDF files into one instantly in your browser. No uploads, no accounts. 100% private PDF merging. Free forever.",
+    title: "Merge PDF Files Free \u2013 Private, No Upload Required",
+    description: "Combine multiple PDFs into one file \u2014 processed entirely in your browser. No uploads, no accounts. Your documents never reach our servers.",
     alternates: {
         canonical: "https://aurafile.net/merge-pdf",
     },
@@ -16,36 +16,36 @@ export const metadata: Metadata = {
 export default function MergePdfPage() {
     const steps: Step[] = [
         {
-            title: "Merge PDF Free - Private, No Upload | AuraFile",
-            description: "Combine multiple PDF files into one instantly in your browser. No uploads, no accounts. 100% private PDF merging. Free forever.",
+            title: "Merge PDF Files Free \u2013 Private, No Upload Required",
+            description: "Combine multiple PDFs into one file \u2014 processed entirely in your browser. No uploads, no accounts. Your documents never reach our servers.",
             icon: "upload-cloud"
         },
         {
-            title: "Merge PDF Free - Private, No Upload | AuraFile",
-            description: "Combine multiple PDF files into one instantly in your browser. No uploads, no accounts. 100% private PDF merging. Free forever.",
+            title: "Merge PDF Files Free \u2013 Private, No Upload Required",
+            description: "Combine multiple PDFs into one file \u2014 processed entirely in your browser. No uploads, no accounts. Your documents never reach our servers.",
             icon: "layers"
         },
         {
-            title: "Merge PDF Free - Private, No Upload | AuraFile",
-            description: "Combine multiple PDF files into one instantly in your browser. No uploads, no accounts. 100% private PDF merging. Free forever.",
+            title: "Merge PDF Files Free \u2013 Private, No Upload Required",
+            description: "Combine multiple PDFs into one file \u2014 processed entirely in your browser. No uploads, no accounts. Your documents never reach our servers.",
             icon: "download"
         }
     ];
 
     const benefits: Benefit[] = [
         {
-            title: "Merge PDF Free - Private, No Upload | AuraFile",
-            description: "Combine multiple PDF files into one instantly in your browser. No uploads, no accounts. 100% private PDF merging. Free forever.",
+            title: "Merge PDF Files Free \u2013 Private, No Upload Required",
+            description: "Combine multiple PDFs into one file \u2014 processed entirely in your browser. No uploads, no accounts. Your documents never reach our servers.",
             icon: "file-text"
         },
         {
-            title: "Merge PDF Free - Private, No Upload | AuraFile",
-            description: "Combine multiple PDF files into one instantly in your browser. No uploads, no accounts. 100% private PDF merging. Free forever.",
+            title: "Merge PDF Files Free \u2013 Private, No Upload Required",
+            description: "Combine multiple PDFs into one file \u2014 processed entirely in your browser. No uploads, no accounts. Your documents never reach our servers.",
             icon: "lock"
         },
         {
-            title: "Merge PDF Free - Private, No Upload | AuraFile",
-            description: "Combine multiple PDF files into one instantly in your browser. No uploads, no accounts. 100% private PDF merging. Free forever.",
+            title: "Merge PDF Files Free \u2013 Private, No Upload Required",
+            description: "Combine multiple PDFs into one file \u2014 processed entirely in your browser. No uploads, no accounts. Your documents never reach our servers.",
             icon: "folder"
         }
     ];
@@ -73,6 +73,11 @@ export default function MergePdfPage() {
             howItWorks={steps}
             benefits={benefits}
             faq={faq}
+            breadcrumbs={[
+                { label: "Home", href: "/" },
+                { label: "PDF Tools", href: "/pdf-tools" },
+                { label: "Merge PDF Files", href: "/merge-pdf" }
+            ]}
         />
     );
 }

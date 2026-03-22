@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { ImageToPdfToolLoader } from "./ImageToPdfToolLoader";
 import ToolPageLayout, { Step, Benefit, FAQItem } from "@/components/tools/ToolPageLayout";
 
@@ -74,6 +74,11 @@ export default function ImageToPdfPage() {
             benefits={benefits}
             faq={faq}
             theme="blue"
+            breadcrumbs={[
+                { label: "Home", href: "/" },
+                { label: "PDF Tools", href: "/pdf-tools" },
+                { label: "Convert Images to PDF", href: "/image-to-pdf" }
+            ]}
         />
     );
 }

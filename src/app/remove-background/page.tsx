@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import { RemoveBgToolLoader } from './RemoveBgToolLoader';
 import ToolPageLayout, { Step, Benefit, FAQItem } from '@/components/tools/ToolPageLayout';
 
@@ -6,8 +6,8 @@ export const dynamic = 'force-static';
 
 
 export const metadata: Metadata = {
-    title: 'Remove Background Online – AI Background Remover | AuraFile',
-    description: 'Automatically remove image backgrounds using AI — entirely in your browser. No uploads, 100% private, free.',
+    title: 'Remove Image Background Free � On-Device AI | AuraFile',
+    description: 'Remove image backgrounds using AI that runs locally in your browser. Your photos are never uploaded. Free, private, no accounts needed.',
     alternates: {
         canonical: 'https://aurafile.net/remove-background',
     },
@@ -76,11 +76,16 @@ export default function RemoveBackgroundPage() {
     return (
         <ToolPageLayout
             title="AI Background Remover"
-            description="Remove image backgrounds instantly using on-device AI. 100% private — no uploads, no accounts."
+            description="Remove image backgrounds instantly using on-device AI. 100% private � no uploads, no accounts."
             toolComponent={<RemoveBgToolLoader />}
             howItWorks={steps}
             benefits={benefits}
             faq={faq}
+            breadcrumbs={[
+                { label: "Home", href: "/" },
+                { label: "Image Tools", href: "/image-tools" },
+                { label: "AI Background Remover", href: "/remove-background" }
+            ]}
         />
     );
 }

@@ -1,4 +1,4 @@
-﻿import { Metadata } from "next";
+import { Metadata } from "next";
 import { ResizeToolLoader } from "./ResizeToolLoader";
 import ToolPageLayout, { Step, Benefit, FAQItem } from "@/components/tools/ToolPageLayout";
 
@@ -81,6 +81,11 @@ export default function ResizePage() {
             howItWorks={steps}
             benefits={benefits}
             faq={faq}
+            breadcrumbs={[
+                { label: "Home", href: "/" },
+                { label: "Image Tools", href: "/image-tools" },
+                { label: "Resize Image", href: "/resize-image" }
+            ]}
         />
     );
 }

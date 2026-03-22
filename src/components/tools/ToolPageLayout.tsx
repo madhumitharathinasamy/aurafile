@@ -2,6 +2,7 @@ import React from 'react';
 import { PageTitle, SectionDescription } from "@/components/ui/typography";
 import { SEOAndSpecsSection, FAQSection, Step, Benefit, FAQItem, PrivacyBadge } from "@/components/sections/ToolSections";
 import { ScrollReveal } from "@/components/ScrollReveal";
+import { Breadcrumbs, type BreadcrumbItem } from "@/components/seo/Breadcrumbs";
 
 interface ToolPageLayoutProps {
     title: string;
@@ -13,6 +14,7 @@ interface ToolPageLayoutProps {
     specs?: {label: string, value: string}[];
     backgroundImage?: string;
     theme?: "blue" | "red";
+    breadcrumbs?: BreadcrumbItem[];
 }
 
 export default function ToolPageLayout({
@@ -23,7 +25,8 @@ export default function ToolPageLayout({
     benefits,
     faq,
     specs,
-    theme = "blue"
+    theme = "blue",
+    breadcrumbs
 }: ToolPageLayoutProps) {
     const isRed = theme === "red";
     
@@ -31,8 +34,9 @@ export default function ToolPageLayout({
     return (
         <div className="min-h-screen bg-white">
             {/* 1. Hero Section - Clean Minimal Background */}
-            <section className="relative pt-12 pb-16 border-b border-border/40 bg-slate-50/50">
+            <section className="relative pt-8 pb-16 border-b border-border/40 bg-slate-50/50">
                 <div className="container mx-auto px-4 md:px-8 max-w-7xl text-center">
+                    {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
                     <PrivacyBadge theme={theme} />
                     <PageTitle className="mb-4 text-slate-900">{title}</PageTitle>
                     <SectionDescription className="max-w-2xl mx-auto text-slate-600 mb-10">{description}</SectionDescription>

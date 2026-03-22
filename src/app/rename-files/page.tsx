@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import ToolPageLayout from "@/components/tools/ToolPageLayout";
 import RenameTool from "@/components/tools/RenameTool";
 

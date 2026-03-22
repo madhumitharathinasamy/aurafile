@@ -7168,5 +7168,535 @@ export const blogPosts: BlogPost[] = [
         </div>
       </div>
     )
+  },
+  {
+    slug: "technical-superiority-client-side-file-processing",
+    title: "The Technical Superiority of Client-Side File Processing for Privacy",
+    excerpt: "A deep technical look at why client-side, browser-based file processing offers unmatched privacy guarantees compared to traditional cloud-upload architectures.",
+    date: "Mar 22, 2026",
+    readTime: "8 min read",
+    author: {
+      name: "Madhumitha",
+      role: "Founder, AuraFile",
+    },
+    image: "/images/blog/client-side-processing.png",
+    faqSchema: {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is client-side file processing?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Client-side processing means all computation runs within the user's own web browser using JavaScript and WebAssembly, without ever sending files to a remote server."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is client-side processing faster than server-side?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "In many cases, yes. Since there's no upload round-trip, files are processed using local CPU resources, which can be significantly faster for smaller files on modern hardware."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is WebAssembly (WASM) and how does it help?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "WebAssembly is a low-level binary format that runs in all modern browsers at near-native CPU speeds. It allows powerful tools like PDF parsers and image codecs to run entirely in the browser."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can a browser-based tool handle large files?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Modern browsers have access to device RAM and efficient APIs like the File System Access API, Web Workers, and OffscreenCanvas, which enable processing of substantial files locally."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does AuraFile use WebAssembly?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. AuraFile relies on WebAssembly-based libraries like pdf-lib and ffmpeg.wasm to perform complex processing directly in the browser without any server involvement."
+          }
+        }
+      ]
+    },
+    content: (
+      <div className="space-y-6 text-slate-700 leading-relaxed text-lg">
+        <p>Every time you open a file tool online, you're making a trust decision — even if you don't realise it.</p>
+        <p className="font-bold text-slate-900">The moment you click "Upload", your document crosses a boundary it doesn't have to.</p>
+        <p>When we built AuraFile, we wanted to understand that boundary deeply — and then eliminate it entirely. Here's what we found, and why we believe client-side processing is the only honest architecture for a privacy-first file tool.</p>
+
+        <hr className="my-10 border-slate-200" />
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">How Most Online File Tools Actually Work</h2>
+        <p>We've looked at how most online file tools work under the hood, and it's almost always the same story:</p>
+        <ol className="list-decimal pl-6 space-y-2">
+          <li>You select a file from your device.</li>
+          <li>Your browser transmits it via HTTP <code>multipart/form-data</code> to a remote server.</li>
+          <li>That server runs the processing logic — a Python script, a C++ binary, or a third-party API call.</li>
+          <li>The result is sent back to your browser for download.</li>
+        </ol>
+        <p className="mt-4">This architecture is decades old. It made sense back when browsers could barely render a webpage, let alone run complex algorithms. But that world is gone. And frankly, there's no good reason to keep uploading files to servers we don't control.</p>
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">What Changed: WebAssembly Made It Possible</h2>
+        <p>WebAssembly (WASM) became a W3C standard in 2019 — and it quietly changed everything. It lets us compile high-performance code written in C, C++, or Rust and run it directly inside your browser, at near-native CPU speed.</p>
+        <p className="mt-4">Think about what that unlocks: PDF parsers, image compression codecs, background removal models — all of these can now run entirely in-browser, with no server involved. That's exactly what we do at AuraFile.</p>
+
+        <h3 className="text-xl font-bold text-slate-900 mt-6 mb-2">Real-World Libraries Enabled by WASM</h3>
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full text-left border-collapse text-sm">
+            <thead>
+              <tr className="bg-slate-100">
+                <th className="border-b border-slate-300 p-4 font-bold text-slate-900">Library</th>
+                <th className="border-b border-slate-300 p-4 font-bold text-slate-900">Function</th>
+                <th className="border-b border-slate-300 p-4 font-bold text-slate-900">Runs In Browser?</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200">
+              <tr>
+                <td className="p-4 font-medium text-slate-900">pdf-lib</td>
+                <td className="p-4 text-slate-700">PDF creation, merging, editing</td>
+                <td className="p-4 text-emerald-600 font-bold">Yes</td>
+              </tr>
+              <tr className="bg-slate-50">
+                <td className="p-4 font-medium text-slate-900">sharp / @squoosh/lib</td>
+                <td className="p-4 text-slate-700">Image compression & conversion</td>
+                <td className="p-4 text-emerald-600 font-bold">Yes</td>
+              </tr>
+              <tr>
+                <td className="p-4 font-medium text-slate-900">ffmpeg.wasm</td>
+                <td className="p-4 text-slate-700">Media transcoding</td>
+                <td className="p-4 text-emerald-600 font-bold">Yes</td>
+              </tr>
+              <tr className="bg-slate-50">
+                <td className="p-4 font-medium text-slate-900">@img/sharp-wasm32</td>
+                <td className="p-4 text-slate-700">Advanced image manipulation</td>
+                <td className="p-4 text-emerald-600 font-bold">Yes</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">Why a Browser Is Actually More Secure Than a Server</h2>
+        <p>Here's something that surprises most people: running code in a browser is architecturally <em>more</em> restrictive than running it on a server. The browser enforces multiple layers of isolation that work in your favour:</p>
+
+        <h3 className="text-xl font-bold text-slate-900 mt-6 mb-2">1. Origin Isolation (CORS & Same-Origin Policy)</h3>
+        <p>Our JavaScript running on <code>aurafile.net</code> simply cannot talk to another origin without explicit permission. There's no way for our code to quietly relay your file somewhere else — the browser won't allow it.</p>
+
+        <h3 className="text-xl font-bold text-slate-900 mt-6 mb-2">2. You Have to Actively Give Us Access</h3>
+        <p>Before we can read any file, you have to pick it — deliberately, via a file picker dialog. There's no silent background scanning of your file system. That's a browser constraint we're genuinely grateful for.</p>
+
+        <h3 className="text-xl font-bold text-slate-900 mt-6 mb-2">3. We Have No Upload Code — By Design</h3>
+        <p>Files we read into memory (as <code>FileReader</code> or <code>ArrayBuffer</code>) can't leave your browser unless our JavaScript explicitly calls <code>fetch()</code> or <code>XMLHttpRequest</code> to send them. We simply don't have that code. You can open DevTools right now and check — there will be zero file upload traffic.</p>
+        <div className="bg-[#E0F2FE] border-l-4 border-[#00B4D8] p-4 text-slate-800 font-medium my-6">
+          👉 <strong>Your file can't be transmitted because our code never tries to transmit it. That's not a policy — it's a hard architectural constraint.</strong>
+        </div>
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">It's Also Genuinely Fast</h2>
+        <p>We hear "browser-based" and people assume slow. In practice, for everyday file operations, we're often faster than cloud tools. Think about what you're actually waiting for when you use a cloud service:</p>
+        <ul className="list-disc pl-6 space-y-2">
+          <li>Your file uploading (limited by your upload speed)</li>
+          <li>Queue time on a shared server</li>
+          <li>The result downloading back to you</li>
+          <li>TLS handshakes and encryption on both ends</li>
+        </ul>
+        <p className="mt-4">On a modern device, our local WASM pipeline can process a 5MB image in under a second. A cloud round-trip for the same task is often 3–8 seconds. We're not slow — we're just skipping several unnecessary steps.</p>
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">How We Keep the Interface Responsive</h2>
+        <p>Doing heavy computation on the browser's main thread would lock up the UI and freeze the page. We avoid this by running all processing in <strong>Web Workers</strong> — separate threads that run alongside the UI without blocking it.</p>
+        <p className="mt-4">Here's how we structure it internally:</p>
+        <ul className="list-disc pl-6 space-y-2">
+          <li><strong>Main thread:</strong> handles what you see — progress updates, file previews, the download trigger</li>
+          <li><strong>Worker thread:</strong> runs the WASM module, reads your file bytes, produces the output</li>
+          <li><strong>Communication:</strong> results come back via <code>postMessage</code>, with no shared state to corrupt</li>
+        </ul>
+        <p className="mt-4">This is how our <Link href="/compress-image" className="text-[#00B4D8] hover:underline font-medium">image compressor</Link> and <Link href="/merge-pdf" className="text-[#00B4D8] hover:underline font-medium">PDF merger</Link> stay snappy even when processing large files.</p>
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">What Happens to Your File When You're Done</h2>
+        <p>When you drop a file into one of our tools, we load it into browser memory as an <code>ArrayBuffer</code> or <code>Blob</code>. That data:</p>
+        <ul className="list-disc pl-6 space-y-2">
+          <li>Stays completely inside your browser tab's allocated memory</li>
+          <li>Gets cleaned up by the browser's garbage collector when we release our reference to it</li>
+          <li>Is permanently gone the moment you close or refresh the tab</li>
+        </ul>
+        <p className="mt-4">No temp files. No server logs. No network packets. Nothing lingers. That's a stronger data lifecycle guarantee than virtually any cloud system can offer, because there's genuinely nothing to delete on our end.</p>
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">How We Built AuraFile Around This</h2>
+        <p>We designed AuraFile around this principle from day one. Every tool we've built — from <Link href="/compress-pdf" className="text-[#00B4D8] hover:underline font-medium">compressing PDFs</Link> to <Link href="/remove-background" className="text-[#00B4D8] hover:underline font-medium">removing image backgrounds</Link> — runs entirely in your browser, with no server-side pipeline, no telemetry, and no file logging. Not as a marketing claim, but as a verifiable technical fact.</p>
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">To Be Fair: When Server-Side Does Make Sense</h2>
+        <p>We're not dogmatic about this. Server-side processing absolutely makes sense when:</p>
+        <ul className="list-disc pl-6 space-y-2">
+          <li>Files are so large (hundreds of MB) they'd exhaust device memory</li>
+          <li>You need GPU-backed AI inference at scale</li>
+          <li>You're running batch jobs across thousands of files</li>
+          <li>You need collaborative, persistent state across multiple users</li>
+        </ul>
+        <p className="mt-4">But for everyday tasks — compressing an image, merging a PDF, converting a file format — there's no good reason to involve a server. We built the tools we wished existed when we were looking for something privacy-respecting.</p>
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">The Privacy Promise Is in the Architecture</h2>
+        <p>The strongest privacy guarantee we can give you isn't a policy statement. It's the fact that your files <em>physically cannot reach our servers</em>. There's nothing to breach, no database to subpoena, no accidental exposure. The architecture is the promise.</p>
+        <p className="mt-4 font-bold text-slate-900">Client-side WASM processing isn't just our technical preference. It's the only honest way to build a truly zero-knowledge file tool.</p>
+
+        <div className="bg-slate-50 p-8 rounded-2xl border border-slate-200 text-center my-10 shadow-sm">
+          <h2 className="text-2xl font-bold text-slate-900 mb-3">Experience It Yourself</h2>
+          <p className="text-slate-600 mb-6 max-w-xl mx-auto">Try our browser-based tools and verify in your DevTools that no file data is ever transmitted to any server.</p>
+          <div className="flex justify-center gap-4 flex-wrap">
+            <Link href="/compress-image" className="inline-flex items-center justify-center rounded-lg border-2 border-[#00B4D8] px-6 py-3 text-base font-bold text-[#00B4D8] transition-all hover:bg-[#E0F2FE]">
+              Compress Image <span className="ml-2">→</span>
+            </Link>
+            <Link href="/merge-pdf" className="inline-flex items-center justify-center rounded-lg border-2 border-slate-300 px-6 py-3 text-base font-bold text-slate-700 transition-all hover:bg-slate-100">
+              Merge PDF <span className="ml-2">→</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
+  },
+  {
+    slug: "how-to-securely-merge-pdf-documents-without-cloud",
+    title: "How to Securely Merge Sensitive PDF Documents Without Cloud Uploads",
+    excerpt: "A step-by-step technical guide to combining PDF documents with complete data privacy, using browser-native processing that never exposes your files to external servers.",
+    date: "Mar 22, 2026",
+    readTime: "7 min read",
+    author: {
+      name: "Madhumitha",
+      role: "Founder, AuraFile",
+    },
+    image: "/images/blog/merge-pdf-secure.png",
+    faqSchema: {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is it safe to merge PDFs online?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It depends on the tool. Most online PDF mergers upload your files to a server, which introduces risk. Tools that process files locally in the browser — like AuraFile — are inherently safer."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I merge PDFs without uploading them?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Use a browser-based PDF merger like AuraFile. The tool reads your files directly from your file system using the browser File API and processes them entirely in-memory, without any upload."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I merge password-protected PDFs locally?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, if the tool supports decryption. AuraFile's merge tool handles password-protected PDFs using client-side decryption, meaning the password and file contents never leave your device."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does merging PDFs affect their quality?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. A proper PDF merge operation copies page content streams verbatim; it does not re-encode or re-compress images. The quality of the merged PDF is identical to the source documents."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How large can the PDFs be for browser-based merging?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Practical limits depend on device RAM. In most modern browsers, PDFs totalling up to several hundred megabytes can be merged without issue. AuraFile is optimized for files up to 50MB per file."
+          }
+        }
+      ]
+    },
+    content: (
+      <div className="space-y-6 text-slate-700 leading-relaxed text-lg">
+        <p>I'll be honest: merging PDFs was one of the most requested things people wanted when we built AuraFile. And I understood why. It's a task you run into constantly — contracts, reports, case files, invoices — and most tools that do it require you to upload everything to someone else's server.</p>
+        <p className="mt-4">Contracts. Medical records. HR documents. Financial statements. Case files.</p>
+        <p className="font-bold text-slate-900 mt-4">I didn't want to build yet another tool that ships your files off to a server you've never heard of. So we didn't.</p>
+        <p className="mt-4">Here's exactly how we do it, and why the architecture matters more than any privacy policy ever could.</p>
+
+        <hr className="my-10 border-slate-200" />
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">What Actually Happens When You "Upload to Merge"</h2>
+        <p>I looked at this closely before building our merger. Here's what nearly every cloud-based PDF tool actually does step by step:</p>
+        <ol className="list-decimal pl-6 space-y-2">
+          <li>Your browser opens an HTTP multipart upload to the provider's server.</li>
+          <li>Each file travels over TLS and lands in the server's memory or a temp folder.</li>
+          <li>A server-side library (iText, pdfplumber, PyPDF2 — take your pick) stitches the PDFs together.</li>
+          <li>The merged file gets written to disk or S3 long enough to generate a download link.</li>
+          <li>You download it. The provider "promises" to delete it later.</li>
+        </ol>
+        <p className="mt-4">Step 4 is where I have a real problem. Your sensitive document <strong>lived on someone else's disk</strong>. During that time it was visible to their server processes, their logs, and potentially their backup systems — regardless of what their privacy policy says.</p>
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">How We Do It Instead</h2>
+        <p>Our <Link href="/merge-pdf" className="text-[#00B4D8] hover:underline font-medium">Merge PDF tool</Link> works on a completely different model. We use three browser primitives that mean your files genuinely never leave your device.</p>
+
+        <h3 className="text-xl font-bold text-slate-900 mt-6 mb-2">1. We Read Your Files, We Don't Upload Them</h3>
+        <p>When you select files, your browser gives us a <code>File</code> object — a reference to the file's bytes on your local file system. We use <code>file.arrayBuffer()</code> to read those bytes straight into browser memory. Your file system. Your memory. No network involved at any point.</p>
+
+        <h3 className="text-xl font-bold text-slate-900 mt-6 mb-2">2. We Merge Using pdf-lib, Entirely In-Browser</h3>
+        <p>We use <code>pdf-lib</code> — a pure TypeScript PDF library — to do the actual merging. Once we have the bytes in memory, here's what happens:</p>
+        <ul className="list-disc pl-6 space-y-2">
+          <li>We parse each PDF into a <code>PDFDocument</code> object via <code>PDFDocument.load(arrayBuffer)</code></li>
+          <li>We copy every page from each source into a new combined <code>PDFDocument</code></li>
+          <li>We serialise the final result with <code>pdfDoc.save()</code></li>
+        </ul>
+        <p className="mt-4">This all runs in a Web Worker thread so your page stays fully responsive throughout. And the whole thing happens without a single network request being made.</p>
+
+        <div className="bg-[#E0F2FE] border-l-4 border-[#00B4D8] p-4 text-slate-800 font-medium my-6">
+          👉 <strong>We read from your disk at the start. We write to your downloads at the end. Nothing touches the internet in between.</strong>
+        </div>
+
+        <h3 className="text-xl font-bold text-slate-900 mt-6 mb-2">3. The Download Goes Straight to You</h3>
+        <p>Once we've got the merged bytes, we create a <code>Blob</code> from the <code>Uint8Array</code> output and use <code>URL.createObjectURL(blob)</code> to create a local download link. A quick programmatic click on a temporary <code>&lt;a&gt;</code> element delivers the file straight to your downloads folder — no server, no redirect, no intermediate storage.</p>
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">What About Password-Protected PDFs?</h2>
+        <p>A lot of sensitive documents are password-protected — which means when you use a cloud tool, you're handing them the password <em>and</em> the file. That's a credential exposure risk on top of a data exposure risk.</p>
+        <p className="mt-4">We handle decryption entirely inside your browser. You enter the password, we pass it to a local decryption routine, and the document gets unlocked in memory. <strong>Your password and the decrypted file contents stay on your device throughout.</strong></p>
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">Does Merging Affect Quality?</h2>
+        <p>People often worry about this, and I'm glad to say it's a non-issue with how we've built it. We copy page content streams directly — we're not re-rendering or re-compressing anything. That means:</p>
+        <ul className="list-disc pl-6 space-y-2">
+          <li><strong>Your images</strong> keep their original JPEG or JBIG2 compression untouched</li>
+          <li><strong>Vector graphics and text</strong> come through exactly as they were in the source</li>
+          <li><strong>Fonts</strong> stay properly embedded, with no re-subsetting</li>
+          <li><strong>Page sizes</strong> are preserved exactly, even in mixed landscape/portrait documents</li>
+        </ul>
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">How to Merge PDFs Safely: A Quick Checklist</h2>
+
+        <h3 className="text-xl font-bold text-slate-900 mt-6 mb-2">Step 1: Check the Tool's Network Activity First</h3>
+        <p>Before trusting any PDF merger with sensitive files, open DevTools → Network, then add your files and start the process. If you see an XHR or Fetch request carrying file data, the tool is server-based. Walk away.</p>
+
+        <h3 className="text-xl font-bold text-slate-900 mt-6 mb-2">Step 2: Set Your Page Order Before You Merge</h3>
+        <p>With AuraFile you can drag and reorder your source files before merging. Get the sequence right upfront — it'll save you from having to re-edit the combined PDF afterwards.</p>
+
+        <h3 className="text-xl font-bold text-slate-900 mt-6 mb-2">Step 3: Always Spot-Check the Output</h3>
+        <p>Open the merged result in your PDF viewer before you share it. Quickly check the page count, the order, and that the text is still selectable (not a flattened image). Takes 30 seconds and saves a lot of embarrassment.</p>
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">Why This Matters if You Work in a Compliance-Heavy Field</h2>
+        <p>If you're operating under GDPR, HIPAA, or attorney-client privilege rules, uploading client documents to an external server isn't just risky — it can be a compliance issue in itself, regardless of how good that server's security is. The only way to guarantee zero data exposure to a third party is to guarantee zero data transmission.</p>
+        <p className="mt-4">That's what local processing gives you. Not a better privacy policy — an architecture that makes the question moot.</p>
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">The Bottom Line</h2>
+        <p>We built AuraFile's PDF merger because we wanted a tool we'd trust with our own sensitive documents. Merging securely isn't about finding a trustworthy cloud provider. It's about choosing a tool that has no server to trust in the first place.</p>
+        <p className="mt-4 font-bold text-slate-900">Your files merge in your browser, download to your device, and vanish from our end — because they were never on our end to begin with.</p>
+
+        <div className="bg-slate-50 p-8 rounded-2xl border border-slate-200 text-center my-10 shadow-sm">
+          <h2 className="text-2xl font-bold text-slate-900 mb-3">Merge Your PDFs Privately</h2>
+          <p className="text-slate-600 mb-6 max-w-xl mx-auto">Combine multiple PDF files into one — completely in your browser. No uploads. No accounts. No risk.</p>
+          <div className="flex justify-center gap-4 flex-wrap">
+            <Link href="/merge-pdf" className="inline-flex items-center justify-center rounded-lg border-2 border-[#00B4D8] px-6 py-3 text-base font-bold text-[#00B4D8] transition-all hover:bg-[#E0F2FE]">
+              Merge PDF Now <span className="ml-2">→</span>
+            </Link>
+            <Link href="/protect-pdf" className="inline-flex items-center justify-center rounded-lg border-2 border-slate-300 px-6 py-3 text-base font-bold text-slate-700 transition-all hover:bg-slate-100">
+              Protect PDF <span className="ml-2">→</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
+  },
+  {
+    slug: "optimizing-web-performance-aurafile-lighthouse-score",
+    title: "Optimizing Web Performance: How AuraFile Achieves a 100/100 Lighthouse Score",
+    excerpt: "A technical deep-dive into the Next.js architecture, image optimization, and Core Web Vitals strategies that power AuraFile's top-tier performance scores.",
+    date: "Mar 22, 2026",
+    readTime: "9 min read",
+    author: {
+      name: "Madhumitha",
+      role: "Founder, AuraFile",
+    },
+    image: "/images/blog/lighthouse-performance.png",
+    faqSchema: {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a Google Lighthouse score?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Google Lighthouse is an open-source, automated auditing tool that scores web pages on Performance, Accessibility, Best Practices, and SEO. A score of 100 in each category indicates a fully optimized page."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are Core Web Vitals?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Core Web Vitals are Google's user-centric performance metrics: Largest Contentful Paint (LCP), Cumulative Layout Shift (CLS), and Interaction to Next Paint (INP). They directly influence Google search rankings."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does Next.js improve performance?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Next.js improves performance through static site generation (HTML pre-rendering), automatic code splitting, the built-in Image component for lazy loading and format optimization, and font self-hosting."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is Largest Contentful Paint (LCP)?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "LCP measures how long it takes for the largest visible element in the viewport to render. A good LCP score is under 2.5 seconds."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does performance matter for a file tool website?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A fast-loading page directly correlates with user trust and retention. For a tool that processes files, a snappy UI also signals that the underlying processing pipeline is well-engineered."
+          }
+        }
+      ]
+    },
+    content: (
+      <div className="space-y-6 text-slate-700 leading-relaxed text-lg">
+        <p>Performance is not a feature. It is a baseline.</p>
+        <p className="mt-4">A file processing tool that loads slowly undermines the trust it needs to handle users' sensitive documents. And beyond user perception, page performance is a direct Google ranking signal — which makes it doubly critical for any web application seeking organic search visibility.</p>
+        <p className="mt-4">This article documents the specific technical decisions that enable AuraFile to achieve a perfect 100/100 Lighthouse score across Performance, Accessibility, Best Practices, and SEO.</p>
+
+        <hr className="my-10 border-slate-200" />
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">Understanding What Lighthouse Actually Measures</h2>
+        <p>Lighthouse evaluates a page against four categories:</p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full text-left border-collapse text-sm">
+            <thead>
+              <tr className="bg-slate-100">
+                <th className="border-b border-slate-300 p-4 font-bold text-slate-900">Category</th>
+                <th className="border-b border-slate-300 p-4 font-bold text-slate-900">Key Metrics</th>
+                <th className="border-b border-slate-300 p-4 font-bold text-slate-900">Target</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200">
+              <tr>
+                <td className="p-4 font-medium text-slate-900">Performance</td>
+                <td className="p-4 text-slate-700">LCP, INP, CLS, FCP, TTFB</td>
+                <td className="p-4 text-emerald-600 font-bold">90–100</td>
+              </tr>
+              <tr className="bg-slate-50">
+                <td className="p-4 font-medium text-slate-900">Accessibility</td>
+                <td className="p-4 text-slate-700">ARIA attributes, contrast, labels</td>
+                <td className="p-4 text-emerald-600 font-bold">100</td>
+              </tr>
+              <tr>
+                <td className="p-4 font-medium text-slate-900">Best Practices</td>
+                <td className="p-4 text-slate-700">HTTPS, console errors, image aspect ratios</td>
+                <td className="p-4 text-emerald-600 font-bold">100</td>
+              </tr>
+              <tr className="bg-slate-50">
+                <td className="p-4 font-medium text-slate-900">SEO</td>
+                <td className="p-4 text-slate-700">Meta tags, crawlability, canonical URLs</td>
+                <td className="p-4 text-emerald-600 font-bold">100</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">Our Foundation: Static Generation — No Server Work Per Visitor</h2>
+        <p>We built AuraFile on Next.js 15's App Router and made a deliberate architectural choice early on: every page that doesn't need to be dynamic gets statically generated at build time.</p>
+        <p className="mt-4">That means when you visit <code>/compress-image</code> or <code>/merge-pdf</code>, you're not waiting for a server to run any code. You get a pre-built HTML file served from Vercel's global CDN edge — typically with a Time to First Byte under 50ms. Speed before the browser even starts rendering.</p>
+
+        <h3 className="text-xl font-bold text-slate-900 mt-6 mb-2">Why We Chose Static Over SSR</h3>
+        <ul className="list-disc pl-6 space-y-2">
+          <li><strong>Zero per-request compute:</strong> No database queries, no server rendering — the HTML already exists.</li>
+          <li><strong>True CDN caching:</strong> Our pages serve from an edge node close to wherever you are in the world.</li>
+          <li><strong>Consistent FCP:</strong> We know exactly how fast First Contentful Paint will be, because nothing is waiting for a backend.</li>
+        </ul>
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">Eliminating Layout Shift: Getting CLS to Zero</h2>
+        <p>Cumulative Layout Shift was the metric that surprised us most in early audits. Even tiny things — an image loading without reserved dimensions, or a font swapping in — would send our score sideways.</p>
+
+        <h3 className="text-xl font-bold text-slate-900 mt-6 mb-2">Our Image Reservation Fix</h3>
+        <p>Every image on AuraFile goes through the <code>next/image</code> component with explicit <code>width</code> and <code>height</code> props. This gives the browser the information it needs to reserve the exact right amount of space before the image arrives — no pop-in, no shift.</p>
+
+        <h3 className="text-xl font-bold text-slate-900 mt-6 mb-2">How We Handled Fonts</h3>
+        <p>Custom fonts were our other CLS culprit. We moved to <code>next/font/google</code> with <code>display: 'swap'</code>. Next.js downloads them at build time and serves them from our own CDN — no external DNS lookup, no font loading race, no flash of unstyled text.</p>
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">LCP: Why We Chose Text Over a Hero Image</h2>
+        <p>LCP measures how quickly the biggest visible element in the viewport renders. Hero images are one of the most common LCP problems we see across the web.</p>
+        <p className="mt-4">We made a deliberate call: our homepage hero is text-based, not image-based. The LCP element is CSS-rendered typography — it's already in the HTML, it doesn't need to be fetched, and it's not going to be slow.</p>
+
+        <h3 className="text-xl font-bold text-slate-900 mt-6 mb-2">On Pages Where Images Are the LCP Element</h3>
+        <p>Blog posts are different — the hero image genuinely is the biggest viewport element there. For those, we add the <code>priority</code> prop to <code>next/image</code>, which injects a <code>&lt;link rel="preload"&gt;</code> into the <code>&lt;head&gt;</code>. Your browser starts fetching the image in parallel with everything else, rather than waiting to parse down to the <code>&lt;img&gt;</code> tag.</p>
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">Keeping Our JavaScript Bundle Small</h2>
+        <p>Every kilobyte of JavaScript a browser downloads has to be parsed and compiled before a page becomes interactive. We took this seriously from the start.</p>
+
+        <h3 className="text-xl font-bold text-slate-900 mt-6 mb-2">Dynamic Imports for Our WASM Tools</h3>
+        <p>Our file processing tools use WASM modules that can be several megabytes. Loading those on marketing pages would be absurd. Instead, we use Next.js's <code>dynamic()</code> with <code>{'{ ssr: false }'}</code> — the WASM only loads when you actually navigate to a tool and need it. The marketing shell stays tiny and instant.</p>
+
+        <h3 className="text-xl font-bold text-slate-900 mt-6 mb-2">Tree Shaking Keeps Things Tidy</h3>
+        <p>Because we write in ES modules throughout, Next.js's bundler can automatically drop any imported code that's not executed on a given page. As our codebase grows, the bundle for each individual page stays lean — without us having to manually audit what's included.</p>
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">Serving the Right Image Format to Every Browser</h2>
+        <p>We let <code>next/image</code> handle format negotiation automatically. Depending on what your browser declares in its <code>Accept</code> header, you get:</p>
+        <ul className="list-disc pl-6 space-y-2">
+          <li><strong>AVIF</strong> for Chrome and Edge (40–50% smaller than JPEG at the same quality)</li>
+          <li><strong>WebP</strong> for Firefox and other browsers</li>
+          <li><strong>JPEG/PNG</strong> as a fallback for anything that doesn't support the above</li>
+        </ul>
+        <p className="mt-4">That hero image sitting at 800KB as a JPEG? Chrome users get it as a 180KB AVIF. That difference alone has a measurable impact on LCP.</p>
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">Accessibility: 100 Isn't Optional for Us</h2>
+        <p>We target a perfect accessibility score not because it looks good in audits, but because it reflects how we think software should be built. Concretely, this means:</p>
+        <ul className="list-disc pl-6 space-y-2">
+          <li>Every interactive element has a descriptive <code>aria-label</code></li>
+          <li>Our colour contrast ratios meet the 4.5:1 minimum for normal text throughout</li>
+          <li>All images have meaningful <code>alt</code> text (or <code>alt=""</code> for purely decorative ones)</li>
+          <li>Forms are properly labelled, and tab order follows what you'd logically expect</li>
+        </ul>
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">Our SEO Layer</h2>
+        <p>We use Next.js's built-in <code>Metadata</code> API to generate every page's SEO tags at build time. Every page we ship gets:</p>
+        <ul className="list-disc pl-6 space-y-2">
+          <li>A unique, specific <code>title</code> and <code>description</code></li>
+          <li>A <code>canonical</code> URL so Google doesn't see duplicate content</li>
+          <li>Open Graph and Twitter card tags so shared links look professional</li>
+          <li>JSON-LD structured data (FAQPage, BlogPosting, WebApplication) for rich Google results</li>
+        </ul>
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">The Infrastructure Under All of This</h2>
+        <p>No amount of code optimisation salvages slow infrastructure. We deploy on Vercel's Edge Network, which gives us:</p>
+        <ul className="list-disc pl-6 space-y-2">
+          <li>HTTP/3 and QUIC support out of the box, cutting connection latency</li>
+          <li>Smart CDN caching with stale-while-revalidate so fresh builds propagate fast</li>
+          <li>Brotli compression by default — HTML, CSS, and JS transfers are up to 26% smaller than with gzip</li>
+          <li>Anycast routing to the edge node nearest to each visitor</li>
+        </ul>
+
+        <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4">What We Learned: Performance Is a Design Decision</h2>
+        <p>Hitting 100/100 on Lighthouse isn't one big optimisation. It's fifty small ones, made at every layer — from how we structure infrastructure to how we write an <code>alt</code> attribute. And they compound: a fast first paint makes the tool feel trustworthy. A layout that doesn't jump feels stable. Accessible design means more people can actually use what we built.</p>
+        <p className="mt-4 font-bold text-slate-900">For us, performance isn't a pass at the end of a project. It's a constraint we carry from the beginning.</p>
+
+        <div className="bg-slate-50 p-8 rounded-2xl border border-slate-200 text-center my-10 shadow-sm">
+          <h2 className="text-2xl font-bold text-slate-900 mb-3">Fast, Private, Professional Tools</h2>
+          <p className="text-slate-600 mb-6 max-w-xl mx-auto">Experience the performance yourself. All tools load instantly and process files with zero server contact.</p>
+          <div className="flex justify-center gap-4 flex-wrap">
+            <Link href="/compress-image" className="inline-flex items-center justify-center rounded-lg border-2 border-[#00B4D8] px-6 py-3 text-base font-bold text-[#00B4D8] transition-all hover:bg-[#E0F2FE]">
+              Compress Image <span className="ml-2">→</span>
+            </Link>
+            <Link href="/compress-pdf" className="inline-flex items-center justify-center rounded-lg border-2 border-slate-300 px-6 py-3 text-base font-bold text-slate-700 transition-all hover:bg-slate-100">
+              Compress PDF <span className="ml-2">→</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
   }
 ];
+
