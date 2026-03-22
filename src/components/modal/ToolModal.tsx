@@ -196,15 +196,22 @@ export function ToolModal({
                                                     </div>
                                                     <div className="relative p-4 min-h-[200px] bg-white">
                                                         {file.previewUrl ? (
-                                                            <Image
-                                                                src={file.previewUrl}
-                                                                alt={file.file.name}
-                                                                fill
-                                                                className="object-contain drop-shadow-sm p-4"
-                                                                unoptimized
-                                                            />
+                                                            file.file.name.toLowerCase().match(/\.(tiff|tif|avif)$/i) ? (
+                                                                <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-50/50">
+                                                                    <Icon name="file-image" size={48} className="text-slate-300 mb-3" />
+                                                                    <span className="text-sm font-medium text-slate-500">{file.file.name.split('.').pop()?.toUpperCase()} format</span>
+                                                                </div>
+                                                            ) : (
+                                                                <Image
+                                                                    src={file.previewUrl}
+                                                                    alt={file.file.name}
+                                                                    fill
+                                                                    className="object-contain drop-shadow-sm p-4"
+                                                                    unoptimized
+                                                                />
+                                                            )
                                                         ) : (
-                                                            <div className="animate-pulse flex flex-col items-center">
+                                                            <div className="animate-pulse flex flex-col items-center justify-center h-full min-h-[200px]">
                                                                 <Icon name="image" size={32} className="text-slate-200 mb-2" />
                                                                 <div className="h-4 w-24 bg-slate-200 rounded"></div>
                                                             </div>
@@ -219,13 +226,20 @@ export function ToolModal({
                                 ) : activeFile?.previewUrl ? (
                                     <div className="w-full h-full p-4 md:p-8 flex items-center justify-center overflow-auto custom-scrollbar">
                                         <div className="relative w-full h-[70vh] max-h-full aspect-square" style={{ transition: 'transform 0.2s ease-out', transform: `scale(${zoom / 100})`, transformOrigin: 'center center' }}>
-                                            <Image
-                                                src={activeFile.previewUrl}
-                                                alt="Preview"
-                                                fill
-                                                className="object-contain shadow-lg border border-slate-200 bg-white p-1"
-                                                unoptimized
-                                            />
+                                            {activeFile.file.name.toLowerCase().match(/\.(tiff|tif|avif)$/i) ? (
+                                                <div className="w-full h-full flex flex-col items-center justify-center bg-slate-50 border border-slate-200 shadow-lg rounded-xl">
+                                                    <Icon name="file-image" size={64} className="text-slate-300 mb-4" />
+                                                    <p className="text-slate-500 font-medium text-center px-4">Preview not available<br/>for {activeFile.file.name.split('.').pop()?.toUpperCase()}</p>
+                                                </div>
+                                            ) : (
+                                                <Image
+                                                    src={activeFile.previewUrl}
+                                                    alt="Preview"
+                                                    fill
+                                                    className="object-contain shadow-lg border border-slate-200 bg-white p-1"
+                                                    unoptimized
+                                                />
+                                            )}
                                             {/* Page Placeholder for future implementation */}
                                             {activeFile.settings?.pageCount > 0 && (
                                                 <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-xs px-3 py-1.5 rounded-full shadow-md font-medium whitespace-nowrap opacity-90">
@@ -256,13 +270,19 @@ export function ToolModal({
                                                     onClick={() => setActiveIndex(idx)}
                                                     className={`relative h-12 w-12 aspect-square rounded-lg overflow-hidden shrink-0 snap-start transition-all bg-white border border-border/50 ${isActive ? 'ring-2 ring-primary ring-offset-1 scale-95 shadow-sm' : 'opacity-60 hover:opacity-100 hover:scale-95'}`}
                                                 >
-                                                    <Image
-                                                        src={file.previewUrl}
-                                                        alt="thumb"
-                                                        fill
-                                                        className="object-cover"
-                                                        unoptimized
-                                                    />
+                                                    {file.file.name.toLowerCase().match(/\.(tiff|tif|avif)$/i) ? (
+                                                        <div className="w-full h-full flex items-center justify-center bg-slate-100">
+                                                            <span className="text-[10px] font-bold text-slate-400">{file.file.name.split('.').pop()?.substring(0, 3).toUpperCase()}</span>
+                                                        </div>
+                                                    ) : (
+                                                        <Image
+                                                            src={file.previewUrl}
+                                                            alt="thumb"
+                                                            fill
+                                                            className="object-cover"
+                                                            unoptimized
+                                                        />
+                                                    )}
                                                 </button>
                                             );
                                         })}

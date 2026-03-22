@@ -18,8 +18,6 @@ const ACCEPTED_EXTENSIONS = {
     "image/tiff": [".tiff", ".tif"],
     "image/avif": [".avif"],
     "image/bmp": [".bmp"],
-    "image/heic": [".heic"],
-    "image/heif": [".heif"],
     "image/x-icon": [".ico"],
 };
 
@@ -127,6 +125,8 @@ export default function ConvertTool() {
             const conversionFormat = integratedFile.settings.targetFormat.toLowerCase();
             const mimeType = `image/${conversionFormat === 'jpg' ? 'jpeg' : conversionFormat}`;
 
+            let sourceFile: File | Blob = integratedFile.file;
+
             // Note: browser-image-compression is primarily for compression, 
             // but we can use it for fileType conversion between web-safe formats
             const options = {
@@ -150,8 +150,9 @@ export default function ConvertTool() {
                 [integratedFile.id]: resultFile
             }));
             return true;
-        } catch (e) {
-            toast.error(`Error converting ${integratedFile.file.name}.`);
+        } catch (e: any) {
+            console.error("Conversion Error:", e);
+            toast.error(`Error converting ${integratedFile.file.name}: ${e?.message || e?.toString() || "Unknown error"}`);
             return false;
         }
     };

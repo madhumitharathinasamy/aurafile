@@ -41,6 +41,15 @@ export function ImageUploader({
                 // Pre-validate for broken images
                 const validFiles: File[] = [];
                 for (const file of filesToProcess) {
+                    // Skip native preview validation for formats browsers can't natively render in <img> tags
+                    const fileName = file.name.toLowerCase();
+                    const isUnsupportedPreviewFormat = fileName.endsWith('.tiff') || fileName.endsWith('.tif') || fileName.endsWith('.avif');
+
+                    if (isUnsupportedPreviewFormat) {
+                        validFiles.push(file);
+                        continue;
+                    }
+
                     try {
                         const url = URL.createObjectURL(file);
                         const img = new Image();
