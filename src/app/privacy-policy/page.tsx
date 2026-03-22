@@ -168,19 +168,12 @@ const SECTIONS = [
                         </p>
                     </div>
 
-                    {/* TODO: Uncomment when Google AdSense is approved
                     <div>
                         <h3 className="font-semibold text-foreground mb-2">
                             4.3 Advertising Cookies (Google AdSense)
                         </h3>
                         <p className="mb-3">
-                            <strong>
-                                AuraFile uses Google AdSense to display advertisements on our
-                                website.
-                            </strong>{" "}
-                            Google AdSense uses cookies to serve ads that are relevant to you based
-                            on your prior visits to our site and other websites on the internet.
-                            This is known as interest-based advertising or personalized advertising.
+                            Google, as a third-party vendor, uses cookies to serve ads on our site. Google's use of advertising cookies enables it and its partners to serve ads to our users based on their visit to AuraFile.net and/or other sites on the Internet.
                         </p>
                         <p className="mb-3">
                             Specifically, Google AdSense may:
@@ -214,7 +207,6 @@ const SECTIONS = [
                             Google's use of advertising cookies is governed by Google's Privacy Policy.
                         </p>
                     </div>
-                    */}
 
                     <div>
                         <h3 className="font-semibold text-foreground mb-2">
@@ -298,7 +290,6 @@ const SECTIONS = [
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-foreground/10">
-                            {/* TODO: Uncomment when Google AdSense is approved
                             <tr>
                                 <td className="py-3 pr-4 font-medium">Google AdSense</td>
                                 <td className="py-3 pr-4">Displaying personalized and contextual advertisements</td>
@@ -313,7 +304,6 @@ const SECTIONS = [
                                     </a>
                                 </td>
                             </tr>
-                            */}
                             <tr>
                                 <td className="py-3 pr-4 font-medium">Google Analytics</td>
                                 <td className="py-3 pr-4">Anonymized website usage analytics</td>
@@ -370,12 +360,10 @@ const SECTIONS = [
                         <strong>Website Performance:</strong> Monitoring page load times, error
                         rates, and Core Web Vitals to ensure a fast and reliable experience.
                     </li>
-                    {/* TODO: Uncomment when Google AdSense is approved
                     <li>
                         <strong>Displaying Advertisements:</strong> Serving ads via Google AdSense
                         to fund the free availability of AuraFile's tools.
                     </li>
-                    */}
                     <li>
                         <strong>Legal Compliance:</strong> Complying with applicable laws and
                         responding to lawful requests from public authorities.
@@ -409,12 +397,10 @@ const SECTIONS = [
                         with Google&apos;s data retention settings (typically 14–26 months before
                         automatic deletion).
                     </li>
-                    {/* TODO: Uncomment when Google AdSense is approved
                     <li>
                         <strong>AdSense data:</strong> Retained and managed by Google in accordance
                         with Google's own data retention policies.
                     </li>
-                    */}
                     <li>
                         <strong>Email communications:</strong> Retained for as long as necessary to
                         resolve your inquiry, then deleted.
@@ -656,7 +642,6 @@ export default function PrivacyPolicy() {
                             email, or any personal information to use our tools.
                         </span>
                     </li>
-                    {/* TODO: Uncomment when Google AdSense is approved
                     <li className="flex items-start gap-2">
                         <span className="text-yellow-400 mt-0.5 shrink-0">⚠</span>
                         <span>
@@ -664,7 +649,6 @@ export default function PrivacyPolicy() {
                             Google uses cookies to show relevant ads based on your browsing history.
                         </span>
                     </li>
-                    */}
                     <li className="flex items-start gap-2">
                         <span className="text-yellow-400 mt-0.5 shrink-0">⚠</span>
                         <span>
