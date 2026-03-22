@@ -6,8 +6,8 @@ export const dynamic = 'force-static';
 
 
 export const metadata: Metadata = {
-    title: 'Remove Background Online – AI Background Remover | AuraFile',
-    description: 'Automatically remove image backgrounds using AI — entirely in your browser. No uploads, 100% private, free.',
+    title: 'Remove Image Background Free – On-Device AI | AuraFile',
+    description: 'Remove image backgrounds using AI that runs locally in your browser. Your photos are never uploaded. Free, private, no accounts needed.',
     alternates: {
         canonical: 'https://aurafile.net/remove-background',
     },

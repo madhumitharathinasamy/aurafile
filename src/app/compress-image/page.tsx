@@ -6,8 +6,8 @@ export const dynamic = 'force-static';
 
 
 export const metadata: Metadata = {
-    title: "Compress Image - No Upload, 100% Private | AuraFile",
-    description: "Compress JPG, PNG & WebP images instantly in your browser. No file uploads, no servers. Your images never leave your device. Free & fast.",
+    title: "Compress Images Free \u2013 No Upload, Stays on Your Device",
+    description: "Reduce JPG, PNG & WebP file size directly in your browser. No uploads, no accounts, no data sent anywhere. Instant results, free.",
     alternates: {
         canonical: "https://aurafile.net/compress-image",
     },
@@ -16,36 +16,36 @@ export const metadata: Metadata = {
 export default function CompressPage() {
     const steps: Step[] = [
         {
-            title: "Compress Image - No Upload, 100% Private | AuraFile",
-            description: "Compress JPG, PNG & WebP images instantly in your browser. No file uploads, no servers. Your images never leave your device. Free & fast.",
+            title: "Compress Images Free \u2013 No Upload, Stays on Your Device",
+            description: "Reduce JPG, PNG & WebP file size directly in your browser. No uploads, no accounts, no data sent anywhere. Instant results, free.",
             icon: "upload-cloud"
         },
         {
-            title: "Compress Image - No Upload, 100% Private | AuraFile",
-            description: "Compress JPG, PNG & WebP images instantly in your browser. No file uploads, no servers. Your images never leave your device. Free & fast.",
+            title: "Compress Images Free \u2013 No Upload, Stays on Your Device",
+            description: "Reduce JPG, PNG & WebP file size directly in your browser. No uploads, no accounts, no data sent anywhere. Instant results, free.",
             icon: "sliders"
         },
         {
-            title: "Compress Image - No Upload, 100% Private | AuraFile",
-            description: "Compress JPG, PNG & WebP images instantly in your browser. No file uploads, no servers. Your images never leave your device. Free & fast.",
+            title: "Compress Images Free \u2013 No Upload, Stays on Your Device",
+            description: "Reduce JPG, PNG & WebP file size directly in your browser. No uploads, no accounts, no data sent anywhere. Instant results, free.",
             icon: "download"
         }
     ];
 
     const benefits: Benefit[] = [
         {
-            title: "Compress Image - No Upload, 100% Private | AuraFile",
-            description: "Compress JPG, PNG & WebP images instantly in your browser. No file uploads, no servers. Your images never leave your device. Free & fast.",
+            title: "Compress Images Free \u2013 No Upload, Stays on Your Device",
+            description: "Reduce JPG, PNG & WebP file size directly in your browser. No uploads, no accounts, no data sent anywhere. Instant results, free.",
             icon: "cpu"
         },
         {
-            title: "Compress Image - No Upload, 100% Private | AuraFile",
-            description: "Compress JPG, PNG & WebP images instantly in your browser. No file uploads, no servers. Your images never leave your device. Free & fast.",
+            title: "Compress Images Free \u2013 No Upload, Stays on Your Device",
+            description: "Reduce JPG, PNG & WebP file size directly in your browser. No uploads, no accounts, no data sent anywhere. Instant results, free.",
             icon: "layers"
         },
         {
-            title: "Compress Image - No Upload, 100% Private | AuraFile",
-            description: "Compress JPG, PNG & WebP images instantly in your browser. No file uploads, no servers. Your images never leave your device. Free & fast.",
+            title: "Compress Images Free \u2013 No Upload, Stays on Your Device",
+            description: "Reduce JPG, PNG & WebP file size directly in your browser. No uploads, no accounts, no data sent anywhere. Instant results, free.",
             icon: "lock"
         }
     ];

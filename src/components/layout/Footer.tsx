@@ -78,6 +78,7 @@ export function Footer() {
                                 <li><Link href="/#tools" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block">Image Tools</Link></li>
                                 <li><Link href="/#tools" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block">PDF Tools</Link></li>
                                 <li><Link href="/blog" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block">Blog</Link></li>
+                                <li><Link href="/faq" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block">FAQ</Link></li>
                                 <li><Link href="/about" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block">About</Link></li>
                                 <li><Link href="/contact" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block">Contact</Link></li>
                             </ul>
