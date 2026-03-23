@@ -2,7 +2,7 @@ export async function generatePdfPreview(file: File): Promise<{ url: string, pag
     try {
         const pdfjsLib = await import('pdfjs-dist');
         if (typeof window !== "undefined") {
-            pdfjsLib.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+            pdfjsLib.GlobalWorkerOptions.workerSrc = `/workers/pdf.worker.min.mjs`;
         }
 
         const arrayBuffer = await file.arrayBuffer();

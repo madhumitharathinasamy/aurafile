@@ -9,7 +9,7 @@ export async function analyzePdf(file: File): Promise<PdfAnalysisResult> {
 
     // Configure worker to avoid blocking the main thread
     if (typeof window !== "undefined") {
-        pdfjsLib.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+        pdfjsLib.GlobalWorkerOptions.workerSrc = `/workers/pdf.worker.min.mjs`;
     }
 
     const arrayBuffer = await file.arrayBuffer();

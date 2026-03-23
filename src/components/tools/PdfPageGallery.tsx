@@ -39,8 +39,8 @@ export function PdfPageGallery({ files, onPageStateChange }: PdfPageGalleryProps
             try {
                 // We use global pdfjsLib imported dynamically to ensure worker is ready
                 const pdfjsLib = await import("pdfjs-dist");
-                if (typeof window !== "undefined" && !pdfjsLib.GlobalWorkerOptions.workerSrc) {
-                    pdfjsLib.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+                if (typeof window !== "undefined") {
+                    pdfjsLib.GlobalWorkerOptions.workerSrc = `/workers/pdf.worker.min.mjs`;
                 }
 
                 for (const fileObj of files) {

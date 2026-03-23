@@ -255,6 +255,7 @@ export default function RemoveBgTool() {
                 <img
                     src={activeFile.previewUrl}
                     alt="Preview"
+                    loading="lazy"
                     className="max-w-full max-h-full object-contain drop-shadow-sm pointer-events-none"
                     style={{ opacity: isProcessing ? 0.3 : 1 }}
                 />

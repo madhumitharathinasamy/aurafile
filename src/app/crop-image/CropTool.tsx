@@ -473,6 +473,7 @@ export default function CropTool() {
                     <img
                         src={croppedUrls[activeFile.id]}
                         alt="Cropped Result"
+                        loading="lazy"
                         className="max-h-[60vh] md:max-h-[80%] pointer-events-none"
                         style={{ objectFit: 'contain' }}
                     />
@@ -495,6 +496,7 @@ export default function CropTool() {
                         key={activeFile.id} // Ensure it rerenders cleanly on switch
                         src={activeFile.previewUrl}
                         alt="Edit"
+                        loading="lazy"
                         onLoad={onImageLoad}
                         style={{
                             transform: `rotate(${rotate}deg) scale(${flipH ? -1 : 1}, ${flipV ? -1 : 1})`,

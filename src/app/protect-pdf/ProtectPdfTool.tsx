@@ -183,6 +183,7 @@ export default function ProtectPdfTool() {
                             <img
                                 src={activeFile.previewUrl}
                                 alt="PDF preview"
+                                loading="lazy"
                                 className={`max-w-full max-h-full object-contain shadow-2xl rounded-sm transition-all duration-700 ${isProtected ? 'blur-md opacity-40 scale-95' : 'blur-0 opacity-100 scale-100'}`}
                             />
                         )}

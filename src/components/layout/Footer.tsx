@@ -32,7 +32,7 @@ export function Footer() {
                     {/* Brand & Trust (Column 1) */}
                     <div className="flex flex-col items-start lg:pr-6">
                         <Link href="/" className="flex items-center gap-3 mb-6 hover:opacity-90 transition-opacity">
-                            <img src="/favicon.ico" alt="AuraFile Logo" width={32} height={32} className="rounded-[6px] shadow-sm bg-white p-0.5" />
+                            <img src="/favicon.ico" alt="AuraFile Logo" loading="lazy" width={32} height={32} className="rounded-[6px] shadow-sm bg-white p-0.5" />
                             <span className="text-2xl font-bold tracking-tight text-white uppercase tracking-widest">
                                 Aura<span className="text-[#00B4D8]">File</span>
                             </span>

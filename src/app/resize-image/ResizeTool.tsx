@@ -274,6 +274,7 @@ export default function ResizeTool() {
                 <img
                     src={resizedUrls[activeFile.id] || activeFile.previewUrl}
                     alt={resizedUrls[activeFile.id] ? "Resized Image" : "Live Preview"}
+                    loading="lazy"
                     className="w-full h-full pointer-events-none"
                     style={{
                         objectFit: activeFile.settings?.width && activeFile.settings?.height ? 'fill' : 'contain'

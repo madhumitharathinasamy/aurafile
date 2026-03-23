@@ -290,6 +290,7 @@ export default function RenameTool() {
                   <img
                     src={f.previewUrl}
                     alt={f.file.name}
+                    loading="lazy"
                     className="h-full w-full object-cover"
                     onError={(e) => {
                       (e.currentTarget as HTMLImageElement).style.display = "none";

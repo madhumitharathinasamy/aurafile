@@ -84,7 +84,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               {/* Optional Hero Image */}
               {post.image && (
                 <div className="mb-12 md:mb-16 rounded-2xl overflow-hidden shadow-xl border border-slate-100 w-full relative h-[300px] md:h-[500px] bg-slate-900">
-                  <img src={post.image} alt={post.title} className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" />
+                  <img src={post.image} alt={post.title} loading="lazy" className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" />
                 </div>
               )}
               

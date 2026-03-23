@@ -50,6 +50,7 @@ export function ImagePreviewList({
                                     <img
                                         src={item.previewUrl}
                                         alt={item.file.name}
+                                        loading="lazy"
                                         className="h-full w-full object-cover"
                                     />
                                 </div>

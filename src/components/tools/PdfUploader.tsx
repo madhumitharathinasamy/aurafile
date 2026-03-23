@@ -27,8 +27,8 @@ export function PdfUploader({ onUpload, maxFiles = UPLOAD_LIMITS.MAX_FILES, allo
                     try {
                         const arrayBuffer = await file.arrayBuffer();
                         const pdfjsLib = await import("pdfjs-dist");
-                        if (typeof window !== "undefined" && !pdfjsLib.GlobalWorkerOptions.workerSrc) {
-                            pdfjsLib.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+                        if (typeof window !== "undefined") {
+                            pdfjsLib.GlobalWorkerOptions.workerSrc = `/workers/pdf.worker.min.mjs`;
                         }
 
                         const loadingTask = pdfjsLib.getDocument(arrayBuffer);
@@ -66,7 +66,8 @@ export function PdfUploader({ onUpload, maxFiles = UPLOAD_LIMITS.MAX_FILES, allo
                         if (error.message === "PasswordProtected") {
                             toast.error(`"${file.name}" is password protected and cannot be processed.`);
                         } else {
-                            toast.error(`"${file.name}" appears to be an invalid or broken PDF.`);
+                            console.error("PDF load error:", error);
+                            toast.error(`"${file.name}" appears to be an invalid or broken PDF. Error: ${error?.message || error}`);
                         }
                     }
                 }

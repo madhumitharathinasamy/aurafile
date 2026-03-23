@@ -15,7 +15,7 @@ export async function convertPdfToDocx(file: File, options: ConversionOptions): 
     options.onProgress(10);
 
     if (typeof window !== "undefined") {
-        pdfjsLib.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+        pdfjsLib.GlobalWorkerOptions.workerSrc = `/workers/pdf.worker.min.mjs`;
     }
 
     const arrayBuffer = await file.arrayBuffer();

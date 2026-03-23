@@ -79,8 +79,8 @@ export default function CompressPdfTool() {
                 if (currentLevel === 'extreme' || currentLevel === 'recommended') {
                     try {
                         const pdfjsLib = await import("pdfjs-dist");
-                        if (typeof window !== "undefined" && !pdfjsLib.GlobalWorkerOptions.workerSrc) {
-                            pdfjsLib.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+                        if (typeof window !== "undefined") {
+                            pdfjsLib.GlobalWorkerOptions.workerSrc = `/workers/pdf.worker.min.mjs`;
                         }
 
                         const scale = currentLevel === 'extreme' ? 0.75 : 1.5; // ~54 DPI vs ~108 DPI

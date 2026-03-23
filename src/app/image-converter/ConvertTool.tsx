@@ -330,6 +330,7 @@ export default function ConvertTool() {
                             <img
                                 src={convertedFiles[activeFile.id]}
                                 alt="Converted Preview"
+                                loading="lazy"
                                 className="max-w-full max-h-full object-contain pointer-events-none drop-shadow-sm border border-slate-200"
                                 style={{ backgroundColor: activeFile.settings?.backgroundColor !== 'transparent' ? activeFile.settings?.backgroundColor : 'transparent' }}
                             />
