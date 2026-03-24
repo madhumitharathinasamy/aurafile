@@ -17,7 +17,7 @@ export const revalidate = 86400;
 
 
 export const metadata: Metadata = {
-  metadataBase: new URL(`https://${siteConfig.domain}`),
+  metadataBase: new URL("https://aurafile.net"),
   title: {
     default: siteConfig.name,
     template: `%s | ${siteConfig.name}`,
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   authors: siteConfig.authors,
   creator: siteConfig.creator,
   alternates: {
-    canonical: `https://${siteConfig.domain}`,
+    canonical: "https://aurafile.net",
   },
   openGraph: {
     type: "website",
