@@ -31,132 +31,139 @@ export default function CompressPdfTool() {
                 try {
                     const filesToCompress = files.filter(f => !f.settings?.compressionDone);
                     const totalToCompress = filesToCompress.length;
-                    
+
                     for (let i = 0; i < totalToCompress; i++) {
                         const fileToProcess = filesToCompress[i];
-                        await new Promise(r => setTimeout(r, 50)); // Allow UI to hydrate Progress
-                        
-                        const currentLevel = fileToProcess.settings?.compressionLevel || compressionLevel;
+                        await new Promise(r => setTimeout(r, 50));
 
+                        const currentLevel = fileToProcess.settings?.compressionLevel || compressionLevel;
                         const arrayBuffer = await fileToProcess.file.arrayBuffer();
-                        const pdfDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
 
                         let finalPdfBytes: Uint8Array | null = null;
 
-                        // Attempt deep image compression via rasterization for Recommended / Extreme
-                        if (currentLevel === 'extreme' || currentLevel === 'recommended') {
-                            try {
-                                const pdfjsLib = await import("pdfjs-dist");
-                                if (typeof window !== "undefined") {
-                                    pdfjsLib.GlobalWorkerOptions.workerSrc = `/workers/pdf.worker.min.mjs`;
-                                }
-
-                                const scale = currentLevel === 'extreme' ? 0.75 : 1.5; // ~54 DPI vs ~108 DPI
-                                const quality = currentLevel === 'extreme' ? 0.6 : 0.8;
-
-                                const loadingTask = pdfjsLib.getDocument(arrayBuffer);
-                                const pdf = await loadingTask.promise;
-                                const numPages = pdf.numPages;
-
-                                const rasterizedPdf = await PDFDocument.create();
-
-                                for (let pageNum = 1; pageNum <= numPages; pageNum++) {
-                                    const page = await pdf.getPage(pageNum);
-                                    const viewport = page.getViewport({ scale });
-
-                                    const canvas = document.createElement("canvas");
-                                    const context = canvas.getContext("2d");
-
-                                    if (context) {
-                                        canvas.width = viewport.width;
-                                        canvas.height = viewport.height;
-
-                                        await page.render({ canvasContext: context, viewport } as any).promise;
-
-                                        const imgDataUrl = canvas.toDataURL("image/jpeg", quality);
-
-                                        const res = await fetch(imgDataUrl);
-                                        const imgBytes = await res.arrayBuffer();
-                                        const pdfImage = await rasterizedPdf.embedJpg(imgBytes);
-
-                                        const originalWidth = viewport.width / scale;
-                                        const originalHeight = viewport.height / scale;
-
-                                        const newPage = rasterizedPdf.addPage([originalWidth, originalHeight]);
-                                        newPage.drawImage(pdfImage, {
-                                            x: 0,
-                                            y: 0,
-                                            width: originalWidth,
-                                            height: originalHeight,
-                                        });
-                                    }
-                                }
-
-                                const rasterizedBytes = await rasterizedPdf.save({ useObjectStreams: true });
-
-                                if (rasterizedBytes.byteLength < fileToProcess.size) {
-                                    finalPdfBytes = rasterizedBytes;
-                                }
-                            } catch (e) {
-                                console.error("Rasterization skipped", e);
-                            }
-                        }
-
-                        // Fallback to structural compression if rasterization was skipped or increased the size
-                        if (!finalPdfBytes) {
-                            let outputPdf: PDFDocument;
-
-                            if (currentLevel === 'less') {
-                                outputPdf = pdfDoc;
-                                outputPdf.setTitle('');
-                                outputPdf.setAuthor('');
-                                outputPdf.setSubject('');
-                                outputPdf.setKeywords([]);
-                                outputPdf.setProducer('');
-                                outputPdf.setCreator('');
-                            } else {
-                                outputPdf = await PDFDocument.create();
-                                const pages = await outputPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
-                                pages.forEach((page) => outputPdf.addPage(page));
-
-                                if (currentLevel === 'extreme') {
-                                    outputPdf.setCreator('AuraFile Optimizer');
-                                }
-                            }
-
-                            finalPdfBytes = await outputPdf.save({ useObjectStreams: true });
-                        }
-
-                        let settingsUpdate = {
-                            compressedBlob: null as Blob | null,
-                            compressedSize: finalPdfBytes.byteLength,
-                            compressionDone: true,
-                            savings: 0,
-                            compressionLevel: currentLevel
+                        // --- Rasterization-based compression for all levels ---
+                        // "less" = minimal quality loss, "recommended" = balanced, "extreme" = max compression
+                        const levelConfig = {
+                            extreme:     { scale: 0.6,  quality: 0.55 },
+                            recommended: { scale: 0.82, quality: 0.75 },
+                            less:        { scale: 1.0,  quality: 0.92 },
                         };
 
-                        const blob = new Blob([finalPdfBytes as any], { type: "application/pdf" });
-                        settingsUpdate.compressedBlob = blob;
+                        const { scale, quality } = levelConfig[currentLevel as keyof typeof levelConfig] ?? levelConfig.recommended;
 
-                        if (finalPdfBytes.byteLength >= fileToProcess.size) {
+                        try {
+                            const pdfjsLib = await import("pdfjs-dist");
+                            if (typeof window !== "undefined") {
+                                pdfjsLib.GlobalWorkerOptions.workerSrc = `/workers/pdf.worker.min.mjs`;
+                            }
+
+                            const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer.slice(0) });
+                            const pdfSrc = await loadingTask.promise;
+                            const numPages = pdfSrc.numPages;
+
+                            const rasterizedPdf = await PDFDocument.create();
+
+                            for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+                                const page = await pdfSrc.getPage(pageNum);
+                                const viewport = page.getViewport({ scale });
+
+                                const canvas = document.createElement("canvas");
+                                const context = canvas.getContext("2d");
+
+                                if (!context) continue;
+
+                                canvas.width  = Math.round(viewport.width);
+                                canvas.height = Math.round(viewport.height);
+
+                                await page.render({ canvasContext: context, viewport } as any).promise;
+
+                                const imgDataUrl = canvas.toDataURL("image/jpeg", quality);
+                                const res = await fetch(imgDataUrl);
+                                const imgBytes = await res.arrayBuffer();
+                                const pdfImage = await rasterizedPdf.embedJpg(imgBytes);
+
+                                // Preserve original page dimensions (points), not viewport pixels
+                                const origVp = page.getViewport({ scale: 1.0 });
+                                const newPage = rasterizedPdf.addPage([origVp.width, origVp.height]);
+                                newPage.drawImage(pdfImage, {
+                                    x: 0,
+                                    y: 0,
+                                    width: origVp.width,
+                                    height: origVp.height,
+                                });
+
+                                onProgress(((i / totalToCompress) + ((pageNum / numPages) / totalToCompress)) * 90);
+                            }
+
+                            const rasterBytes = await rasterizedPdf.save({ useObjectStreams: true });
+
+                            // Only use rasterized result if it is actually smaller
+                            if (rasterBytes.byteLength < fileToProcess.size) {
+                                finalPdfBytes = rasterBytes;
+                            }
+                        } catch (e) {
+                            console.error("Rasterization failed, falling back to structural compression", e);
+                        }
+
+                        // --- Structural fallback: strip metadata + re-save with object streams ---
+                        // Used when rasterization failed OR produced a larger file (e.g. text-only PDFs with small embedded fonts)
+                        if (!finalPdfBytes) {
+                            try {
+                                const pdfDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+                                pdfDoc.setTitle('');
+                                pdfDoc.setAuthor('');
+                                pdfDoc.setSubject('');
+                                pdfDoc.setKeywords([]);
+                                pdfDoc.setProducer('');
+                                pdfDoc.setCreator('');
+                                const structBytes = await pdfDoc.save({ useObjectStreams: true });
+                                // Use structural result only if it reduces size
+                                if (structBytes.byteLength < fileToProcess.size) {
+                                    finalPdfBytes = structBytes;
+                                }
+                            } catch (e) {
+                                console.error("Structural compression also failed", e);
+                            }
+                        }
+
+                        // If nothing helped, use the original (won't inflate the file)
+                        if (!finalPdfBytes) {
+                            finalPdfBytes = new Uint8Array(arrayBuffer);
+                        }
+
+                        const blob = new Blob([finalPdfBytes as Uint8Array<ArrayBuffer>], { type: "application/pdf" });
+                        const compressedSize = finalPdfBytes.byteLength;
+
+                        const savings = compressedSize < fileToProcess.size
+                            ? Number(((fileToProcess.size - compressedSize) / fileToProcess.size * 100).toFixed(1))
+                            : 0;
+
+                        updateFileSettings(fileToProcess.id, {
+                            compressedBlob: blob,
+                            compressedSize,
+                            compressionDone: true,
+                            savings,
+                            compressionLevel: currentLevel,
+                        });
+
+                        if (savings === 0) {
                             toast.info(`${fileToProcess.file.name} is already optimized.`, {
                                 description: "We couldn't reduce the file size further without losing quality."
                             });
-                        } else {
-                            const savings = ((fileToProcess.size - finalPdfBytes.byteLength) / fileToProcess.size * 100).toFixed(1);
-                            settingsUpdate.savings = Number(savings);
                         }
 
-                        updateFileSettings(fileToProcess.id, settingsUpdate);
                         onProgress(((i + 1) / totalToCompress) * 100);
                     }
 
                     if (filesToCompress.length > 1) {
                         toast.success(`Successfully compressed ${filesToCompress.length} PDFs!`);
                     } else if (filesToCompress.length === 1) {
-                        toast.success('PDF successfully compressed!');
+                        const anyCompressed = files.filter(f => (f.settings?.savings ?? 0) > 0);
+                        if (anyCompressed.length > 0 || filesToCompress[0].settings?.savings > 0) {
+                            toast.success('PDF successfully compressed!');
+                        }
                     }
-                    
+
                     resolve(filesToCompress.length);
                 } catch (error) {
                     toast.error("Failed to compress PDFs. One or more files might be corrupted or password protected.");
@@ -165,6 +172,7 @@ export default function CompressPdfTool() {
             });
         }
     });
+
 
     useEffect(() => {
         files.forEach(async (fileObj) => {
