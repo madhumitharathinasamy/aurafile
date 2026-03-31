@@ -79,7 +79,17 @@ export default function CropTool() {
 
                     for (let i = 0; i < filesToProcess.length; i++) {
                         const fileMeta = filesToProcess[i];
-                        const cropParams = applyToAll ? { ...percentCrop, unit: '%' as const } : { ...completedCrop! as any, unit: 'px' as const };
+                        const scaleX = imgRef.current.naturalWidth / imgRef.current.width;
+                        const scaleY = imgRef.current.naturalHeight / imgRef.current.height;
+                        const pixelCrop = {
+                            x: completedCrop.x * scaleX,
+                            y: completedCrop.y * scaleY,
+                            width: completedCrop.width * scaleX,
+                            height: completedCrop.height * scaleY,
+                            unit: 'px' as const
+                        };
+                        
+                        const cropParams = applyToAll ? { ...percentCrop, unit: '%' as const } : pixelCrop;
                         const source = (fileMeta.id === activeFile.id) ? imgRef.current : fileMeta.file;
 
                         const result = await canvasUtils(source, cropParams, rotate, { horizontal: flipH, vertical: flipV }, isCircular);
@@ -344,21 +354,16 @@ export default function CropTool() {
                 }, outFormat, 0.95);
             };
 
-            if (imageSource instanceof File) {
-                const url = URL.createObjectURL(imageSource);
-                img.onload = () => {
-                    URL.revokeObjectURL(url);
-                    handleDraw();
-                };
-                img.onerror = () => {
-                    URL.revokeObjectURL(url);
-                    reject("Image load error");
-                }
-                img.src = url;
-            } else {
-                img.src = imageSource.src;
+            const cleanUrl = imageSource instanceof File ? URL.createObjectURL(imageSource) : imageSource.src;
+            img.onload = () => {
+                if (imageSource instanceof File) URL.revokeObjectURL(cleanUrl);
                 handleDraw();
-            }
+            };
+            img.onerror = () => {
+                if (imageSource instanceof File) URL.revokeObjectURL(cleanUrl);
+                reject("Image load error. The file might be corrupted or unsupported.");
+            };
+            img.src = cleanUrl;
         });
     };
 

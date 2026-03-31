@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Inter } from "next/font/google";
 import { siteConfig } from "@/config/site";
 import { themeConfig } from "@/config/theme";
 import { Header } from "@/components/layout/Header";
@@ -10,6 +11,13 @@ import { Analytics } from "@vercel/analytics/next";
 import { ClientToaster } from "@/components/ui/ClientToaster";
 import { CookieConsent } from "@/components/layout/CookieConsent";
 import Script from "next/script";
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+  preload: true,
+});
 
 
 export const dynamic = "force-static";
@@ -86,21 +94,26 @@ export default function RootLayout({
   } as React.CSSProperties;
 
   return (
-    <html lang="en">
-      <body className="font-sans antialiased" style={themeVariables} suppressHydrationWarning>
-        {/* Placeholder AdSense Script: Replace with actual Publisher ID once approved */}
+    <html lang="en" className={inter.variable}>
+      <head>
+        {/* Resource Hints — resolve DNS before scripts fire */}
+        <link rel="dns-prefetch" href="//www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="//va.vercel-scripts.com" />
+        <link rel="dns-prefetch" href="//pagead2.googlesyndication.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      </head>
+      <body className={`${inter.className} font-sans antialiased`} style={themeVariables} suppressHydrationWarning>
+        {/* AdSense — lazyOnload ensures it never blocks main thread */}
         <Script 
           async 
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0000000000000000" 
           crossOrigin="anonymous"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
 
-        {/* Global Schema.org Structured Data */}
-        <Script
-          id="global-schema"
+        {/* Global Schema.org Structured Data — plain script tag, no runtime overhead */}
+        <script
           type="application/ld+json"
-          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",

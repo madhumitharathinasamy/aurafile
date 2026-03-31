@@ -10,6 +10,7 @@ import { useFileUpload, type IntegratedFile } from "@/hooks/useFileUpload";
 
 import { ToolSettingsRenderer, SettingGroup, SettingRow, ToggleRow, SelectRow } from "@/components/tools/ToolSettingsRenderer";
 import { useFileProcessor } from "@/hooks/useFileProcessor";
+import { isMobileBrowser, isIOS } from "@/lib/mobile-detection";
 
 type CompressStrategy = "lossy" | "lossless" | "auto";
 type ChromaSubsampling = "4:4:4" | "4:2:0" | "auto";
@@ -73,40 +74,109 @@ export default function CompressTool() {
                 // Use the outer `files` reference to locate IntegratedFiles corresponding to passed targetFiles
                 const processingFiles = batch ? files : (activeFile ? [activeFile] : []);
 
+                // Mobile-specific optimizations
+                const isMobile = isMobileBrowser();
+                const isIosDevice = isIOS();
+                
+                // Reduce concurrent processing on mobile to prevent memory issues
+                const maxConcurrent = isMobile ? 1 : 3;
+                
                 for (let i = 0; i < processingFiles.length; i++) {
                     const currentFile = processingFiles[i];
+                    
+                    // For mobile, process files sequentially with delays to manage memory
+                    if (isMobile && i > 0) {
+                        // Wait a bit between files to let memory settle
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                    }
+                    
                     try {
                         const imageCompression = (await import("browser-image-compression")).default;
+                        
+                        // Mobile-specific options
                         const options: any = {
-                            useWebWorker: true,
+                            useWebWorker: !isIosDevice, // Disable web workers on iOS due to known issues
                             preserveExif: currentFile.settings.preserveMetadata,
                         };
 
-                        if (currentFile.settings.targetMode && currentFile.settings.targetSizeValue) {
-                            const targetSize = parseFloat(currentFile.settings.targetSizeValue);
-                            if (!isNaN(targetSize) && targetSize > 0) {
-                                options.maxSizeMB = currentFile.settings.targetSizeUnit === "KB" ? targetSize / 1024 : targetSize;
+                        // More conservative settings for mobile
+                        if (isMobile) {
+                            // Reduce quality slightly for better performance on mobile
+                            if (!currentFile.settings.targetMode) {
+                                options.initialQuality = Math.min(currentFile.settings.quality / 100, 0.8);
                             }
+                            
+                            // Lower max size for mobile to prevent memory issues
+                            options.maxSizeMB = Math.min(
+                                currentFile.settings.targetMode && currentFile.settings.targetSizeValue 
+                                    ? (parseFloat(currentFile.settings.targetSizeValue) / 1024) 
+                                    : 25, // Default to 25MB instead of 50MB
+                                25
+                            );
+                            
+                            // Additional mobile optimizations
+                            options.alwaysKeepWidth = false;
+                            options.alwaysKeepHeight = false;
                         } else {
-                            options.initialQuality = currentFile.settings.quality / 100;
-                            options.maxSizeMB = 50;
+                            // Desktop settings
+                            if (currentFile.settings.targetMode && currentFile.settings.targetSizeValue) {
+                                const targetSize = parseFloat(currentFile.settings.targetSizeValue);
+                                if (!isNaN(targetSize) && targetSize > 0) {
+                                    options.maxSizeMB = currentFile.settings.targetSizeUnit === "KB" ? targetSize / 1024 : targetSize;
+                                }
+                            } else {
+                                options.initialQuality = currentFile.settings.quality / 100;
+                                options.maxSizeMB = 50;
+                            }
                         }
 
                         if (currentFile.settings.outputFormat !== "original") {
                             options.fileType = `image/${currentFile.settings.outputFormat}`;
                         }
 
-                        const compressedFile = await imageCompression(currentFile.file, options);
-                        const compressedUrl = createSafeObjectURL(compressedFile); // Leverage memory safe urls
+                        // Additional fallback for canvas issues on mobile
+                        try {
+                            const compressedFile = await imageCompression(currentFile.file, options);
+                            const compressedUrl = createSafeObjectURL(compressedFile); // Leverage memory safe urls
 
-                        updateFileSettings(currentFile.id, {
-                            compressedSize: compressedFile.size,
-                            isCompressed: true,
-                            compressedUrl: compressedUrl,
-                            compressedBlob: compressedFile
-                        });
-                        successCount++;
+                            updateFileSettings(currentFile.id, {
+                                compressedSize: compressedFile.size,
+                                isCompressed: true,
+                                compressedUrl: compressedUrl,
+                                compressedBlob: compressedFile
+                            });
+                            successCount++;
+                        } catch (canvasError) {
+                            // Fallback to canvas-based compression if library fails
+                            if (isMobile) {
+                                try {
+                                    const fallbackBlob = await mobileCanvasFallback(currentFile.file, {
+                                        quality: currentFile.settings.quality / 100,
+                                        maxSizeMB: options.maxSizeMB || 25,
+                                        fileType: currentFile.settings.outputFormat !== "original" 
+                                            ? `image/${currentFile.settings.outputFormat}` 
+                                            : undefined
+                                    });
+                                    
+                                    const fallbackUrl = createSafeObjectURL(fallbackBlob);
+                                    
+                                    updateFileSettings(currentFile.id, {
+                                        compressedSize: fallbackBlob.size,
+                                        isCompressed: true,
+                                        compressedUrl: fallbackUrl,
+                                        compressedBlob: fallbackBlob
+                                    });
+                                    successCount++;
+                                    continue; // Skip the normal error handling
+                                } catch (fallbackError) {
+                                    console.warn('Mobile fallback failed:', fallbackError);
+                                    // Fall through to normal error handling
+                                }
+                            }
+                            throw canvasError; // Re-throw if not mobile or fallback also failed
+                        }
                     } catch (e) {
+                        console.error(`Compression failed for ${currentFile.file.name}:`, e);
                         toast.error(`Error compressing ${currentFile.file.name}.`);
                         failCount++;
                     }
@@ -184,6 +254,63 @@ export default function CompressTool() {
 
     const isAllCompressed = files.length > 0 && files.every(f => f.settings.isCompressed && f.settings.compressedUrl);
     const isCurrentCompressed = activeFile && activeFile.settings.isCompressed && activeFile.settings.compressedUrl;
+
+// Mobile canvas fallback for when browser-image-compression fails
+const mobileCanvasFallback = async (file: File, options: any): Promise<Blob> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      
+      // Calculate dimensions with mobile-friendly limits
+      let { width, height } = img;
+      const MAX_DIMENSION = 2048; // Limit canvas size for mobile
+      
+      if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+        const ratio = Math.min(MAX_DIMENSION / width, MAX_DIMENSION / height);
+        width *= ratio;
+        height *= ratio;
+      }
+      
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        reject(new Error('Failed to get canvas context'));
+        return;
+      }
+      
+      // Fill with white background for JPG conversion
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, width, height);
+      
+      // Convert to blob with mobile-friendly quality
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) {
+            reject(new Error('Canvas to Blob failed'));
+            return;
+          }
+          resolve(blob);
+        },
+        options.fileType || 'image/jpeg',
+        Math.max(options.quality || 0.8, 0.5) // Ensure minimum quality
+      );
+    };
+    
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error('Failed to load image for conversion'));
+    };
+    
+    img.src = url;
+  });
+};
 
     const handleDownload = async () => {
         try {

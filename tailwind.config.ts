@@ -49,7 +49,7 @@ const config: Config = {
                 soft: "0 2px 10px rgba(0, 0, 0, 0.05)",
             },
             fontFamily: {
-                sans: ["Inter", ...fontFamily.sans],
+                sans: ["var(--font-inter)", ...fontFamily.sans],
             },
         },
     },
