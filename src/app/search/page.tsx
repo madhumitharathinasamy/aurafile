@@ -11,11 +11,10 @@ export const metadata: Metadata = {
     description: 'Search for secure, in-browser PDF, Image, and Document processing tools.',
 };
 
-export default function SearchPage({
-    searchParams,
-}: {
-    searchParams: { q?: string };
+export default async function SearchPage(props: {
+    searchParams: Promise<{ q?: string }>;
 }) {
+    const searchParams = await props.searchParams;
     const query = searchParams.q?.toLowerCase() || '';
 
     // Flat array of all tools to search against
@@ -25,10 +24,15 @@ export default function SearchPage({
         ...siteConfig.home.tools.other
     ];
 
-    const results = allTools.filter(tool => 
-        tool.title.toLowerCase().includes(query) || 
-        tool.description.toLowerCase().includes(query)
-    );
+    const results = allTools.filter(tool => {
+        const keywords = (tool as any).keywords as string[] | undefined;
+        return (
+            tool.title.toLowerCase().includes(query) || 
+            tool.description.toLowerCase().includes(query) ||
+            tool.tags?.some(tag => tag.toLowerCase().includes(query)) ||
+            keywords?.some(kw => kw.toLowerCase().includes(query))
+        );
+    });
 
     return (
         <main className="min-h-screen bg-slate-50 pt-16 pb-24">

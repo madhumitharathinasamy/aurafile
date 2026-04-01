@@ -103,12 +103,12 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className={`${inter.className} font-sans antialiased`} style={themeVariables} suppressHydrationWarning>
-        {/* AdSense — lazyOnload ensures it never blocks main thread */}
+        {/* AdSense verification and ad delivery */}
         <Script 
           async 
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0000000000000000" 
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6779576782536943" 
           crossOrigin="anonymous"
-          strategy="lazyOnload"
+          strategy="afterInteractive"
         />
 
         {/* Global Schema.org Structured Data — plain script tag, no runtime overhead */}
