@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { siteConfig } from "@/config/site";
 import { Icon } from "@/components/ui/Icon";
+import { SearchBar } from "@/components/layout/SearchBar";
 
 
 export function Header() {
@@ -99,16 +100,7 @@ export function Header() {
 
                 {/* Desktop Right Actions */}
                 <div className="hidden items-center justify-end gap-4 md:flex">
-                    <form role="search" className="relative hidden lg:block" action="/search">
-                        <Icon name="search" size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                        <input 
-                            type="search" 
-                            name="q"
-                            placeholder="Search tools..." 
-                            className="h-9 w-44 rounded-full border border-slate-200 bg-slate-50 pl-9 pr-4 text-sm outline-none transition-all focus:w-56 focus:border-[#00B4D8] focus:bg-white focus:ring-2 focus:ring-[#00B4D8]/20"
-                            aria-label="Search"
-                        />
-                    </form>
+                    <SearchBar variant="desktop" />
 
                     <Link
                         href="/#tools"
@@ -149,16 +141,7 @@ export function Header() {
                 <div className="absolute left-0 right-0 top-full flex flex-col border-b border-border bg-white shadow-lg md:hidden animate-in slide-in-from-top-2 max-h-[80vh] overflow-y-auto thin-scrollbar">
                     <div className="p-4 flex flex-col gap-2">
                         {/* Mobile Search */}
-                        <form role="search" className="relative mb-2 shrink-0" action="/search">
-                            <Icon name="search" size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                            <input 
-                                type="search" 
-                                name="q"
-                                placeholder="Search tools..." 
-                                className="h-10 w-full rounded-lg border border-slate-200 bg-slate-50 pl-10 pr-4 text-base outline-none focus:border-[#00B4D8]"
-                                aria-label="Search"
-                            />
-                        </form>
+                        <SearchBar variant="mobile" onClose={() => setIsMenuOpen(false)} />
 
                         <Link href="/" className="rounded-md p-3 text-lg font-bold hover:bg-slate-50 text-slate-700" onClick={() => setIsMenuOpen(false)}>
                             Home

@@ -66,35 +66,40 @@ export const siteConfig = {
                     description: "Reduce image file size significantly without losing quality.",
                     href: "/compress-image",
                     icon: "compress",
-                    tags: ["JPG", "PNG", "WebP", "SVG"]
+                    tags: ["JPG", "PNG", "WebP", "SVG"],
+                    keywords: ["reduce", "shrink", "optimize", "mb", "kb", "file size", "discord"]
                 },
                 {
                     title: "Resize Image",
                     description: "Resize images to exact pixel dimensions or percentage.",
                     href: "/resize-image",
                     icon: "resize",
-                    tags: ["JPG", "PNG", "WebP", "GIF"]
+                    tags: ["JPG", "PNG", "WebP", "GIF"],
+                    keywords: ["instagram", "facebook", "twitter", "linkedin", "social media", "dimensions", "width", "height", "scale"]
                 },
                 {
                     title: "Image Converter",
                     description: "Convert images between JPG, PNG, WebP, and more.",
                     href: "/image-converter",
                     icon: "convert",
-                    tags: ["JPG", "PNG", "WebP", "GIF", "BMP"]
+                    tags: ["JPG", "PNG", "WebP", "GIF", "BMP"],
+                    keywords: ["jpg", "png", "webp", "gif", "format", "change type"]
                 },
                 {
                     title: "Crop Image",
                     description: "Crop efficiently with custom aspect ratios.",
                     href: "/crop-image",
                     icon: "crop",
-                    tags: ["Edit"]
+                    tags: ["Edit"],
+                    keywords: ["trim", "cut", "aspect ratio", "profile picture", "cover photo", "youtube thumbnail"]
                 },
                 {
                     title: "Background Remover",
                     description: "Remove image backgrounds automatically with AI precision.",
                     href: "/remove-background",
                     icon: "scissors",
-                    tags: ["AI", "Edit"]
+                    tags: ["AI", "Edit"],
+                    keywords: ["transparent", "cutout", "bg", "remove bg", "erase", "magic"]
                 },
             ],
             pdf: [
@@ -103,42 +108,48 @@ export const siteConfig = {
                     description: "Reduce PDF file size for easy sharing and storage.",
                     href: "/compress-pdf",
                     icon: "file-minus",
-                    tags: ["PDF"]
+                    tags: ["PDF"],
+                    keywords: ["reduce", "shrink", "optimize", "mb", "kb", "file size"]
                 },
                 {
                     title: "Merge PDF",
                     description: "Combine multiple PDF files into one single document.",
                     href: "/merge-pdf",
                     icon: "files",
-                    tags: ["PDF"]
+                    tags: ["PDF"],
+                    keywords: ["combine", "join", "add together", "multiple"]
                 },
                 {
                     title: "PDF to Word",
                     description: "Convert PDF documents to editable Microsoft Word files.",
                     href: "/pdf-to-word",
                     icon: "file-text",
-                    tags: ["PDF", "DOCX"]
+                    tags: ["PDF", "DOCX"],
+                    keywords: ["docx", "microsoft word", "convert pdf", "editable"]
                 },
                 {
                     title: "Image to PDF",
                     description: "Convert JPG, PNG, and other images to PDF format.",
                     href: "/image-to-pdf",
                     icon: "file-image",
-                    tags: ["PDF", "Image"]
+                    tags: ["PDF", "Image"],
+                    keywords: ["jpg to pdf", "png to pdf", "photos to pdf"]
                 },
                 {
                     title: "Protect PDF",
                     description: "Encrypt your PDF with a password for enhanced security.",
                     href: "/protect-pdf",
                     icon: "lock",
-                    tags: ["PDF", "Security"]
+                    tags: ["PDF", "Security"],
+                    keywords: ["password", "encrypt", "secure", "lock"]
                 },
                 {
                     title: "Unlock PDF",
                     description: "Remove passwords to unlock and easily share your PDFs.",
                     href: "/unlock-pdf",
                     icon: "unlock",
-                    tags: ["PDF", "Security"]
+                    tags: ["PDF", "Security"],
+                    keywords: ["remove password", "decrypt", "open"]
                 },
             ],
             other: [
@@ -147,7 +158,8 @@ export const siteConfig = {
                     description: "Bulk rename multiple files securely right in your browser.",
                     href: "/rename-files",
                     icon: "folder",
-                    tags: ["Utility", "Files"]
+                    tags: ["Utility", "Files"],
+                    keywords: ["bulk rename", "batch rename", "names"]
                 }
             ],
         },
