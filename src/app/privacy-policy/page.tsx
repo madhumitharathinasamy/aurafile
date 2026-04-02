@@ -45,7 +45,13 @@ export default function PrivacyPolicyPage() {
 
                     <h2>4. Cookies and Web Beacons</h2>
                     <p>
-                        A &quot;cookie&quot; is a small text file stored on your browser. We use cookies primarily for tracking user consent (such as acknowledging our cookie banner) and for third-party advertising networks. You have the ability to accept or decline cookies through your browser settings. However, opting out of cookies may affect the personalization of the advertisements you see.
+                        A &quot;cookie&quot; is a small text file stored on your browser. We use cookies primarily for tracking user consent (such as acknowledging our cookie banner) and for third-party advertising networks. Third-party vendors, including Google, use cookies to serve ads based on a user&apos;s prior visits to your website or other websites.
+                    </p>
+                    <p>
+                        Users may opt out of personalized advertising by visiting <a href="https://myadcenter.google.com/" target="_blank" rel="noopener noreferrer">Google Ads Settings</a>. You can also opt out of a third-party vendor&apos;s use of cookies for personalized advertising by visiting <a href="https://www.aboutads.info/" target="_blank" rel="noopener noreferrer">www.aboutads.info</a>.
+                    </p>
+                    <p>
+                        You have the ability to accept or decline cookies through your browser settings. However, opting out of cookies may affect the personalization of the advertisements you see. For users in the European Economic Area (EEA), the UK, and Switzerland, you can manage or revoke your consent at any time via the &quot;Cookie Settings&quot; link found in our website footer.
                     </p>
 
                     <h2>5. Third-Party Links</h2>

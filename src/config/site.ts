@@ -42,6 +42,7 @@ export const siteConfig = {
             { title: "Sitemap", href: "/sitemap-html" },
             { title: "About Us", href: "/about" },
             { title: "Contact Us", href: "/contact" },
+            { title: "Cookie Settings", href: "#cookie-settings" },
         ],
     },
     home: {
