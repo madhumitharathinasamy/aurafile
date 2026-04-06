@@ -8,6 +8,21 @@ const nextConfig = {
     },
     optimizePackageImports: ["lucide-react"],
   },
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'www.aurafile.net',
+          },
+        ],
+        destination: 'https://aurafile.net/:path*',
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

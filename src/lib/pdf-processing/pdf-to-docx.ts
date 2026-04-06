@@ -156,7 +156,11 @@ export async function convertPdfToDocx(file: File, options: ConversionOptions): 
 
     options.onProgress(85);
 
-    const blob = await Packer.toBlob(doc);
+    const rawBlob = await Packer.toBlob(doc);
+    
+    // Explicitly enforce the MIME type to prevent browsers from rendering it as raw TXT/ZIP
+    const docxType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    const blob = new Blob([rawBlob], { type: docxType });
 
     options.onProgress(100);
     return blob;
