@@ -8,6 +8,14 @@ const nextConfig = {
     },
     optimizePackageImports: ["lucide-react"],
   },
+  webpack(config) {
+    config.experiments = {
+      ...config.experiments,
+      asyncWebAssembly: true,
+    };
+    return config;
+  },
+  turbopack: {},
   async redirects() {
     return [
       {
