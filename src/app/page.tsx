@@ -32,8 +32,8 @@ export default function Home() {
             </div>
 
             <h1 className="mb-6 font-extrabold tracking-tight text-slate-900 text-5xl md:text-7xl">
-              {hero.title.replace("made simple", "").trim()}<br className="hidden md:block" />
-              <span className="text-[#00B4D8]"> made simple</span>
+              {hero.title.replace("secure it.", "").trim()}<br className="hidden md:block" />
+              <span className="text-[#00B4D8]"> secure it.</span>
             </h1>
 
             <p className="mb-12 text-lg md:text-xl font-medium text-slate-600 max-w-2xl mx-auto leading-relaxed">
