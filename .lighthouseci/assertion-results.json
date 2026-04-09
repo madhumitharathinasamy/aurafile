@@ -1,0 +1,82 @@
+[
+  {
+    "name": "minScore",
+    "expected": 0.85,
+    "actual": 0.66,
+    "values": [
+      0.42,
+      0.66,
+      0.65
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "performance",
+    "auditId": "categories",
+    "level": "warn",
+    "url": "http://localhost:3030/compress-image"
+  },
+  {
+    "name": "minScore",
+    "expected": 0.85,
+    "actual": 0.7,
+    "values": [
+      0.7,
+      0.65,
+      0.65
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "performance",
+    "auditId": "categories",
+    "level": "warn",
+    "url": "http://localhost:3030/merge-pdf"
+  },
+  {
+    "name": "minScore",
+    "expected": 0.85,
+    "actual": 0.55,
+    "values": [
+      0.5,
+      0.55,
+      0.52
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "performance",
+    "auditId": "categories",
+    "level": "warn",
+    "url": "http://localhost:3030/image-converter"
+  },
+  {
+    "name": "minScore",
+    "expected": 0.85,
+    "actual": 0.61,
+    "values": [
+      0.58,
+      0.58,
+      0.61
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "performance",
+    "auditId": "categories",
+    "level": "warn",
+    "url": "http://localhost:3030/remove-background"
+  },
+  {
+    "name": "minScore",
+    "expected": 0.85,
+    "actual": 0.69,
+    "values": [
+      0.68,
+      0.69,
+      0.68
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "performance",
+    "auditId": "categories",
+    "level": "warn",
+    "url": "http://localhost:3030/pdf-to-word"
+  }
+]

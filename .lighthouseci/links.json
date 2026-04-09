@@ -1,0 +1,7 @@
+{
+  "http://localhost:3030/compress-image": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1775751081646-47231.report.html",
+  "http://localhost:3030/merge-pdf": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1775751087785-68376.report.html",
+  "http://localhost:3030/image-converter": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1775751092738-99017.report.html",
+  "http://localhost:3030/remove-background": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1775751098587-27216.report.html",
+  "http://localhost:3030/pdf-to-word": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1775751108354-88637.report.html"
+}

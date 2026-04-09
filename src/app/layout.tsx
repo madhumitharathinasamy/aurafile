@@ -105,10 +105,9 @@ export default function RootLayout({
       <body className={`${inter.className} font-sans antialiased`} style={themeVariables} suppressHydrationWarning>
         {/* AdSense verification and ad delivery */}
         <Script 
-          async 
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6779576782536943" 
           crossOrigin="anonymous"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
 
         {/* Global Schema.org Structured Data — plain script tag, no runtime overhead */}

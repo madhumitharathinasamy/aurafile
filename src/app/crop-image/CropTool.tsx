@@ -475,35 +475,37 @@ export default function CropTool() {
                     />
                 </div>
             ) : (
-                <ReactCrop
-                    crop={crop}
-                    onChange={(_, percentCrop) => {
-                        handleSettingChange({}); // Triggers isCropped resetting
-                        setCrop(percentCrop);
-                    }}
-                    onComplete={(c) => setCompletedCrop(c)}
-                    aspect={aspect}
-                    circularCrop={isCircular}
-                    ruleOfThirds={showGrid}
-                    className="max-h-[60vh] md:max-h-[80%]"
-                >
-                    <img
-                        ref={imgRef}
-                        key={activeFile.id} // Ensure it rerenders cleanly on switch
-                        src={activeFile.previewUrl}
-                        alt="Edit"
-                        loading="lazy"
-                        onLoad={onImageLoad}
-                        style={{
-                            transform: `rotate(${rotate}deg) scale(${flipH ? -1 : 1}, ${flipV ? -1 : 1})`,
-                            maxWidth: '100%',
-                            maxHeight: '60vh',
-                            transition: 'transform 0.3s ease',
-                            objectFit: 'contain'
+                <div className="flex items-center justify-center w-full">
+                    <ReactCrop
+                        crop={crop}
+                        onChange={(_, percentCrop) => {
+                            handleSettingChange({}); // Triggers isCropped resetting
+                            setCrop(percentCrop);
                         }}
-                        className="drop-shadow-sm pointer-events-none"
-                    />
-                </ReactCrop>
+                        onComplete={(c) => setCompletedCrop(c)}
+                        aspect={aspect}
+                        circularCrop={isCircular}
+                        ruleOfThirds={showGrid}
+                    >
+                        <img
+                            ref={imgRef}
+                            key={activeFile.id}
+                            src={activeFile.previewUrl}
+                            alt="Edit"
+                            loading="lazy"
+                            onLoad={onImageLoad}
+                            style={{
+                                transform: `rotate(${rotate}deg) scale(${flipH ? -1 : 1}, ${flipV ? -1 : 1})`,
+                                display: 'block',
+                                maxWidth: '100%',
+                                width: 'auto',
+                                height: 'auto',
+                                transition: 'transform 0.3s ease'
+                            }}
+                            className="max-h-[60vh] md:max-h-[70vh] drop-shadow-sm pointer-events-none"
+                        />
+                    </ReactCrop>
+                </div>
             )}
 
             {/* Quick Stats Overlay & Download Status */}

@@ -46,7 +46,7 @@ export function Reviews() {
                                 "{review.content}"
                             </p>
                             <div>
-                                <h4 className="font-semibold text-foreground">{review.name}</h4>
+                                <h3 className="font-semibold text-foreground">{review.name}</h3>
                                 <p className="text-sm text-text-secondary">{review.role}</p>
                             </div>
                         </div>

@@ -248,16 +248,18 @@ export function ToolModal({
                             {/* Main Preview Center Stage */}
                             <div className="flex-1 relative p-4 md:p-0 flex items-center justify-center overflow-hidden min-h-0 group">
 
-                                {/* Zoom Controller */}
-                                <div className="absolute bottom-4 right-4 z-40 flex items-center bg-white shadow-md rounded-lg border border-slate-200 overflow-hidden">
-                                    <button aria-label="Zoom Out" onClick={() => setZoom(z => Math.max(50, z - 25))} className="p-2 text-muted-foreground hover:bg-slate-50 hover:text-slate-800">
-                                        <Icon name="minus" size={16} />
-                                    </button>
-                                    <div className="px-2 text-xs font-semibold text-slate-700 w-12 text-center select-none cursor-pointer" onClick={() => setZoom(100)}>{zoom}%</div>
-                                    <button aria-label="Zoom In" onClick={() => setZoom(z => Math.min(200, z + 25))} className="p-2 text-muted-foreground hover:bg-slate-50 hover:text-slate-800">
-                                        <Icon name="plus" size={16} />
-                                    </button>
-                                </div>
+                                {/* Zoom Controller (Hidden for custom previews which manage their own scaling) */}
+                                {!customPreview && (
+                                    <div className="absolute bottom-4 right-4 z-40 flex items-center bg-white shadow-md rounded-lg border border-slate-200 overflow-hidden">
+                                        <button aria-label="Zoom Out" onClick={() => setZoom(z => Math.max(50, z - 25))} className="p-2 text-muted-foreground hover:bg-slate-50 hover:text-slate-800">
+                                            <Icon name="minus" size={16} />
+                                        </button>
+                                        <div className="px-2 text-xs font-semibold text-slate-700 w-12 text-center select-none cursor-pointer" onClick={() => setZoom(100)}>{zoom}%</div>
+                                        <button aria-label="Zoom In" onClick={() => setZoom(z => Math.min(200, z + 25))} className="p-2 text-muted-foreground hover:bg-slate-50 hover:text-slate-800">
+                                            <Icon name="plus" size={16} />
+                                        </button>
+                                    </div>
+                                )}
 
                                 {/* Floating Navigation Arrows (Only in single view) */}
                                 {isBatch && !isBatchView && (

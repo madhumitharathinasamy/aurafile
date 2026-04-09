@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 };
 
 import { siteConfig } from "@/config/site";
-
+import { VisualNetworkMonitor } from "@/components/privacy/VisualNetworkMonitor";
 
 
 export default function PrivacyPage() {
@@ -19,6 +19,7 @@ export default function PrivacyPage() {
             />
 
             <main className="container mx-auto max-w-[800px] pb-12 px-4 md:pb-12">
+                <VisualNetworkMonitor />
                 <div className="flex flex-col gap-12">
 
                     <section>

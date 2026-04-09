@@ -48,7 +48,7 @@ export const siteConfig = {
     home: {
         hero: {
             trustedText: "100% Private & Browser-Based Processing",
-            title: "Professional file tools made simple",
+            title: "Before you share it, secure it.",
             subtitle: "Resize images, compress PDFs, and convert files instantly. No signup required. Your files never leave your browser.",
             ctaPrimary: "Explore Tools",
             ctaSecondary: "View Features",
