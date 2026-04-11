@@ -1,15 +1,24 @@
+"use client";
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Icon } from '@/components/ui/Icon';
 import { siteConfig } from '@/config/site';
 
 export default function RelatedToolsSection() {
-    // Select 4 diverse tools to feature
-    const featuredTools = [
-        siteConfig.home.tools.image[0], // Compress Image
-        siteConfig.home.tools.image[1], // Resize Image
-        siteConfig.home.tools.pdf[0],   // Compress PDF
-        siteConfig.home.tools.pdf[2],   // PDF to Word
+    const pathname = usePathname();
+
+    // Flatten all tools
+    const allTools = [
+        ...siteConfig.home.tools.image,
+        ...siteConfig.home.tools.pdf,
+        // ...siteConfig.home.tools.utility // Add if utility exists
     ];
+
+    // Filter out the current tool and take the first 4
+    const featuredTools = allTools
+        .filter(tool => tool.href !== pathname)
+        .slice(0, 4);
 
     return (
         <section className="container mx-auto px-4 max-w-7xl mt-16 pt-16 border-t border-slate-200">
