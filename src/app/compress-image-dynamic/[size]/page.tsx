@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { CompressDynamicToolLoader } from './CompressDynamicToolLoader';
 import ToolPageLayout from '@/components/tools/ToolPageLayout';
-import { DynamicArticle } from './DynamicArticle';
+import { DynamicPower } from './DynamicPower';
 import Link from 'next/link';
 
 export async function generateMetadata({ params }: { params: Promise<{ size: string }> }): Promise<Metadata> {
@@ -18,60 +18,12 @@ export async function generateMetadata({ params }: { params: Promise<{ size: str
 export default async function DynamicCompressImagePage({ params }: { params: Promise<{ size: string }> }) {
     const { size } = await params;
 
-    const steps = [
-        {
-            title: "Select Images",
-            description: "Choose one or multiple images form your device. We support JPG, PNG, and WebP formats.",
-            icon: "upload" as const
-        },
-        {
-            title: "Automatic Compression",
-            description: `We will automatically apply intelligent settings to compress your image to approx ${size} KB without destroying quality.`,
-            icon: "settings" as const
-        },
-        {
-            title: "Download Optimized",
-            description: "Save the compressed images individually or as a ZIP file. Everything happens instantly.",
-            icon: "download" as const
-        }
-    ];
-
-    const benefits = [
-        {
-            title: "Client-Side Processing",
-            description: "Your images never leave your device. All compression happens locally in your browser for absolute privacy and maximum speed.",
-            icon: "shield" as const
-        },
-        {
-            title: "Target Size Optimization",
-            description: `Hit exactly the ${size} KB limit you need using advanced algorithms that intelligently dial down data bloat.`,
-            icon: "zap" as const
-        },
-        {
-            title: "Batch Support",
-            description: "Compress multiple images simultaneously. Our tool utilizes your device's multi-core processor for parallel compression.",
-            icon: "layers" as const
-        }
-    ];
-
-    const faq = [
-        {
-            question: "Are my photos uploaded to a server?",
-            answer: "No. Our tool uses WebAssembly to compress your images directly inside your web browser. Your photos never leave your device, ensuring 100% privacy."
-        },
-        {
-            question: `How does it hit exactly ${size} KB?`,
-            answer: `It repeatedly tests compression parameters internally and strategically reduces dimensions if necessary to output a file that safely meets your strict ${size} KB barrier without you having to randomly guess at sliders.`
-        },
-        {
-            question: "What formats do you support?",
-            answer: "We currently support compressing JPG, PNG, and WebP images."
-        },
-        {
-            question: `Why is my image not reducing to ${size} KB?`,
-            answer: `If you started with an extremely large file (e.g. 10MB), crushing it beneath ${size} KB requires aggressively scaling down the physical dimensions. Use our resize tool first if you wish to control those dimensions specifically.`
-        }
-    ];
+    const schemaData = {
+        name: `AuraFile Compressor to ${size} KB`,
+        description: `Compress your images to strictly under ${size} KB natively in your browser.`,
+        url: `https://aurafile.net/compress-image-to-${size}kb`,
+        applicationCategory: "UtilitiesApplication"
+    };
 
     return (
         <div className="flex flex-col items-center w-full">
@@ -120,16 +72,16 @@ export default async function DynamicCompressImagePage({ params }: { params: Pro
                         </div>
                     </div>
                 }
-                howItWorks={steps}
-                benefits={benefits}
-                faq={faq}
                 breadcrumbs={[
                     { label: "Home", href: "/" },
                     { label: "Image Tools", href: "/image-tools" },
                     { label: "Compress Image", href: "/compress-image" },
                     { label: `${size} KB`, href: `/compress-image-to-${size}kb` }
                 ]}
-                longFormContent={<DynamicArticle size={size} />}
+                longFormContent={<DynamicPower size={size} />}
+                isPowerLayout={true}
+                schemaData={schemaData}
+                canonicalUrl={`https://aurafile.net/compress-image-to-${size}kb`}
             />
         </div>
     );

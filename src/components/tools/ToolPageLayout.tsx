@@ -3,19 +3,28 @@ import { PageTitle, SectionDescription } from "@/components/ui/typography";
 import { SEOAndSpecsSection, FAQSection, Step, Benefit, FAQItem, PrivacyBadge } from "@/components/sections/ToolSections";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { Breadcrumbs, type BreadcrumbItem } from "@/components/seo/Breadcrumbs";
-
+import RelatedToolsSection from "@/components/tools/RelatedToolsSection";
+import { SoftwareSchema } from "@/components/seo/SoftwareSchema";
 interface ToolPageLayoutProps {
     title: string;
     description: string;
     toolComponent: React.ReactNode;
-    howItWorks: Step[];
-    benefits: Benefit[];
-    faq: FAQItem[];
+    howItWorks?: Step[];
+    benefits?: Benefit[];
+    faq?: FAQItem[];
     specs?: {label: string, value: string}[];
     backgroundImage?: string;
     theme?: "blue" | "red";
     breadcrumbs?: BreadcrumbItem[];
     longFormContent?: React.ReactNode;
+    isPowerLayout?: boolean;
+    canonicalUrl?: string;
+    schemaData?: {
+        name: string;
+        description: string;
+        url: string;
+        applicationCategory?: string;
+    };
 }
 
 export default function ToolPageLayout({
@@ -28,13 +37,27 @@ export default function ToolPageLayout({
     specs,
     theme = "blue",
     breadcrumbs,
-    longFormContent
+    longFormContent,
+    isPowerLayout,
+    canonicalUrl,
+    schemaData
 }: ToolPageLayoutProps) {
     const isRed = theme === "red";
     
     // Create a subtle grid patterned hero background
     return (
         <div className="min-h-screen bg-white">
+            {canonicalUrl && (
+                <link rel="canonical" href={canonicalUrl} />
+            )}
+            {schemaData && (
+                <SoftwareSchema 
+                    name={schemaData.name} 
+                    description={schemaData.description} 
+                    url={schemaData.url}
+                    applicationCategory={schemaData.applicationCategory}
+                />
+            )}
             {/* 1. Hero Section - Clean Minimal Background */}
             <section className="relative pt-8 pb-16 border-b border-border/40 bg-slate-50/50">
                 <div className="container mx-auto px-4 md:px-8 max-w-7xl text-center">
@@ -53,16 +76,20 @@ export default function ToolPageLayout({
             {/* Below the fold content with Lazy Loading */}
             <ScrollReveal>
                 <div className="pb-16 pt-8">
-                    {/* 2. SEO & Specs Grid Layout */}
-                    <SEOAndSpecsSection 
-                        howItWorks={howItWorks} 
-                        benefits={benefits} 
-                        theme={theme} 
-                        specs={specs} 
-                    />
+                    {!isPowerLayout && (
+                        <>
+                            {/* 2. SEO & Specs Grid Layout */}
+                            <SEOAndSpecsSection 
+                                howItWorks={howItWorks || []} 
+                                benefits={benefits || []} 
+                                theme={theme} 
+                                specs={specs} 
+                            />
 
-                    {/* 3. FAQ Section */}
-                    <FAQSection items={faq} />
+                            {/* 3. FAQ Section */}
+                            <FAQSection items={faq || []} />
+                        </>
+                    )}
 
                     {/* 4. Long Form SEO Content (if provided) */}
                     {longFormContent && (
@@ -70,6 +97,9 @@ export default function ToolPageLayout({
                             {longFormContent}
                         </section>
                     )}
+
+                    {/* 5. Related Tools Section */}
+                    <RelatedToolsSection />
                 </div>
             </ScrollReveal>
         </div>

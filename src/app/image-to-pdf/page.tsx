@@ -1,84 +1,41 @@
-import type { Metadata } from "next";
-import { ImageToPdfToolLoader } from "./ImageToPdfToolLoader";
-import ToolPageLayout, { Step, Benefit, FAQItem } from "@/components/tools/ToolPageLayout";
+import { Metadata } from 'next';
+import { ImageToPdfToolLoader } from './ImageToPdfToolLoader';
+import ToolPageLayout from '@/components/tools/ToolPageLayout';
+import { ImageToPdfPower } from './ImageToPdfPower';
 
 export const dynamic = 'force-static';
-
+export const revalidate = 86400;
 
 export const metadata: Metadata = {
-    title: "Image to PDF - No Upload, 100% Private | AuraFile",
-    description: "Convert JPG, PNG, and WebP images to PDF in seconds. Entirely browser-based, no uploads, no accounts. Free image to PDF converter.",
+    title: "Image to PDF Converter Free | Secure 100% Private \u2013 AuraFile",
+    description: "Convert JPG to PDF, PNG to PDF safely in your browser. 100% private, no file uploads. Reorder images and create documents instantly.",
     alternates: {
-        canonical: "https://aurafile.net/image-to-pdf",
+        canonical: 'https://aurafile.net/image-to-pdf',
     },
 };
 
 export default function ImageToPdfPage() {
-    const steps: Step[] = [
-        {
-            title: "Image to PDF - No Upload, 100% Private | AuraFile",
-            description: "Convert JPG, PNG, and WebP images to PDF in seconds. Entirely browser-based, no uploads, no accounts. Free image to PDF converter.",
-            icon: "image"
-        },
-        {
-            title: "Image to PDF - No Upload, 100% Private | AuraFile",
-            description: "Convert JPG, PNG, and WebP images to PDF in seconds. Entirely browser-based, no uploads, no accounts. Free image to PDF converter.",
-            icon: "move"
-        },
-        {
-            title: "Image to PDF - No Upload, 100% Private | AuraFile",
-            description: "Convert JPG, PNG, and WebP images to PDF in seconds. Entirely browser-based, no uploads, no accounts. Free image to PDF converter.",
-            icon: "file-text"
-        }
-    ];
-
-    const benefits: Benefit[] = [
-        {
-            title: "Image to PDF - No Upload, 100% Private | AuraFile",
-            description: "Convert JPG, PNG, and WebP images to PDF in seconds. Entirely browser-based, no uploads, no accounts. Free image to PDF converter.",
-            icon: "layers"
-        },
-        {
-            title: "Image to PDF - No Upload, 100% Private | AuraFile",
-            description: "Convert JPG, PNG, and WebP images to PDF in seconds. Entirely browser-based, no uploads, no accounts. Free image to PDF converter.",
-            icon: "globe"
-        },
-        {
-            title: "Image to PDF - No Upload, 100% Private | AuraFile",
-            description: "Convert JPG, PNG, and WebP images to PDF in seconds. Entirely browser-based, no uploads, no accounts. Free image to PDF converter.",
-            icon: "lock"
-        }
-    ];
-
-    const faq: FAQItem[] = [
-        {
-            question: "Can I rearrange images?",
-            answer: "Yes! Simply drag and drop the image thumbnails to change their order before converting."
-        },
-        {
-            question: "Is there a limit on pages?",
-            answer: "You can add as many images as your browser memory allows, but we recommend keeping it under 50 pages for best performance."
-        },
-        {
-            question: "Does it support HEIC?",
-            answer: "Currently, we support JPG, PNG, and WebP. For HEIC, please use our Image Converter tool first."
-        }
-    ];
+    const schemaData = {
+        name: "AuraFile Image to PDF Converter",
+        description: "Combine multiple image files into a single PDF document natively in your browser.",
+        url: "https://aurafile.net/image-to-pdf",
+        applicationCategory: "UtilitiesApplication"
+    };
 
     return (
         <ToolPageLayout
-            title="Convert Images to PDF"
-            description="Turn your JPG, PNG, and WebP images into a single PDF document instantly. Organize and share photos easily."
+            title="Convert Image to PDF"
+            description="Turn random JPGs and PNGs into a clean, professional PDF document. Manage margins, reorder pages, and convert instantly offline."
             toolComponent={<ImageToPdfToolLoader />}
-            howItWorks={steps}
-            benefits={benefits}
-            faq={faq}
-            theme="blue"
             breadcrumbs={[
                 { label: "Home", href: "/" },
-                { label: "PDF Tools", href: "/pdf-tools" },
-                { label: "Convert Images to PDF", href: "/image-to-pdf" }
+                { label: "Image Tools", href: "/image-tools" },
+                { label: "Image to PDF", href: "/image-to-pdf" }
             ]}
+            longFormContent={<ImageToPdfPower />}
+            isPowerLayout={true}
+            schemaData={schemaData}
+            canonicalUrl="https://aurafile.net/image-to-pdf"
         />
     );
 }

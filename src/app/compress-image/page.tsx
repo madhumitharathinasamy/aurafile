@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { CompressToolLoader } from './CompressToolLoader';
 import ToolPageLayout from '@/components/tools/ToolPageLayout';
-import { CompressImageArticle } from './CompressImageArticle';
+import { CompressImagePower } from './CompressImagePower';
 
 export const dynamic = 'force-static';
 export const revalidate = 86400;
@@ -66,6 +66,13 @@ export default function CompressImagePage() {
         }
     ];
 
+    const schemaData = {
+        name: "AuraFile Image Compressor",
+        description: "Reduce JPG, PNG & WebP file size securely in your browser without uploading files.",
+        url: "https://aurafile.net/compress-image",
+        applicationCategory: "UtilitiesApplication"
+    };
+
     return (
         <ToolPageLayout
             title="Compress Image"
@@ -79,7 +86,10 @@ export default function CompressImagePage() {
                 { label: "Image Tools", href: "/image-tools" },
                 { label: "Compress Image", href: "/compress-image" }
             ]}
-            longFormContent={<CompressImageArticle />}
+            longFormContent={<CompressImagePower />}
+            isPowerLayout={true}
+            schemaData={schemaData}
+            canonicalUrl="https://aurafile.net/compress-image"
         />
     );
 }

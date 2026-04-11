@@ -1,83 +1,41 @@
-import type { Metadata } from "next";
-import { CompressPdfToolLoader } from "./CompressPdfToolLoader";
-import ToolPageLayout, { Step, Benefit, FAQItem } from "@/components/tools/ToolPageLayout";
+import { Metadata } from 'next';
+import { CompressPdfToolLoader } from './CompressPdfToolLoader';
+import ToolPageLayout from '@/components/tools/ToolPageLayout';
+import { CompressPdfPower } from './CompressPdfPower';
 
 export const dynamic = 'force-static';
-
+export const revalidate = 86400;
 
 export const metadata: Metadata = {
-    title: "Compress PDF Free - No Upload Required | AuraFile",
-    description: "Reduce PDF file size directly in your browser. No server uploads ever. 100% private, browser-based PDF compression. Free and instant.",
+    title: "Compress PDF Free | Secure No Upload Compressor \u2013 AuraFile",
+    description: "Reduce PDF file size securely directly in your browser. 100% private, no file uploads. Compress documents instantly for email or web.",
     alternates: {
-        canonical: "https://aurafile.net/compress-pdf",
+        canonical: 'https://aurafile.net/compress-pdf',
     },
 };
 
 export default function CompressPdfPage() {
-    const steps: Step[] = [
-        {
-            title: "Compress PDF Free - No Upload Required | AuraFile",
-            description: "Reduce PDF file size directly in your browser. No server uploads ever. 100% private, browser-based PDF compression. Free and instant.",
-            icon: "upload-cloud"
-        },
-        {
-            title: "Compress PDF Free - No Upload Required | AuraFile",
-            description: "Reduce PDF file size directly in your browser. No server uploads ever. 100% private, browser-based PDF compression. Free and instant.",
-            icon: "minimize-2"
-        },
-        {
-            title: "Compress PDF Free - No Upload Required | AuraFile",
-            description: "Reduce PDF file size directly in your browser. No server uploads ever. 100% private, browser-based PDF compression. Free and instant.",
-            icon: "download"
-        }
-    ];
-
-    const benefits: Benefit[] = [
-        {
-            title: "Compress PDF Free - No Upload Required | AuraFile",
-            description: "Reduce PDF file size directly in your browser. No server uploads ever. 100% private, browser-based PDF compression. Free and instant.",
-            icon: "share-2"
-        },
-        {
-            title: "Compress PDF Free - No Upload Required | AuraFile",
-            description: "Reduce PDF file size directly in your browser. No server uploads ever. 100% private, browser-based PDF compression. Free and instant.",
-            icon: "hard-drive"
-        },
-        {
-            title: "Compress PDF Free - No Upload Required | AuraFile",
-            description: "Reduce PDF file size directly in your browser. No server uploads ever. 100% private, browser-based PDF compression. Free and instant.",
-            icon: "eye-off"
-        }
-    ];
-
-    const faq: FAQItem[] = [
-        {
-            question: "How much can I reduce my PDF size?",
-            answer: "It varies depending on the content (images vs text). We aim for maximum reduction without visible quality loss, often achieving 20-50% compression."
-        },
-        {
-            question: "Is it safe?",
-            answer: "Absolutely. Your files are processed in your browser. No data is sent to external servers for compression."
-        },
-        {
-            question: "Can I compress multiple files?",
-            answer: "Currently, we process one file at a time to ensure maximum privacy and performance in the browser."
-        }
-    ];
+    const schemaData = {
+        name: "AuraFile PDF Compressor",
+        description: "Compress large PDF documents securely locally in your browser.",
+        url: "https://aurafile.net/compress-pdf",
+        applicationCategory: "UtilitiesApplication"
+    };
 
     return (
         <ToolPageLayout
             title="Compress PDF"
-            description="Reduce PDF file size securely in your browser. Optimize documents for email and web sharing."
+            description="Shrink heavy PDF documents to a fraction of their original size, making them easy to stream, email, and store. 100% secure processing."
             toolComponent={<CompressPdfToolLoader />}
-            howItWorks={steps}
-            benefits={benefits}
-            faq={faq}
             breadcrumbs={[
                 { label: "Home", href: "/" },
-                { label: "PDF Tools", href: "/pdf-tools" },
+                { label: "PDF Tools", href: "/#tools" }, // Adjusting simple route based on config
                 { label: "Compress PDF", href: "/compress-pdf" }
             ]}
+            longFormContent={<CompressPdfPower />}
+            isPowerLayout={true}
+            schemaData={schemaData}
+            canonicalUrl="https://aurafile.net/compress-pdf"
         />
     );
 }
