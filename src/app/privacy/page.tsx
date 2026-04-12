@@ -1,83 +1,93 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/ui/PageHeader";
-
-export const metadata: Metadata = {
-    title: "Privacy Policy",
-    description: "Aura File Privacy Policy - How we handle your data.",
-};
-
 import { siteConfig } from "@/config/site";
 import { VisualNetworkMonitor } from "@/components/privacy/VisualNetworkMonitor";
 
+export const metadata: Metadata = {
+    title: "Privacy Policy | Zero-Trust Architecture",
+    description: "AuraFile Privacy Policy. Learn about our 100% client-side, zero-trust WASM architecture and our AdSense data handling.",
+};
 
 export default function PrivacyPage() {
     return (
         <>
             <PageHeader
-                title="Privacy Policy"
-                subtitle="Last Updated: February 2024"
+                title="Privacy Policy & Technical Whitepaper"
+                subtitle={`Last Updated: ${new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' })}`}
             />
 
             <main className="container mx-auto max-w-[800px] pb-12 px-4 md:pb-12">
                 <VisualNetworkMonitor />
-                <div className="flex flex-col gap-12">
+                <div className="flex flex-col gap-12 mt-8 prose prose-slate max-w-none prose-h2:text-2xl prose-h2:text-slate-900 prose-a:text-[#00B4D8] prose-a:no-underline hover:prose-a:underline">
 
                     <section>
-                        <h2 className="mb-4 flex items-center gap-3 text-foreground">
-                            <span>ℹ️</span> 1. Information We Collect
-                        </h2>
-                        <p className="mb-6 leading-relaxed text-muted-foreground">
-                            Our mission is to process your images without compromising your privacy. When you use Aura File tools:
+                        <h2>1. Core Premise: Zero-Trust Client-Side Processing</h2>
+                        <p>
+                            At AuraFile, we operate on a fundamental principle of data sovereignty: your documents belong to you. To ensure absolute privacy, we have engineered a <strong>100% serverless data-processing architecture</strong>.
                         </p>
-                        <ul className="flex flex-col gap-4">
-                            <li className="rounded-md border-l-4 border-primary bg-surface p-5 shadow-sm">
-                                <strong className="mb-1 block text-foreground">User Files</strong>
-                                <span className="leading-relaxed text-text-secondary">Images you upload are processed either strictly in your browser or temporarily on our secure servers.</span>
-                            </li>
-                            <li className="rounded-md border-l-4 border-primary bg-surface p-5 shadow-sm">
-                                <strong className="mb-1 block text-foreground">Auto-Deletion</strong>
-                                <span className="leading-relaxed text-text-secondary">For server-side tools, files are automatically deleted immediately after processing or within 1 hour.</span>
-                            </li>
-                            <li className="rounded-md border-l-4 border-primary bg-surface p-5 shadow-sm">
-                                <strong className="mb-1 block text-foreground">No Permanent Storage</strong>
-                                <span className="leading-relaxed text-text-secondary">We do strictly NOT store your images permanently.</span>
-                            </li>
+                        <p>
+                            Unlike traditional web utilities that require you to upload your sensitive PDFs or images to a remote corporate server, AuraFile utilizes WebAssembly (WASM) to process your files securely within the localized active memory (RAM) of your own web browser.
+                        </p>
+                        <ul>
+                            <li><strong>Zero Uploads:</strong> Your files never traverse the public internet.</li>
+                            <li><strong>Zero Server Access:</strong> We literally do not possess backend servers capable of receiving or storing your documents.</li>
+                            <li><strong>Zero Retention:</strong> The moment you close your browser tab, the temporary local memory is flushed natively by your operating system.</li>
                         </ul>
                     </section>
 
                     <section>
-                        <h2 className="mb-4 flex items-center gap-3 text-foreground">
-                            <span>🛠️</span> 2. How We Use Information
-                        </h2>
-                        <p className="leading-relaxed text-muted-foreground">
-                            We use the data solely to provide the service you requested (e.g., resizing an image). We do not sell, trade, or share your personal files with third parties.
+                        <h2>2. Information We DO NOT Collect</h2>
+                        <p>
+                            Because of our zero-trust architecture, it is physically impossible for us to collect, view, monitor, or sell your files. Specifically, we <strong>do not</strong> collect:
+                        </p>
+                        <ul>
+                            <li>The contents of any PDF or Document you manipulate.</li>
+                            <li>Images, metadata (EXIF data), or contextual tags from your graphics.</li>
+                            <li>Passwords used to lock or unlock documents (since cryptography happens locally).</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>3. Telemetry and Analytics</h2>
+                        <p>
+                            While your processing data is strictly local, we do utilize anonymous analytical tools (such as Google Analytics and Vercel Analytics) to monitor the aggregate health and performance of the website itself.
+                        </p>
+                        <p>
+                            These tools collect non-personally identifiable information, including:
+                        </p>
+                        <ul>
+                            <li>Browser type and generalized device categories (e.g., Mobile vs. Desktop).</li>
+                            <li>Diagnostic timing for load speeds to ensure our WASM engines are performing optimally.</li>
+                            <li>Pages visited and generalized country-level geolocation.</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>4. Advertising and Cookies (Google AdSense)</h2>
+                        <p>
+                            To maintain our enterprise-grade tools entirely for free, AuraFile utilizes <strong>Google AdSense</strong> to display advertisements. To serve relevant ads, third-party vendors, including Google, use cookies based on a user's prior visits to this website or other websites.
+                        </p>
+                        <div className="p-5 bg-slate-50 border border-slate-200 rounded-lg">
+                            <h3 className="text-lg font-bold text-slate-800 mt-0 mb-3">Google DoubleClick DART Cookie Notice</h3>
+                            <ul className="mb-0">
+                                <li>Google's use of advertising cookies enables it and its partners to serve ads to users based on their visit to AuraFile and/or other sites on the Internet.</li>
+                                <li>Users may strictly <strong>opt out of personalized advertising</strong> by visiting <a href="https://myadcenter.google.com/" target="_blank" rel="noopener noreferrer">Google Ads Settings</a>.</li>
+                                <li>Alternatively, you can opt out of a third-party vendor's use of cookies for personalized advertising by visiting <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer">www.aboutads.info</a>.</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2>5. Security Protocol & Updates</h2>
+                        <p>
+                            We maintain AuraFile using industry-leading transport layer security (HTTPS) for serving the application scripts, ensuring that your connection to our interface is immune to Man-in-the-Middle attacks. We reserve the right to update this policy to reflect any architectural enhancements in WebAssembly or browser APIs.
                         </p>
                     </section>
 
                     <section>
-                        <h2 className="mb-4 flex items-center gap-3 text-foreground">
-                            <span>🍪</span> 3. Cookies & Analytics
-                        </h2>
-                        <p className="leading-relaxed text-muted-foreground">
-                            We use minimal cookies necessary for website functionality and anonymous analytics (e.g., Google Analytics) to improve our performance. You can disable cookies in your browser settings.
-                        </p>
-                    </section>
-
-                    <section>
-                        <h2 className="mb-4 flex items-center gap-3 text-foreground">
-                            <span>🔒</span> 4. Security
-                        </h2>
-                        <p className="leading-relaxed text-muted-foreground">
-                            We implement industry-standard security measures including SSL/TLS encryption for data in transit and automatic cleanup scripts for data at rest.
-                        </p>
-                    </section>
-
-                    <section>
-                        <h2 className="mb-4 flex items-center gap-3 text-foreground">
-                            <span>📫</span> 5. Contact Us
-                        </h2>
-                        <p className="leading-relaxed text-muted-foreground">
-                            If you have questions about this Privacy Policy, please contact us at <a href={`mailto:${siteConfig.links.email}`} className="text-primary hover:underline">{siteConfig.links.email}</a>.
+                        <h2>6. Contact Us</h2>
+                        <p>
+                            If you have questions regarding this architecture, code auditing, or general privacy inquiries, please reach out to our engineering team at <a href={`mailto:${siteConfig.links.email}`}>{siteConfig.links.email}</a> or visit our <a href="/contact">Contact Page</a>.
                         </p>
                     </section>
                 </div>
