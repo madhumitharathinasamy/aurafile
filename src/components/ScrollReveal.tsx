@@ -42,10 +42,10 @@ export function ScrollReveal({ children, className = "" }: ScrollRevealProps) {
       className={
         hasIntersected
           ? `animate-in fade-in slide-in-from-bottom-4 duration-700 ${className}`
-          : `opacity-0 ${className}`
+          : `opacity-0 translate-y-4 ${className}`
       }
     >
-      {hasIntersected ? children : null}
+      {children}
     </div>
   );
 }

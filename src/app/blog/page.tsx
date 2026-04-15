@@ -1,5 +1,6 @@
 import { blogPosts } from "@/data/blog";
 import Link from "next/link";
+import Image from "next/image";
 import { Metadata } from "next";
 
 export const dynamic = 'force-static';
@@ -32,7 +33,7 @@ export default function BlogList() {
             >
               <div className="h-56 bg-slate-100 w-full relative overflow-hidden bg-grid-slate flex items-center justify-center">
                 {post.image ? (
-                  <img src={post.image} alt={post.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <Image src={post.image} alt={post.title} priority fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-500" />
                 ) : (
                   <div className="text-[#00B4D8] opacity-50 font-bold text-5xl">
                     Aura<span className="text-slate-400">File</span>
