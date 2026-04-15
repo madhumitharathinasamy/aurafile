@@ -11,7 +11,7 @@ export default function BlogSection() {
     <section id="blog" className="py-20 md:py-28 bg-white border-b border-slate-100">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="mb-4 inline-block rounded-full bg-[#E0F2FE] px-4 py-1.5 text-sm font-bold text-[#00B4D8]">
+          <span className="mb-4 inline-block rounded-full bg-[#E0F2FE] px-4 py-1.5 text-sm font-bold text-sky-700">
             Privacy & Performance
           </span>
           <h2 className="mb-6 font-bold tracking-tight text-slate-900 text-4xl md:text-5xl">
@@ -42,12 +42,12 @@ export default function BlogSection() {
 
               <div className="p-6 flex flex-col flex-1">
                 <div className="flex items-center gap-3 text-sm text-slate-500 font-medium mb-3">
-                  <span className="text-[#00B4D8]">{post.date}</span>
+                  <span className="text-sky-700">{post.date}</span>
                   <span>•</span>
                   <span>{post.readTime}</span>
                 </div>
                 
-                <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-[#00B4D8] transition-colors leading-snug">
+                <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-sky-700 transition-colors leading-snug">
                   {post.title}
                 </h3>
                 
@@ -62,7 +62,7 @@ export default function BlogSection() {
                     </div>
                     <span className="text-sm font-semibold text-slate-900">{post.author.name}</span>
                   </div>
-                  <span className="text-[#00B4D8] font-bold text-sm flex items-center">
+                  <span className="text-sky-700 font-bold text-sm flex items-center">
                     Read Post <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
                   </span>
                 </div>

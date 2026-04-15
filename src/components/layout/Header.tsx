@@ -25,7 +25,7 @@ export function Header() {
 
                 {/* Desktop Nav - Centered */}
                 <nav className="hidden flex-1 justify-center gap-6 lg:gap-8 md:flex items-center">
-                    <Link href="/" className="p-2 text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900">
+                    <Link href="/" className="px-3 py-2 text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900">
                         Home
                     </Link>
 
@@ -87,13 +87,13 @@ export function Header() {
                         </div>
                     </div>
 
-                    <Link href="/blog" className="p-2 text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900">
+                    <Link href="/blog" className="px-3 py-2 text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900">
                         Blog
                     </Link>
-                    <Link href="/about" className="p-2 text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900">
+                    <Link href="/about" className="px-3 py-2 text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900">
                         About
                     </Link>
-                    <Link href="/contact" className="p-2 text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900">
+                    <Link href="/contact" className="px-3 py-2 text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900">
                         Contact
                     </Link>
                 </nav>
@@ -148,10 +148,10 @@ export function Header() {
                         </Link>
 
                         {/* Image Tools Section Content */}
-                        <div className="px-3 py-2">
-                            <Link href="/image-tools" onClick={() => setIsMenuOpen(false)} className="text-sm font-bold text-slate-400 hover:text-slate-600 uppercase tracking-wider mb-2 flex items-center gap-2">
+                        <div className="px-3 py-2 mt-1">
+                            <h4 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-2 px-3">
                                 <Icon name="image" size={14} /> Image Tools
-                            </Link>
+                            </h4>
                             <div className="flex flex-col pl-2 border-l-2 border-slate-100 gap-1">
                                 {siteConfig.home.tools.image.map(tool => (
                                     <Link key={tool.title} href={tool.href} onClick={() => setIsMenuOpen(false)} className="py-2 px-3 text-base font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md">
@@ -162,10 +162,10 @@ export function Header() {
                         </div>
 
                         {/* PDF Tools Section Content */}
-                        <div className="px-3 py-2">
-                            <Link href="/pdf-tools" onClick={() => setIsMenuOpen(false)} className="text-sm font-bold text-slate-400 hover:text-slate-600 uppercase tracking-wider mb-2 flex items-center gap-2">
+                        <div className="px-3 py-2 mt-2">
+                            <h4 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-2 px-3">
                                 <Icon name="file-text" size={14} /> PDF Tools
-                            </Link>
+                            </h4>
                             <div className="flex flex-col pl-2 border-l-2 border-slate-100 gap-1">
                                 {siteConfig.home.tools.pdf.map(tool => (
                                     <Link key={tool.title} href={tool.href} onClick={() => setIsMenuOpen(false)} className="py-2 px-3 text-base font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md">

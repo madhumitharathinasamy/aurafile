@@ -20,7 +20,7 @@ export function Footer() {
                         <h2 className="text-2xl font-bold text-white mb-2">Ready to secure your files?</h2>
                         <p className="text-slate-400 font-medium">No signup. 100% private. Files never leave your device.</p>
                     </div>
-                    <Link href="/compress-image" className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#00B4D8] px-8 py-4 text-sm font-bold text-white shadow-lg transition-all hover:bg-[#0096B4] hover:-translate-y-1 hover:shadow-[#00B4D8]/20 focus:outline-none focus:ring-2 focus:ring-[#00B4D8] focus:ring-offset-2 w-full md:w-auto">
+                    <Link href="/compress-image" className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#00B4D8] px-8 py-4 text-sm font-bold text-slate-900 shadow-lg transition-all hover:bg-[#0096B4] hover:-translate-y-1 hover:shadow-[#00B4D8]/20 focus:outline-none focus:ring-2 focus:ring-[#00B4D8] focus:ring-offset-2 w-full md:w-auto">
                         Start using tools <ArrowRight size={16} />
                     </Link>
                 </div>
@@ -61,12 +61,12 @@ export function Footer() {
                         <h3 className="text-white font-bold text-lg mb-6 tracking-wide">Popular Tools</h3>
                         <nav aria-label="Footer Navigation - Popular Tools">
                             <ul className="flex flex-col gap-4 m-0 p-0">
-                                <li><Link href="/compress-image" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-1">Compress Image</Link></li>
-                                <li><Link href="/compress-image-to-100kb" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-1">Compress to 100KB</Link></li>
-                                <li><Link href="/resize-image" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-1">Resize Image</Link></li>
-                                <li><Link href="/pdf-to-word" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-1">PDF to Word</Link></li>
-                                <li><Link href="/remove-background" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-1">Background Remover</Link></li>
-                                <li><Link href="/rename-files" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-1">Rename Files</Link></li>
+                                <li><Link href="/compress-image" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-2">Compress Image</Link></li>
+                                <li><Link href="/compress-image-to-100kb" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-2">Compress to 100KB</Link></li>
+                                <li><Link href="/resize-image" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-2">Resize Image</Link></li>
+                                <li><Link href="/pdf-to-word" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-2">PDF to Word</Link></li>
+                                <li><Link href="/remove-background" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-2">Background Remover</Link></li>
+                                <li><Link href="/rename-files" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-2">Rename Files</Link></li>
                             </ul>
                         </nav>
                     </div>
@@ -76,15 +76,15 @@ export function Footer() {
                         <h3 className="text-white font-bold text-lg mb-6 tracking-wide">Explore</h3>
                         <nav aria-label="Footer Navigation - Site Map">
                             <ul className="flex flex-col gap-4 m-0 p-0">
-                                <li><Link href="/" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-1">Home</Link></li>
-                                <li><Link href="/image-tools" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-1">Image Tools</Link></li>
-                                <li><Link href="/pdf-tools" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-1">PDF Tools</Link></li>
-                                <li><Link href="/document-tools" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-1">Document Tools</Link></li>
-                                <li><Link href="/blog" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-1">Blog</Link></li>
-                                <li><Link href="/faq" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-1">FAQ</Link></li>
-                                <li><Link href="/about" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-1">About</Link></li>
-                                <li><Link href="/security" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-1">Security Architecture</Link></li>
-                                <li><Link href="/contact" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-1">Contact</Link></li>
+                                <li><Link href="/" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-2">Home</Link></li>
+                                <li><Link href="/image-tools" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-2">Image Tools</Link></li>
+                                <li><Link href="/pdf-tools" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-2">PDF Tools</Link></li>
+                                <li><Link href="/document-tools" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-2">Document Tools</Link></li>
+                                <li><Link href="/blog" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-2">Blog</Link></li>
+                                <li><Link href="/faq" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-2">FAQ</Link></li>
+                                <li><Link href="/about" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-2">About</Link></li>
+                                <li><Link href="/security" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-2">Security Architecture</Link></li>
+                                <li><Link href="/contact" className="text-slate-400 hover:text-white hover:translate-x-1 transition-all text-sm font-medium inline-block py-2">Contact</Link></li>
                             </ul>
                         </nav>
                     </div>
@@ -103,12 +103,12 @@ export function Footer() {
                                                     e.preventDefault();
                                                     window.dispatchEvent(new Event('open-cookie-settings'));
                                                 }}
-                                                className="text-slate-400 hover:text-white transition-colors text-sm font-medium hover:translate-x-1 inline-block border-transparent py-1 cursor-pointer bg-transparent text-left"
+                                                className="text-slate-400 hover:text-white transition-colors text-sm font-medium hover:translate-x-1 inline-block border-transparent py-2 cursor-pointer bg-transparent text-left"
                                             >
                                                 {link.title}
                                             </button>
                                         ) : (
-                                            <Link href={link.href} className="text-slate-400 hover:text-white transition-colors text-sm font-medium hover:translate-x-1 inline-block border-transparent py-1">
+                                            <Link href={link.href} className="text-slate-400 hover:text-white transition-colors text-sm font-medium hover:translate-x-1 inline-block border-transparent py-2">
                                                 {link.title}
                                             </Link>
                                         )}
@@ -125,7 +125,7 @@ export function Footer() {
                     
                     {/* Copyright Left */}
                     <div className="order-3 md:order-1 flex-1">
-                        <p className="text-[13px] font-medium text-slate-500 text-center md:text-left">
+                        <p className="text-[13px] font-medium text-slate-400 text-center md:text-left">
                             © 2026 AuraFile. All rights reserved.
                         </p>
                     </div>
