@@ -47,9 +47,6 @@ export default function ToolPageLayout({
     // Create a subtle grid patterned hero background
     return (
         <div className="min-h-screen bg-white">
-            {canonicalUrl && (
-                <link rel="canonical" href={canonicalUrl} />
-            )}
             {schemaData && (
                 <SoftwareSchema 
                     name={schemaData.name} 

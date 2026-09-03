@@ -9,6 +9,9 @@ export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
     title: 'Search Results | AuraFile',
     description: 'Search for secure, in-browser PDF, Image, and Document processing tools.',
+    alternates: {
+        canonical: 'https://aurafile.net/search',
+    },
 };
 
 export default async function SearchPage(props: {

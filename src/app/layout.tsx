@@ -10,6 +10,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import { ClientToaster } from "@/components/ui/ClientToaster";
 import { CookieConsent } from "@/components/layout/CookieConsent";
+import { InteractionWrapper } from "@/components/analytics/InteractionWrapper";
 import Script from "next/script";
 
 const inter = Inter({
@@ -103,12 +104,14 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className={`${inter.className} font-sans antialiased`} style={themeVariables} suppressHydrationWarning>
-        {/* AdSense verification and ad delivery */}
-        <Script 
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6779576782536943" 
-          crossOrigin="anonymous"
-          strategy="lazyOnload"
-        />
+        {/* AdSense verification and ad delivery - Deferred until interaction */}
+        <InteractionWrapper>
+          <Script 
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6779576782536943" 
+            crossOrigin="anonymous"
+            strategy="lazyOnload"
+          />
+        </InteractionWrapper>
 
         {/* Global Schema.org Structured Data — plain script tag, no runtime overhead */}
         <script
@@ -132,7 +135,9 @@ export default function RootLayout({
         <Header />
         {children}
         <Footer />
-        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || "G-0000000000"} />
+        <InteractionWrapper>
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || "G-0000000000"} />
+        </InteractionWrapper>
         <ClientToaster />
         <CookieConsent />
         <SpeedInsights />

@@ -25,7 +25,7 @@ export function Header() {
 
                 {/* Desktop Nav - Centered */}
                 <nav className="hidden flex-1 justify-center gap-6 lg:gap-8 md:flex items-center">
-                    <Link href="/" className="px-3 py-2 text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900">
+                    <Link href="/" className="flex items-center min-h-[48px] px-3 text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900">
                         Home
                     </Link>
 
@@ -34,7 +34,7 @@ export function Header() {
                         <Link
                             href="/image-tools"
                             aria-label="Image Tools Menu"
-                            className="flex items-center gap-1 text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900 focus:outline-none"
+                            className="flex items-center min-h-[48px] gap-1 text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900 focus:outline-none"
                         >
                             Image Tools
                             <Icon name="chevron-down" size={14} className="transition-transform group-hover:rotate-180" />
@@ -63,7 +63,7 @@ export function Header() {
                         <Link
                             href="/pdf-tools"
                             aria-label="PDF Tools Menu"
-                            className="flex items-center gap-1 text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900 focus:outline-none"
+                            className="flex items-center min-h-[48px] gap-1 text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900 focus:outline-none"
                         >
                             PDF Tools
                             <Icon name="chevron-down" size={14} className="transition-transform group-hover:rotate-180" />
@@ -87,13 +87,13 @@ export function Header() {
                         </div>
                     </div>
 
-                    <Link href="/blog" className="px-3 py-2 text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900">
+                    <Link href="/blog" className="flex items-center min-h-[48px] px-3 text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900">
                         Blog
                     </Link>
-                    <Link href="/about" className="px-3 py-2 text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900">
+                    <Link href="/about" className="flex items-center min-h-[48px] px-3 text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900">
                         About
                     </Link>
-                    <Link href="/contact" className="px-3 py-2 text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900">
+                    <Link href="/contact" className="flex items-center min-h-[48px] px-3 text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900">
                         Contact
                     </Link>
                 </nav>
@@ -143,7 +143,7 @@ export function Header() {
                         {/* Mobile Search */}
                         <SearchBar variant="mobile" onClose={() => setIsMenuOpen(false)} />
 
-                        <Link href="/" className="rounded-md p-3 text-lg font-bold hover:bg-slate-50 text-slate-700" onClick={() => setIsMenuOpen(false)}>
+                        <Link href="/" className="flex items-center min-h-[48px] rounded-md p-3 text-lg font-bold hover:bg-slate-50 text-slate-700" onClick={() => setIsMenuOpen(false)}>
                             Home
                         </Link>
 
@@ -154,7 +154,7 @@ export function Header() {
                             </h4>
                             <div className="flex flex-col pl-2 border-l-2 border-slate-100 gap-1">
                                 {siteConfig.home.tools.image.map(tool => (
-                                    <Link key={tool.title} href={tool.href} onClick={() => setIsMenuOpen(false)} className="py-2 px-3 text-base font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md">
+                                    <Link key={tool.title} href={tool.href} onClick={() => setIsMenuOpen(false)} className="flex items-center min-h-[48px] py-2 px-3 text-base font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md">
                                         {tool.title}
                                     </Link>
                                 ))}
@@ -168,20 +168,20 @@ export function Header() {
                             </h4>
                             <div className="flex flex-col pl-2 border-l-2 border-slate-100 gap-1">
                                 {siteConfig.home.tools.pdf.map(tool => (
-                                    <Link key={tool.title} href={tool.href} onClick={() => setIsMenuOpen(false)} className="py-2 px-3 text-base font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md">
+                                    <Link key={tool.title} href={tool.href} onClick={() => setIsMenuOpen(false)} className="flex items-center min-h-[48px] py-2 px-3 text-base font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md">
                                         {tool.title}
                                     </Link>
                                 ))}
                             </div>
                         </div>
 
-                        <Link href="/blog" className="rounded-md p-3 text-lg font-bold hover:bg-slate-50 text-slate-700" onClick={() => setIsMenuOpen(false)}>
+                        <Link href="/blog" className="flex items-center min-h-[48px] rounded-md p-3 text-lg font-bold hover:bg-slate-50 text-slate-700" onClick={() => setIsMenuOpen(false)}>
                             Blog
                         </Link>
-                        <Link href="/about" className="rounded-md p-3 text-lg font-bold hover:bg-slate-50 text-slate-700" onClick={() => setIsMenuOpen(false)}>
+                        <Link href="/about" className="flex items-center min-h-[48px] rounded-md p-3 text-lg font-bold hover:bg-slate-50 text-slate-700" onClick={() => setIsMenuOpen(false)}>
                             About
                         </Link>
-                        <Link href="/contact" className="rounded-md p-3 text-lg font-bold hover:bg-slate-50 text-slate-700" onClick={() => setIsMenuOpen(false)}>
+                        <Link href="/contact" className="flex items-center min-h-[48px] rounded-md p-3 text-lg font-bold hover:bg-slate-50 text-slate-700" onClick={() => setIsMenuOpen(false)}>
                             Contact
                         </Link>
                     </div>

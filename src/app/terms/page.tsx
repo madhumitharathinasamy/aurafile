@@ -7,6 +7,9 @@ export const revalidate = 86400;
 export const metadata: Metadata = {
     title: "Terms of Service | AuraFile",
     description: "AuraFile Terms and Conditions of Use. Read our policies regarding software liability, client-side processing algorithms, and acceptable use.",
+    alternates: {
+        canonical: 'https://aurafile.net/terms',
+    },
 };
 
 export default function TermsPage() {

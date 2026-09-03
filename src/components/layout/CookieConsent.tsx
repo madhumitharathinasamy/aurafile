@@ -100,20 +100,20 @@ export function CookieConsent() {
               <div className="flex gap-2 w-full">
                 <button 
                   onClick={handleRejectAll}
-                  className="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg transition-all text-[13px]"
+                  className="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg transition-all text-[13px] min-h-[48px]"
                 >
                   Reject
                 </button>
                 <button 
                   onClick={handleAcceptAll}
-                  className="flex-1 py-2 bg-[#00B4D8] hover:bg-[#0096b7] text-slate-900 font-semibold rounded-lg transition-all shadow-sm shadow-[#00B4D8]/20 text-[13px]"
+                  className="flex-1 py-2 bg-[#00B4D8] hover:bg-[#0096b7] text-slate-900 font-semibold rounded-lg transition-all shadow-sm shadow-[#00B4D8]/20 text-[13px] min-h-[48px]"
                 >
                   Accept
                 </button>
               </div>
               <button 
                 onClick={() => setShowSettings(true)}
-                className="w-full py-1.5 text-slate-600 hover:text-slate-900 font-medium text-[12px] transition-colors"
+                className="w-full py-1.5 text-slate-600 hover:text-slate-900 font-medium text-[12px] transition-colors min-h-[48px]"
               >
                 Manage Preferences
               </button>
@@ -169,7 +169,7 @@ export function CookieConsent() {
 
             <button 
               onClick={handleSaveSettings}
-              className="w-full py-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-lg transition-all shadow-sm text-[13px] mt-1"
+              className="w-full py-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-lg transition-all shadow-sm text-[13px] mt-1 min-h-[48px]"
             >
               Save Preferences
             </button>

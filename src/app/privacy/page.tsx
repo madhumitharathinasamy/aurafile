@@ -6,6 +6,9 @@ import { VisualNetworkMonitor } from "@/components/privacy/VisualNetworkMonitor"
 export const metadata: Metadata = {
     title: "Privacy Policy | Zero-Trust Architecture",
     description: "AuraFile Privacy Policy. Learn about our 100% client-side, zero-trust WASM architecture and our AdSense data handling.",
+    alternates: {
+        canonical: 'https://aurafile.net/privacy',
+    },
 };
 
 export default function PrivacyPage() {

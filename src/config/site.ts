@@ -36,8 +36,8 @@ export const siteConfig = {
     footer: {
         copyright: `© ${new Date().getFullYear()} Aura File. All rights reserved.`,
         legal: [
-            { title: "Privacy Policy", href: "/privacy-policy" },
-            { title: "Terms of Service", href: "/terms-of-service" },
+            { title: "Privacy Policy", href: "/privacy" },
+            { title: "Terms of Service", href: "/terms" },
             { title: "Disclaimer", href: "/disclaimer" },
             { title: "Sitemap", href: "/sitemap-html" },
             { title: "About Us", href: "/about" },
@@ -109,6 +109,14 @@ export const siteConfig = {
                     icon: "shrink",
                     tags: ["Target Size"],
                     keywords: ["target size", "50kb", "100kb", "file limit", "discord", "restrict file size"]
+                },
+                {
+                    title: "HEIC to JPG Converter",
+                    description: "Convert iPhone HEIC photos to JPG format securely offline.",
+                    href: "/heic-to-jpg",
+                    icon: "apple",
+                    tags: ["Image", "Apple"],
+                    keywords: ["heic", "heif", "jpg", "iphone photo", "convert", "offline"]
                 },
             ],
             pdf: [

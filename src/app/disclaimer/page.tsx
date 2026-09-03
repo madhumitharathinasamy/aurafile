@@ -4,6 +4,9 @@ import { PageTitle, SectionDescription } from '@/components/ui/typography';
 export const metadata: Metadata = {
     title: 'Disclaimer',
     description: 'General disclaimer regarding the functionality and guarantees of AuraFile.',
+    alternates: {
+        canonical: 'https://aurafile.net/disclaimer',
+    },
 };
 
 export default function DisclaimerPage() {
