@@ -29,7 +29,7 @@ export default function PdfToWordPage() {
             toolComponent={<PdfToWordToolLoader />}
             breadcrumbs={[
                 { label: "Home", href: "/" },
-                { label: "PDF Tools", href: "/#tools" },
+                { label: "PDF Tools", href: "/pdf-tools" },
                 { label: "PDF to Word", href: "/pdf-to-word" }
             ]}
             longFormContent={<PdfToWordPower />}

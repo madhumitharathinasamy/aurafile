@@ -29,7 +29,7 @@ export default function ProtectPdfPage() {
             toolComponent={<ProtectPdfToolLoader />}
             breadcrumbs={[
                 { label: "Home", href: "/" },
-                { label: "PDF Tools", href: "/#tools" },
+                { label: "PDF Tools", href: "/pdf-tools" },
                 { label: "Protect PDF", href: "/protect-pdf" }
             ]}
             longFormContent={<ProtectPdfPower />}

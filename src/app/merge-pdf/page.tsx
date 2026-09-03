@@ -29,7 +29,7 @@ export default function MergePdfPage() {
             toolComponent={<MergePdfToolLoader />}
             breadcrumbs={[
                 { label: "Home", href: "/" },
-                { label: "PDF Tools", href: "/#tools" }, 
+                { label: "PDF Tools", href: "/pdf-tools" }, 
                 { label: "Merge PDF", href: "/merge-pdf" }
             ]}
             longFormContent={<MergePdfPower />}

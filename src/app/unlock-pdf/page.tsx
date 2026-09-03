@@ -29,7 +29,7 @@ export default function UnlockPdfPage() {
             toolComponent={<UnlockPdfToolLoader />}
             breadcrumbs={[
                 { label: "Home", href: "/" },
-                { label: "PDF Tools", href: "/#tools" },
+                { label: "PDF Tools", href: "/pdf-tools" },
                 { label: "Unlock PDF", href: "/unlock-pdf" }
             ]}
             longFormContent={<UnlockPdfPower />}
