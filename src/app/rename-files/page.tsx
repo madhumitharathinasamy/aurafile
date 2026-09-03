@@ -29,7 +29,7 @@ export default function RenameFilesPage() {
             toolComponent={<RenameTool />}
             breadcrumbs={[
                 { label: "Home", href: "/" },
-                { label: "Utility Tools", href: "/#tools" },
+                { label: "Document Tools", href: "/document-tools" },
                 { label: "Rename Files", href: "/rename-files" }
             ]}
             longFormContent={<RenameFilesPower />}

@@ -28,7 +28,7 @@ export default function HeicToJpgPage() {
             toolComponent={<HeicToJpgToolLoader />}
             breadcrumbs={[
                 { label: "Home", href: "/" },
-                { label: "Image Tools", href: "/#tools" },
+                { label: "Image Tools", href: "/image-tools" },
                 { label: "HEIC to JPG", href: "/heic-to-jpg" }
             ]}
             longFormContent={<HeicToJpgPower />}

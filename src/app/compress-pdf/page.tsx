@@ -29,7 +29,7 @@ export default function CompressPdfPage() {
             toolComponent={<CompressPdfToolLoader />}
             breadcrumbs={[
                 { label: "Home", href: "/" },
-                { label: "PDF Tools", href: "/#tools" }, // Adjusting simple route based on config
+                { label: "PDF Tools", href: "/pdf-tools" },
                 { label: "Compress PDF", href: "/compress-pdf" }
             ]}
             longFormContent={<CompressPdfPower />}
