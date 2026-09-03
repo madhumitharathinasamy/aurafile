@@ -55,7 +55,7 @@ export default function FAQPage() {
             <div className="mt-16 pt-8 border-t border-slate-100 text-center text-sm text-foreground/60">
                 <p>
                     Still curious about how we handle data? Check out our{" "}
-                    <Link href="/privacy-policy" className="text-[#00B4D8] hover:underline font-medium">
+                    <Link href="/privacy" className="text-[#00B4D8] hover:underline font-medium">
                         Privacy Policy
                     </Link>
                     .

@@ -43,7 +43,7 @@ export function ImageUploader({
                 for (const file of filesToProcess) {
                     // Skip native preview validation for formats browsers can't natively render in <img> tags
                     const fileName = file.name.toLowerCase();
-                    const isUnsupportedPreviewFormat = fileName.endsWith('.tiff') || fileName.endsWith('.tif') || fileName.endsWith('.avif');
+                    const isUnsupportedPreviewFormat = fileName.endsWith('.tiff') || fileName.endsWith('.tif') || fileName.endsWith('.avif') || fileName.endsWith('.heic') || fileName.endsWith('.heif');
 
                     if (isUnsupportedPreviewFormat) {
                         validFiles.push(file);

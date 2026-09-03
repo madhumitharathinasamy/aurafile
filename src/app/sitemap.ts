@@ -18,13 +18,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // Dynamic Pages Discovery from src/app
     const appDir = path.join(process.cwd(), "src", "app");
     
-    // Explicitly exclude non-public directories or utility dirs
+    // Explicitly exclude non-public, utility, or redirected legacy routes
     const excludeDirs = new Set([
         "api",
         "compress-image-dynamic", // We will handle sizes manually
         "about-us",
         "privacy-policy",
-        "terms-of-service"
+        "terms-of-service",
+        "search",
+        "sitemap-html"
     ]);
 
     let toolSubDirs: string[] = [];
@@ -44,7 +46,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         let priority = 0.9;
         let changeFrequency: "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never" = "monthly";
         
-        const legalAndInfoPages = ["about", "about-us", "contact", "disclaimer", "privacy", "privacy-policy", "terms", "terms-of-service", "security", "faq", "sitemap-html"];
+        const legalAndInfoPages = ["about", "contact", "disclaimer", "privacy", "terms", "security", "faq"];
         const categoryPages = ["document-tools", "image-tools", "pdf-tools"];
         
         if (legalAndInfoPages.includes(dirName)) {
